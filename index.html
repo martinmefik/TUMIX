@@ -3,629 +3,582 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>NEBULA DELIVERY | Космическая доставка продуктов</title>
-    <!-- Leaflet CSS + JS -->
+    <title>Доставка 24 | Реальные магазины</title>
+    <!-- Leaflet CSS + JS (карты с русскими названиями) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Font Awesome 6 (free icons) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts: современный шрифт -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        :root {
+            --bg-page: #f8fafc;
+            --surface: #ffffff;
+            --surface-2: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --border: #e2e8f0;
+            --accent: #e11d48;
+            --accent-light: #ffe4e8;
+            --accent-hover: #be123c;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --card-radius: 1.5rem;
+        }
+
+        body.dark {
+            --bg-page: #0f172a;
+            --surface: #1e293b;
+            --surface-2: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --accent: #f43f5e;
+            --accent-light: #2d1b24;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at 10% 30%, #0a0f1e, #03060c);
-            color: #eef5ff;
-            overflow-x: hidden;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            line-height: 1.5;
         }
 
-        /* кастомный скролл */
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1e2a3a;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ff5e7c;
-            border-radius: 10px;
-        }
-
-        .app-container {
-            max-width: 1600px;
+        /* контейнер */
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 1.5rem;
         }
 
-        /* хедер с неоном */
+        /* header */
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: center;
             flex-wrap: wrap;
+            gap: 1rem;
             margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 94, 124, 0.3);
             padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
         }
         .logo h1 {
-            font-weight: 700;
-            font-size: 2rem;
-            background: linear-gradient(135deg, #ffb347, #ff5e7c);
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), #f97316);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.5px;
         }
         .logo p {
             font-size: 0.8rem;
-            opacity: 0.7;
-            letter-spacing: 1px;
+            color: var(--text-secondary);
         }
-        .badge-cart i {
-            font-size: 1.8rem;
-            color: #ffb347;
-            filter: drop-shadow(0 0 6px #ff5e7c);
-        }
-
-        /* главная сетка: асимметричный современный дизайн */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1.2fr 0.9fr;
-            gap: 1.8rem;
-        }
-
-        /* левая колонка */
-        .left-panel {
+        .nav-icons {
             display: flex;
-            flex-direction: column;
-            gap: 1.8rem;
-        }
-        /* карта */
-        .map-card {
-            background: rgba(15, 25, 45, 0.55);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            border: 1px solid rgba(255, 94, 124, 0.4);
-            overflow: hidden;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
-            transition: all 0.2s;
-        }
-        #map {
-            height: 320px;
-            width: 100%;
-            background: #0b1120;
-        }
-        .address-bar {
-            padding: 1rem 1.2rem;
-            background: rgba(10, 20, 35, 0.7);
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
+            gap: 1rem;
             align-items: center;
-            border-bottom: 1px solid rgba(255,94,124,0.3);
         }
-        .address-bar input {
-            flex: 2;
-            background: #0f172a;
-            border: 1px solid #2d3a4e;
-            padding: 0.7rem 1rem;
-            border-radius: 2rem;
-            color: white;
-            font-family: inherit;
-            outline: none;
-            transition: 0.2s;
-        }
-        .address-bar input:focus {
-            border-color: #ff5e7c;
-            box-shadow: 0 0 8px #ff5e7c70;
-        }
-        .glass-btn {
-            background: linear-gradient(95deg, #ff5e7c, #ffb347);
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            color: #0a0f1e;
+        .icon-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 3rem;
+            padding: 0.6rem 1rem;
             cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
+            font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            color: var(--text-primary);
+            transition: 0.2s;
         }
-        .glass-btn-outline {
-            background: transparent;
-            border: 1px solid #ffb347;
-            color: #ffb347;
+        .icon-btn i {
+            font-size: 1.2rem;
+            color: var(--accent);
         }
-        .glass-btn-outline:hover {
-            background: #ffb34720;
+        .icon-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
         }
-        .glass-btn:hover {
-            transform: scale(0.97);
-            box-shadow: 0 0 12px #ff5e7c;
+        .icon-btn:hover i {
+            color: white;
+        }
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+        .user-btn {
+            background: var(--accent-light);
+            border-color: var(--accent);
         }
 
-        /* список ближайших магазинов */
-        .stores-list {
-            background: rgba(12, 22, 40, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 1.8rem;
-            padding: 1.2rem;
-            border: 1px solid rgba(255, 180, 71, 0.3);
+        /* основной грид: магазины слева, каталог справа */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 1.8rem;
         }
-        .stores-list h3 {
+        @media (max-width: 800px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        /* список магазинов */
+        .stores-panel {
+            background: var(--surface);
+            border-radius: var(--card-radius);
+            padding: 1.2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+        .stores-panel h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
+            gap: 0.5rem;
         }
-        .store-items {
+        .store-list {
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
         }
         .store-card {
-            background: rgba(20, 35, 55, 0.7);
-            border-radius: 1.2rem;
-            padding: 0.9rem 1rem;
+            background: var(--surface-2);
+            border-radius: 1rem;
+            padding: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid #ffb347;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
         }
         .store-card.active {
-            background: linear-gradient(120deg, #ff5e7c30, #ffb34730);
-            border-left: 4px solid #ff5e7c;
-            box-shadow: 0 0 10px #ff5e7c60;
+            border-left-color: var(--accent);
+            background: var(--accent-light);
+            transform: translateX(5px);
         }
         .store-card:hover {
-            transform: translateX(5px);
-            background: #1e2f46;
+            background: var(--accent-light);
         }
-        .store-info h4 {
-            font-size: 1.1rem;
-        }
-        .store-info p {
-            font-size: 0.75rem;
-            opacity: 0.7;
-        }
-        .distance-badge {
-            background: #0f172a;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        /* правая колонка: каталог + корзина */
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 1.8rem;
-        }
-        .catalog-section {
-            background: rgba(8, 18, 30, 0.65);
-            backdrop-filter: blur(12px);
-            border-radius: 1.8rem;
-            padding: 1.2rem;
-            border: 1px solid rgba(255, 94, 124, 0.4);
-        }
-        .store-detail-header {
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.7rem;
-            border-bottom: 1px dashed #ffb347;
-        }
-        .store-detail-header h2 {
-            font-size: 1.6rem;
+        .store-name {
             font-weight: 700;
+            font-size: 1rem;
+        }
+        .store-address {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin: 4px 0;
         }
         .store-meta {
             display: flex;
-            gap: 1rem;
-            font-size: 0.8rem;
-            margin-top: 6px;
-            color: #bbb;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        .distance {
+            background: var(--surface);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        /* каталог */
+        .catalog-panel {
+            background: var(--surface);
+            border-radius: var(--card-radius);
+            padding: 1.2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .store-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.8rem;
+        }
+        .store-header h2 {
+            font-size: 1.5rem;
         }
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 1rem;
-            max-height: 380px;
+            max-height: 65vh;
             overflow-y: auto;
-            padding-right: 5px;
+            padding-right: 0.5rem;
         }
         .product-card {
-            background: #0e1a2b;
+            background: var(--surface-2);
             border-radius: 1.2rem;
-            padding: 0.8rem;
-            transition: all 0.2s;
-            border: 1px solid #2a3b4e;
-            cursor: pointer;
+            padding: 1rem;
+            transition: 0.2s;
+            border: 1px solid var(--border);
         }
         .product-card:hover {
-            border-color: #ffb347;
-            transform: translateY(-4px);
-            background: #162336;
+            transform: translateY(-3px);
+            border-color: var(--accent);
         }
         .product-emoji {
             font-size: 2rem;
-            margin-bottom: 0.4rem;
         }
         .product-name {
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 700;
+            margin: 0.5rem 0 0.2rem;
         }
         .product-price {
-            color: #ffb347;
             font-weight: 700;
-            margin: 6px 0;
+            color: var(--accent);
+            margin: 0.3rem 0;
         }
-        .add-to-cart-btn {
-            background: #ff5e7c20;
-            border: 1px solid #ff5e7c;
+        .add-cart {
+            background: var(--accent-light);
+            border: none;
             width: 100%;
-            padding: 5px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            padding: 0.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            color: var(--accent);
             transition: 0.2s;
         }
-        .add-to-cart-btn:hover {
-            background: #ff5e7c;
-            color: #0a0f1e;
+        .add-cart:hover {
+            background: var(--accent);
+            color: white;
         }
 
-        /* корзина */
-        .cart-section {
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(12px);
-            border-radius: 1.8rem;
-            padding: 1.2rem;
-            border: 1px solid #ffb34760;
-        }
-        .cart-title {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 10px;
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
             align-items: center;
+            justify-content: center;
         }
-        .cart-items-list {
-            max-height: 280px;
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--surface);
+            border-radius: 2rem;
+            max-width: 90vw;
+            width: 800px;
+            max-height: 85vh;
             overflow-y: auto;
+            padding: 1.5rem;
+            position: relative;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 40px -12px black;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        #mapModal .modal-content {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #mapContainer {
+            height: 100%;
+            width: 100%;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
         }
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #0f172ad0;
-            margin: 8px 0;
-            padding: 8px 12px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-        }
-        .cart-item-details {
-            display: flex;
-            gap: 8px;
-            align-items: baseline;
-            flex-wrap: wrap;
-        }
-        .remove-item {
-            background: none;
-            border: none;
-            color: #ff5e7c;
-            cursor: pointer;
-            font-size: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
         }
         .cart-total {
-            margin-top: 1rem;
+            font-weight: 800;
             text-align: right;
-            font-weight: bold;
-            border-top: 1px solid #ffb347;
-            padding-top: 10px;
-            display: flex;
-            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 1.2rem;
         }
-        .checkout {
-            margin-top: 12px;
+        .checkout-btn {
+            background: var(--accent);
+            color: white;
             width: 100%;
-            background: linear-gradient(90deg, #ffb347, #ff5e7c);
+            padding: 0.8rem;
             border: none;
-            padding: 10px;
-            border-radius: 40px;
+            border-radius: 3rem;
+            margin-top: 1rem;
             font-weight: bold;
             cursor: pointer;
         }
-        .empty-cart {
+        .empty-state {
             text-align: center;
-            opacity: 0.6;
-            padding: 20px;
+            padding: 2rem;
+            color: var(--text-secondary);
         }
-
-        @media (max-width: 950px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            .app-container {
-                padding: 1rem;
-            }
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
-        .bounce-add {
-            animation: bounceCart 0.4s ease;
+        .register-form input {
+            padding: 0.8rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text-primary);
         }
-        @keyframes bounceCart {
-            0% { transform: scale(1);}
-            50% { transform: scale(1.08); background: #ff5e7c40;}
-            100% { transform: scale(1);}
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        .fa-star {
-            font-size: 0.7rem;
-            color: gold;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95);}
+            to { opacity: 1; transform: scale(1);}
+        }
+        .modal-content {
+            animation: fadeIn 0.2s ease;
         }
     </style>
 </head>
 <body>
-<div class="app-container">
+<div class="container">
     <div class="header">
         <div class="logo">
-            <h1>🚀 NEBULA DELIVERY</h1>
-            <p>доставка из ближайших галактик</p>
+            <h1><i class="fas fa-shopping-basket"></i> Доставка 24</h1>
+            <p>Продукты из Пятёрочки, Магнита, Перекрёстка и ВкусВилла</p>
         </div>
-        <div class="badge-cart">
-            <i class="fas fa-shopping-cart"></i> <span id="cartCountBadge">0</span>
+        <div class="nav-icons">
+            <button id="themeToggle" class="icon-btn theme-toggle"><i class="fas fa-moon"></i> Тема</button>
+            <button id="cartModalBtn" class="icon-btn"><i class="fas fa-shopping-cart"></i> Корзина <span id="cartCount">0</span></button>
+            <button id="mapModalBtn" class="icon-btn"><i class="fas fa-map-marked-alt"></i> Карта</button>
+            <button id="userModalBtn" class="icon-btn user-btn"><i class="fas fa-user-circle"></i> <span id="userNameDisplay">Войти</span></button>
         </div>
     </div>
 
-    <div class="dashboard">
-        <!-- Левая панель: карта + адрес + магазины -->
-        <div class="left-panel">
-            <div class="map-card">
-                <div id="map"></div>
-                <div class="address-bar">
-                    <input type="text" id="addressInput" placeholder="Введите адрес (город, улица)" value="Москва, Тверская 1">
-                    <button id="geocodeBtn" class="glass-btn"><i class="fas fa-map-marker-alt"></i> Найти адрес</button>
-                    <button id="myLocationBtn" class="glass-btn glass-btn-outline"><i class="fas fa-location-dot"></i> Моя геолокация</button>
-                </div>
+    <div class="main-grid">
+        <!-- Левая панель: список ближайших магазинов -->
+        <div class="stores-panel">
+            <h3><i class="fas fa-store"></i> Ближайшие магазины</h3>
+            <div id="storesList" class="store-list">
+                <div class="empty-state">📍 Укажите адрес или используйте геолокацию</div>
             </div>
-            <div class="stores-list">
-                <h3><i class="fas fa-store"></i> Ближайшие магазины</h3>
-                <div id="nearestStoresContainer" class="store-items">
-                    <div style="padding: 1rem; text-align:center;">👆 Укажите адрес или кликните на карту</div>
-                </div>
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                <input type="text" id="addressInput" placeholder="Введите адрес (Москва)" class="icon-btn" style="flex:1; background: var(--surface-2); border:1px solid var(--border); border-radius: 2rem; padding: 0.5rem 1rem;">
+                <button id="geocodeBtn" class="icon-btn"><i class="fas fa-search"></i></button>
+                <button id="myLocationBtn" class="icon-btn"><i class="fas fa-location-dot"></i></button>
             </div>
         </div>
 
-        <!-- Правая панель: каталог выбранного магазина + корзина -->
-        <div class="right-panel">
-            <div class="catalog-section" id="catalogSection">
-                <div class="store-detail-header" id="storeDetailHeader">
-                    <h2>✨ Выберите магазин</h2>
-                    <div class="store-meta">Нажмите на любой магазин слева или маркер на карте</div>
-                </div>
-                <div id="productsContainer" class="products-grid">
-                    <div class="empty-cart">🏪 Здесь появится каталог товаров</div>
-                </div>
+        <!-- Правая панель: каталог выбранного магазина -->
+        <div class="catalog-panel">
+            <div id="catalogHeader" class="store-header">
+                <h2>🏪 Выберите магазин слева</h2>
+                <div class="store-meta">После выбора откроется каталог товаров</div>
             </div>
-
-            <div class="cart-section">
-                <div class="cart-title"><i class="fas fa-basket-shopping"></i> Ваша корзина <span style="font-size:0.8rem;">🛸</span></div>
-                <div id="cartItemsList" class="cart-items-list">
-                    <div class="empty-cart">Корзина пуста, добавьте товары</div>
-                </div>
-                <div id="cartTotal" class="cart-total">Итого: 0 ₽</div>
-                <button id="checkoutBtn" class="checkout"><i class="fas fa-rocket"></i> Оформить доставку</button>
+            <div id="productsContainer" class="products-grid">
+                <div class="empty-state">✨ Нажмите на любой магазин, чтобы увидеть товары</div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Модалка Корзины -->
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-shopping-cart"></i> Ваша корзина</h3>
+            <button class="close-modal" data-modal="cartModal">&times;</button>
+        </div>
+        <div id="cartItemsContainer"></div>
+        <div id="cartTotalModal" class="cart-total">Итого: 0 ₽</div>
+        <button id="checkoutModalBtn" class="checkout-btn"><i class="fas fa-truck"></i> Оформить заказ</button>
+    </div>
+</div>
+
+<!-- Модалка Карты -->
+<div id="mapModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-map"></i> Магазины на карте</h3>
+            <button class="close-modal" data-modal="mapModal">&times;</button>
+        </div>
+        <div id="mapContainer"><div id="map" style="height: 100%;"></div></div>
+    </div>
+</div>
+
+<!-- Модалка регистрации/профиля -->
+<div id="userModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-user"></i> Профиль / Регистрация</h3>
+            <button class="close-modal" data-modal="userModal">&times;</button>
+        </div>
+        <div id="userModalBody">
+            <!-- динамический контент: форма регистрации или приветствие -->
+        </div>
+    </div>
+</div>
+
 <script>
-    // ------------------- МАГАЗИНЫ С ТОВАРАМИ (реальные каталоги) -------------------
+    // ---------- РЕАЛЬНЫЕ МАГАЗИНЫ (Пятёрочка, Магнит, Перекрёсток, ВкусВилл) ----------
     const storesData = [
         {
             id: 1,
-            name: "🌿 Органик Маркет",
-            address: "ул. Цветочная, 12",
-            lat: 55.7558,
-            lng: 37.6173,
-            working: "09:00 - 22:00",
-            rating: "4.9 ★",
+            name: "Пятёрочка",
+            chain: "X5 Group",
+            address: "Москва, ул. Тверская, 10",
+            lat: 55.7602,
+            lng: 37.6139,
+            working: "08:00 – 23:00",
+            rating: "4.5 ★",
             products: [
-                { id: 101, name: "Яблоко Гала", price: 129, unit: "кг", emoji: "🍎", desc: "сочное, фермерское" },
-                { id: 102, name: "Молоко Эко", price: 89, unit: "1л", emoji: "🥛", desc: "без лактозы" },
-                { id: 103, name: "Хлеб цельнозерновой", price: 75, unit: "шт", emoji: "🍞", desc: "свежая выпечка" },
-                { id: 104, name: "Авокадо", price: 199, unit: "шт", emoji: "🥑", desc: "мягкий спелый" }
+                { id: 101, name: "Молоко Простоквашино 2.5%", price: 79.9, unit: "1 л", emoji: "🥛", desc: "пастеризованное" },
+                { id: 102, name: "Хлеб Бородинский", price: 49.9, unit: "шт", emoji: "🍞", desc: "ржаной, фирменный" },
+                { id: 103, name: "Куриное филе", price: 289, unit: "кг", emoji: "🍗", desc: "охлаждённое" },
+                { id: 104, name: "Яйца С1 10шт", price: 119, unit: "уп", emoji: "🥚", desc: "столовые" },
+                { id: 105, name: "Сахар песок", price: 69.9, unit: "кг", emoji: "🍬", desc: "кристаллический" }
             ]
         },
         {
             id: 2,
-            name: "⚡ Фреш Маркет 24",
-            address: "пр. Мира, 45",
-            lat: 55.7580,
-            lng: 37.6300,
+            name: "Магнит",
+            chain: "Магнит",
+            address: "Москва, пр-т Мира, 48",
+            lat: 55.7736,
+            lng: 37.6331,
             working: "Круглосуточно",
-            rating: "4.7 ★",
+            rating: "4.3 ★",
             products: [
-                { id: 201, name: "Помидоры черри", price: 210, unit: "300г", emoji: "🍅", desc: "сладкие" },
-                { id: 202, name: "Салат Айсберг", price: 119, unit: "шт", emoji: "🥬", desc: "хрустящий" },
-                { id: 203, name: "Лосось слабосоленый", price: 550, unit: "200г", emoji: "🐟", desc: "охлажденный" },
-                { id: 204, name: "Лимонад крафт", price: 135, unit: "0.5л", emoji: "🧃", desc: "имбирный" }
+                { id: 201, name: "Макароны Makfa", price: 89, unit: "450г", emoji: "🍝", desc: "спиральки" },
+                { id: 202, name: "Масло сливочное 82%", price: 139, unit: "180г", emoji: "🧈", desc: "Крестьянское" },
+                { id: 203, name: "Картофель мытый", price: 44.9, unit: "кг", emoji: "🥔", desc: "свежий" },
+                { id: 204, name: "Сок Добрый", price: 109, unit: "1 л", emoji: "🧃", desc: "апельсин" }
             ]
         },
         {
             id: 3,
-            name: "🏪 У дома & Ко",
-            address: "ул. Ленина, 78",
-            lat: 55.7512,
-            lng: 37.6185,
-            working: "08:00 - 23:00",
-            rating: "4.5 ★",
+            name: "Перекрёсток",
+            chain: "X5 Group",
+            address: "Москва, ул. Арбат, 25",
+            lat: 55.7524,
+            lng: 37.6034,
+            working: "09:00 – 22:00",
+            rating: "4.7 ★",
             products: [
-                { id: 301, name: "Картофель", price: 49, unit: "кг", emoji: "🥔", desc: "мытый" },
-                { id: 302, name: "Куриное филе", price: 289, unit: "кг", emoji: "🍗", desc: "охлажденное" },
-                { id: 303, name: "Сметана 20%", price: 99, unit: "400г", emoji: "🥄", desc: "фермерская" },
-                { id: 304, name: "Печенье овсяное", price: 89, unit: "уп", emoji: "🍪", desc: "рассыпчатое" }
+                { id: 301, name: "Лосось слабосоленый", price: 599, unit: "200г", emoji: "🐟", desc: "филе" },
+                { id: 302, name: "Авокадо Хасс", price: 199, unit: "шт", emoji: "🥑", desc: "спелый" },
+                { id: 303, name: "Сыр Маасдам", price: 349, unit: "200г", emoji: "🧀", desc: "полутвёрдый" },
+                { id: 304, name: "Гранола с ягодами", price: 269, unit: "400г", emoji: "🥣", desc: "полезный завтрак" }
             ]
         },
         {
             id: 4,
-            name: "🍣 WOK&ROLL",
-            address: "наб. Речная, 3",
-            lat: 55.7605,
-            lng: 37.6250,
-            working: "11:00 - 23:00",
-            rating: "4.8 ★",
+            name: "ВкусВилл",
+            chain: "ВкусВилл",
+            address: "Москва, Смоленская пл., 3",
+            lat: 55.7537,
+            lng: 37.5829,
+            working: "09:00 – 23:00",
+            rating: "4.9 ★",
             products: [
-                { id: 401, name: "Ролл Филадельфия", price: 490, unit: "8 шт", emoji: "🍣", desc: "лосось, сыр" },
-                { id: 402, name: "WOK с говядиной", price: 390, unit: "порция", emoji: "🍜", desc: "острый соус" },
-                { id: 403, name: "Том Ям", price: 320, unit: "350мл", emoji: "🥘", desc: "кокосовое молоко" }
+                { id: 401, name: "Творог 5%", price: 119, unit: "200г", emoji: "🥄", desc: "фермерский" },
+                { id: 402, name: "Печенье овсяное", price: 89, unit: "250г", emoji: "🍪", desc: "без сахара" },
+                { id: 403, name: "Кефир бифидок", price: 79, unit: "500мл", emoji: "🥛", desc: "натуральный" },
+                { id: 404, name: "Манго кусочки", price: 249, unit: "300г", emoji: "🥭", desc: "сушеное" }
             ]
         }
     ];
 
-    // вспомогательные функции расстояния (гаверсинус)
-    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = deg2rad(lat2 - lat1);
-        const dLon = deg2rad(lon2 - lon1);
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    }
-    function deg2rad(deg) { return deg * (Math.PI / 180); }
-
     // Глобальные переменные
-    let userLat = 55.7558, userLng = 37.6173;   // начальная точка (Москва центр)
-    let map;
-    let userMarker;
+    let userLat = 55.7558, userLng = 37.6173;   // Москва центр
+    let currentStore = null;
+    let cart = [];   // { productId, storeId, name, price, unit, emoji, quantity, storeName }
+    let mapInstance = null;
+    let userMarker = null;
     let storeMarkers = [];
-    let currentStore = null;        // выбранный магазин
-    let cart = [];                  // { product, storeName, price, quantity, id }
 
-    // инициализация карты Leaflet
-    function initMap() {
-        map = L.map('map').setView([userLat, userLng], 13);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> & CartoDB',
-            subdomains: 'abcd',
-            maxZoom: 19
-        }).addTo(map);
-        // маркер пользователя
-        userMarker = L.marker([userLat, userLng], { draggable: false, title: "Ваше местоположение" }).addTo(map);
-        userMarker.bindPopup("📍 Вы здесь").openPopup();
+    // Данные пользователя (localStorage)
+    let currentUser = JSON.parse(localStorage.getItem('delivery_user')) || null;
 
-        // добавляем магазины на карту
-        updateStoreMarkersOnMap();
+    // ---- Инициализация темной/светлой темы ----
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.body;
+    if (localStorage.getItem('theme') === 'dark') root.classList.add('dark');
+    themeToggle.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+        themeToggle.innerHTML = root.classList.contains('dark') ? '<i class="fas fa-sun"></i> Тема' : '<i class="fas fa-moon"></i> Тема';
+    });
+    if (root.classList.contains('dark')) themeToggle.innerHTML = '<i class="fas fa-sun"></i> Тема';
 
-        // клик на карту - установка нового местоположения
-        map.on('click', async (e) => {
-            const { lat, lng } = e.latlng;
-            userLat = lat;
-            userLng = lng;
-            userMarker.setLatLng([lat, lng]);
-            map.setView([lat, lng], 13);
-            await updateNearestStoresAndUI(lat, lng);
-        });
+    // ---- Функции корзины ----
+    function saveCartToLocal() {
+        localStorage.setItem('delivery_cart', JSON.stringify(cart));
+        updateCartUI();
     }
-
-    function updateStoreMarkersOnMap() {
-        // удаляем старые маркеры
-        storeMarkers.forEach(m => map.removeLayer(m));
-        storeMarkers = [];
-        storesData.forEach(store => {
-            const marker = L.marker([store.lat, store.lng], { title: store.name }).addTo(map);
-            marker.bindPopup(`<b>${store.name}</b><br>${store.address}<br><button class="glass-btn" style="padding:4px 12px; margin-top:5px;" data-store-id="${store.id}">Выбрать</button>`);
-            marker.on('popupopen', () => {
-                const btn = document.querySelector(`button[data-store-id="${store.id}"]`);
-                if (btn) btn.onclick = () => selectStoreById(store.id);
-            });
-            storeMarkers.push(marker);
-        });
+    function loadCartFromLocal() {
+        const saved = localStorage.getItem('delivery_cart');
+        if (saved) cart = JSON.parse(saved);
+        updateCartUI();
     }
-
-    function selectStoreById(storeId) {
-        const store = storesData.find(s => s.id === storeId);
-        if (store) {
-            currentStore = store;
-            renderCatalog(store);
-            // подсветка активного магазина в списке ближайших
-            renderNearestStoresList(userLat, userLng);
-        }
-    }
-
-    // отрисовка каталога выбранного магазина
-    function renderCatalog(store) {
-        const headerDiv = document.getElementById('storeDetailHeader');
-        headerDiv.innerHTML = `
-            <h2>🏬 ${store.name}</h2>
-            <div class="store-meta"><i class="fas fa-map-pin"></i> ${store.address}  |  🕒 ${store.working}  |  ⭐ ${store.rating}</div>
-        `;
-        const productsContainer = document.getElementById('productsContainer');
-        if (!store.products.length) {
-            productsContainer.innerHTML = '<div class="empty-cart">Товары временно отсутствуют</div>';
-            return;
-        }
-        productsContainer.innerHTML = store.products.map(prod => `
-            <div class="product-card" data-product-id="${prod.id}">
-                <div class="product-emoji">${prod.emoji}</div>
-                <div class="product-name">${prod.name}</div>
-                <div class="product-price">${prod.price} ₽ / ${prod.unit}</div>
-                <div style="font-size: 0.7rem; opacity:0.7;">${prod.desc}</div>
-                <button class="add-to-cart-btn" data-id="${prod.id}" data-name="${prod.name}" data-price="${prod.price}" data-unit="${prod.unit}" data-emoji="${prod.emoji}">
-                    <i class="fas fa-cart-plus"></i> В корзину
-                </button>
-            </div>
-        `).join('');
-        // вешаем обработчики на кнопки
-        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = btn.dataset.id;
-                const name = btn.dataset.name;
-                const price = parseFloat(btn.dataset.price);
-                const unit = btn.dataset.unit;
-                const emoji = btn.dataset.emoji;
-                addToCart({ id, name, price, unit, emoji, storeName: currentStore.name });
-                animateCartBounce();
-            });
-        });
-    }
-
-    // добавить товар в корзину
-    function addToCart(productObj) {
-        const existing = cart.find(item => item.id === productObj.id && item.storeName === productObj.storeName);
+    function addToCart(product, store) {
+        const existing = cart.find(item => item.productId === product.id && item.storeId === store.id);
         if (existing) {
             existing.quantity += 1;
         } else {
-            cart.push({ ...productObj, quantity: 1 });
+            cart.push({
+                productId: product.id,
+                storeId: store.id,
+                storeName: store.name,
+                name: product.name,
+                price: product.price,
+                unit: product.unit,
+                emoji: product.emoji,
+                quantity: 1
+            });
         }
-        updateCartUI();
+        saveCartToLocal();
+        animateCartIcon();
     }
-
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        saveCartToLocal();
+    }
     function updateCartUI() {
-        const cartContainer = document.getElementById('cartItemsList');
+        const count = cart.reduce((sum, i) => sum + i.quantity, 0);
+        document.getElementById('cartCount').innerText = count;
+        const cartContainer = document.getElementById('cartItemsContainer');
+        if (!cartContainer) return;
         if (cart.length === 0) {
-            cartContainer.innerHTML = '<div class="empty-cart">🛒 Корзина пуста, добавьте товары</div>';
-            document.getElementById('cartTotal').innerHTML = `Итого: 0 ₽`;
-            document.getElementById('cartCountBadge').innerText = '0';
+            cartContainer.innerHTML = '<div class="empty-state">Корзина пуста, добавьте товары из магазинов</div>';
+            document.getElementById('cartTotalModal').innerHTML = 'Итого: 0 ₽';
             return;
         }
         let total = 0;
@@ -634,169 +587,208 @@
             total += sum;
             return `
                 <div class="cart-item">
-                    <div class="cart-item-details">
-                        <span>${item.emoji || '📦'} ${item.name}</span>
-                        <span>${item.price}₽ x ${item.quantity}</span>
-                        <span style="font-weight:bold;">${sum}₽</span>
-                        <small style="opacity:0.6;">${item.storeName}</small>
-                    </div>
-                    <button class="remove-item" data-index="${idx}"><i class="fas fa-trash-alt"></i></button>
+                    <div><span style="font-size:1.2rem">${item.emoji}</span> ${item.name}<br><small>${item.storeName} • ${item.price}₽ x ${item.quantity}</small></div>
+                    <div><strong>${sum}₽</strong> <button class="icon-btn" style="padding:0.2rem 0.6rem;" onclick="removeFromCart(${idx}); updateCartUI();"><i class="fas fa-trash"></i></button></div>
                 </div>
             `;
         }).join('');
-        document.getElementById('cartTotal').innerHTML = `Итого: ${total} ₽`;
-        document.getElementById('cartCountBadge').innerText = cart.reduce((acc, i) => acc + i.quantity, 0);
-        // обработка удаления
-        document.querySelectorAll('.remove-item').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.index);
-                cart.splice(idx, 1);
-                updateCartUI();
-            });
-        });
+        document.getElementById('cartTotalModal').innerHTML = `Итого: ${total.toFixed(2)} ₽`;
+    }
+    function animateCartIcon() {
+        const cartBtn = document.getElementById('cartModalBtn');
+        cartBtn.style.transform = 'scale(1.1)';
+        setTimeout(() => cartBtn.style.transform = '', 200);
     }
 
-    function animateCartBounce() {
-        const cartDiv = document.querySelector('.cart-section');
-        cartDiv.classList.add('bounce-add');
-        setTimeout(() => cartDiv.classList.remove('bounce-add'), 400);
+    // ---- Геолокация и ближайшие магазины ----
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
     }
-
-    // ближайшие магазины + рендер списка
-    async function updateNearestStoresAndUI(lat, lng) {
-        // вычисляем расстояния и сортируем
-        const storesWithDist = storesData.map(store => ({
-            ...store,
-            distance: getDistanceFromLatLonInKm(lat, lng, store.lat, store.lng)
-        }));
-        storesWithDist.sort((a,b) => a.distance - b.distance);
-        const nearest = storesWithDist.slice(0, 4); // показываем до 4х ближайших
-        renderNearestStoresListFromArray(nearest, lat, lng);
-        // если текущий магазин не выбран - автоматически выберем первый из ближайших
-        if (!currentStore && nearest.length) {
-            currentStore = nearest[0];
-            renderCatalog(currentStore);
-        } else if (currentStore) {
-            // обновляем каталог если он всё ещё в ближайших? просто перерисовываем (если магазин не изменился)
-            const stillExists = nearest.some(s => s.id === currentStore.id);
-            if (!stillExists && nearest.length) {
-                currentStore = nearest[0];
-                renderCatalog(currentStore);
-            } else if (currentStore) {
-                renderCatalog(currentStore);
-            }
-        }
-        renderNearestStoresListFromArray(nearest, lat, lng);
-    }
-
-    function renderNearestStoresListFromArray(storesArray, userLat, userLng) {
-        const container = document.getElementById('nearestStoresContainer');
-        if (!storesArray.length) {
-            container.innerHTML = '<div style="padding:1rem">❌ Магазины не найдены</div>';
-            return;
-        }
-        container.innerHTML = storesArray.map(store => {
-            const dist = getDistanceFromLatLonInKm(userLat, userLng, store.lat, store.lng).toFixed(1);
-            const activeClass = (currentStore && currentStore.id === store.id) ? 'active' : '';
-            return `
-                <div class="store-card ${activeClass}" data-store-id="${store.id}">
-                    <div class="store-info">
-                        <h4>${store.name}</h4>
-                        <p>${store.address} • ${store.working}</p>
-                    </div>
-                    <div class="distance-badge">${dist} км <i class="fas fa-location-arrow"></i></div>
-                </div>
-            `;
-        }).join('');
+    function renderStoresList(lat, lng) {
+        const storesWithDist = storesData.map(s => ({ ...s, dist: getDistance(lat, lng, s.lat, s.lng) }));
+        storesWithDist.sort((a,b) => a.dist - b.dist);
+        const nearest = storesWithDist.slice(0, 6);
+        const container = document.getElementById('storesList');
+        if (!nearest.length) { container.innerHTML = '<div class="empty-state">Магазины не найдены</div>'; return; }
+        container.innerHTML = nearest.map(store => `
+            <div class="store-card ${currentStore && currentStore.id === store.id ? 'active' : ''}" data-id="${store.id}">
+                <div class="store-name"><i class="fas fa-store"></i> ${store.name}</div>
+                <div class="store-address">${store.address}</div>
+                <div class="store-meta"><span>🕒 ${store.working}</span><span class="distance">${store.dist.toFixed(1)} км</span></div>
+            </div>
+        `).join('');
         document.querySelectorAll('.store-card').forEach(card => {
             card.addEventListener('click', () => {
-                const sid = parseInt(card.dataset.storeId);
-                const store = storesData.find(s => s.id === sid);
+                const id = parseInt(card.dataset.id);
+                const store = storesData.find(s => s.id === id);
                 if (store) {
                     currentStore = store;
                     renderCatalog(store);
-                    renderNearestStoresListFromArray(storesArray, userLat, userLng); // обновить активный класс
+                    renderStoresList(lat, lng);
                 }
             });
         });
+        if (!currentStore && nearest.length) {
+            currentStore = nearest[0];
+            renderCatalog(currentStore);
+            renderStoresList(lat, lng);
+        }
     }
-
-    function renderNearestStoresList(lat, lng) {
-        const withDist = storesData.map(s => ({ ...s, distance: getDistanceFromLatLonInKm(lat, lng, s.lat, s.lng) }));
-        withDist.sort((a,b)=> a.distance - b.distance);
-        renderNearestStoresListFromArray(withDist.slice(0,4), lat, lng);
+    function renderCatalog(store) {
+        const header = document.getElementById('catalogHeader');
+        header.innerHTML = `<h2>🏪 ${store.name}</h2><div class="store-meta">📍 ${store.address} • ⏰ ${store.working} • ⭐ ${store.rating}</div>`;
+        const container = document.getElementById('productsContainer');
+        if (!store.products.length) { container.innerHTML = '<div class="empty-state">Товары временно отсутствуют</div>'; return; }
+        container.innerHTML = store.products.map(prod => `
+            <div class="product-card">
+                <div class="product-emoji">${prod.emoji}</div>
+                <div class="product-name">${prod.name}</div>
+                <div class="product-price">${prod.price} ₽ / ${prod.unit}</div>
+                <div style="font-size:0.7rem; color:var(--text-secondary)">${prod.desc}</div>
+                <button class="add-cart" data-product='${JSON.stringify(prod)}' data-store='${JSON.stringify({id:store.id, name:store.name})}'>+ В корзину</button>
+            </div>
+        `).join('');
+        document.querySelectorAll('.add-cart').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const prod = JSON.parse(btn.dataset.product);
+                const storeObj = JSON.parse(btn.dataset.store);
+                addToCart(prod, storeObj);
+                alert(`✅ ${prod.name} добавлен в корзину!`);
+            });
+        });
     }
-
-    // геокодинг через Nominatim
+    async function setUserLocation(lat, lng) {
+        userLat = lat; userLng = lng;
+        renderStoresList(userLat, userLng);
+        if (mapInstance) {
+            if (userMarker) mapInstance.removeLayer(userMarker);
+            userMarker = L.marker([userLat, userLng]).addTo(mapInstance).bindPopup("📍 Вы здесь").openPopup();
+            mapInstance.setView([userLat, userLng], 13);
+        }
+    }
     async function geocodeAddress(address) {
         try {
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`);
-            const data = await response.json();
-            if (data && data.length > 0) {
-                const lat = parseFloat(data[0].lat);
-                const lon = parseFloat(data[0].lon);
-                return { lat, lon };
-            } else {
-                alert("Адрес не найден, попробуйте точнее или кликните на карту");
-                return null;
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Ошибка геокодинга, попробуйте кликнуть на карту");
-            return null;
-        }
+            const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}, Москва&limit=1`);
+            const data = await resp.json();
+            if (data.length) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+            else throw new Error();
+        } catch(e) { alert("Адрес не найден, попробуйте другой"); return null; }
     }
-
-    // установка адреса из инпута
-    async function setAddressFromInput() {
+    document.getElementById('geocodeBtn').addEventListener('click', async () => {
         const addr = document.getElementById('addressInput').value;
-        if (!addr.trim()) return;
+        if (!addr) return;
         const coords = await geocodeAddress(addr);
-        if (coords) {
-            userLat = coords.lat;
-            userLng = coords.lon;
-            map.setView([userLat, userLng], 13);
-            userMarker.setLatLng([userLat, userLng]);
-            await updateNearestStoresAndUI(userLat, userLng);
+        if (coords) await setUserLocation(coords.lat, coords.lng);
+    });
+    document.getElementById('myLocationBtn').addEventListener('click', () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                setUserLocation(pos.coords.latitude, pos.coords.longitude);
+            }, () => alert("Не удалось получить геолокацию"));
+        } else alert("Геолокация не поддерживается");
+    });
+
+    // ---- Карта (модальное окно, инициализация при открытии) ----
+    function initMapModal() {
+        if (!mapInstance) {
+            mapInstance = L.map('map').setView([userLat, userLng], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 19
+            }).addTo(mapInstance);
+            // маркеры магазинов
+            storesData.forEach(store => {
+                const marker = L.marker([store.lat, store.lng]).addTo(mapInstance);
+                marker.bindPopup(`<b>${store.name}</b><br>${store.address}<br><button class="icon-btn" style="padding:2px 8px; margin-top:5px;" onclick="selectStoreFromMap(${store.id})">Выбрать</button>`);
+                storeMarkers.push(marker);
+            });
+            userMarker = L.marker([userLat, userLng]).addTo(mapInstance).bindPopup("Ваше местоположение");
+        } else {
+            mapInstance.setView([userLat, userLng], 13);
+            if (userMarker) userMarker.setLatLng([userLat, userLng]);
         }
     }
+    window.selectStoreFromMap = (id) => {
+        const store = storesData.find(s => s.id === id);
+        if (store) {
+            currentStore = store;
+            renderCatalog(store);
+            renderStoresList(userLat, userLng);
+            document.getElementById('mapModal').classList.remove('active');
+        }
+    };
 
-    // геолокация браузера
-    function getMyLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                userLat = pos.coords.latitude;
-                userLng = pos.coords.longitude;
-                map.setView([userLat, userLng], 14);
-                userMarker.setLatLng([userLat, userLng]);
-                await updateNearestStoresAndUI(userLat, userLng);
-            }, () => {
-                alert("Не удалось получить геолокацию, разрешите доступ");
+    // ---- Регистрация / профиль ----
+    function renderUserModal() {
+        const modalBody = document.getElementById('userModalBody');
+        if (currentUser) {
+            modalBody.innerHTML = `
+                <div style="text-align:center; padding:1rem;">
+                    <i class="fas fa-user-circle" style="font-size:3rem; color:var(--accent)"></i>
+                    <h3>${currentUser.name}</h3>
+                    <p>${currentUser.email}</p>
+                    <button id="logoutBtn" class="icon-btn" style="margin-top:1rem;">Выйти</button>
+                </div>
+            `;
+            document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                currentUser = null;
+                localStorage.removeItem('delivery_user');
+                document.getElementById('userNameDisplay').innerText = "Войти";
+                renderUserModal();
+                updateCartUI();
             });
         } else {
-            alert("Геолокация не поддерживается");
+            modalBody.innerHTML = `
+                <div class="register-form">
+                    <input type="text" id="regName" placeholder="Ваше имя" autocomplete="off">
+                    <input type="email" id="regEmail" placeholder="Email">
+                    <button id="doRegisterBtn" class="icon-btn">Зарегистрироваться</button>
+                    <div class="empty-state" style="margin-top:1rem;">Данные сохранятся локально</div>
+                </div>
+            `;
+            document.getElementById('doRegisterBtn')?.addEventListener('click', () => {
+                const name = document.getElementById('regName').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                if (!name || !email) { alert("Введите имя и email"); return; }
+                currentUser = { name, email };
+                localStorage.setItem('delivery_user', JSON.stringify(currentUser));
+                document.getElementById('userNameDisplay').innerText = name;
+                renderUserModal();
+                document.getElementById('userModal').classList.remove('active');
+            });
         }
     }
 
-    // обработчик кнопки оформления
-    document.getElementById('checkoutBtn').addEventListener('click', () => {
-        if (cart.length === 0) {
-            alert("Добавьте товары в корзину ✨");
-            return;
-        }
-        alert(`🚀 Заказ оформлен! Сумма: ${document.getElementById('cartTotal').innerText}\nСпасибо, что летите с NEBULA!`);
+    // ---- Модальные окна ----
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.add('active');
+        if (modalId === 'mapModal') initMapModal();
+        if (modalId === 'cartModal') updateCartUI();
+        if (modalId === 'userModal') renderUserModal();
+    }
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => btn.closest('.modal').classList.remove('active'));
     });
-
-    // слушатели кнопок
-    document.getElementById('geocodeBtn').addEventListener('click', setAddressFromInput);
-    document.getElementById('myLocationBtn').addEventListener('click', getMyLocation);
-
-    // запуск карты и начальная инициализация ближайших магазинов
-    initMap().then(() => {
-        setTimeout(() => {
-            updateNearestStoresAndUI(userLat, userLng);
-        }, 500);
+    document.getElementById('cartModalBtn').addEventListener('click', () => openModal('cartModal'));
+    document.getElementById('mapModalBtn').addEventListener('click', () => openModal('mapModal'));
+    document.getElementById('userModalBtn').addEventListener('click', () => openModal('userModal'));
+    document.getElementById('checkoutModalBtn').addEventListener('click', () => {
+        if (cart.length === 0) alert("Корзина пуста");
+        else alert(`🚀 Заказ оформлен! Сумма: ${document.getElementById('cartTotalModal').innerText}. Спасибо, ${currentUser?.name || 'гость'}!`);
     });
+    // загрузка корзины и отображение пользователя
+    loadCartFromLocal();
+    if (currentUser) document.getElementById('userNameDisplay').innerText = currentUser.name;
+    else document.getElementById('userNameDisplay').innerText = "Войти";
+    // начальная установка локации (Москва центр)
+    setUserLocation(55.7558, 37.6173);
 </script>
 </body>
 </html>
