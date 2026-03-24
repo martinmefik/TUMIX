@@ -19,20 +19,17 @@
             padding: 24px;
         }
 
-        /* Контейнер */
         .container {
             max-width: 1280px;
             margin: 0 auto;
         }
 
-        /* Карточки */
         .card {
             background: #ffffff;
             border-radius: 24px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             padding: 28px;
             margin-bottom: 24px;
-            transition: all 0.2s ease;
         }
 
         .card-header {
@@ -44,7 +41,6 @@
             margin-bottom: 20px;
         }
 
-        /* Типография */
         h1 {
             font-size: 28px;
             font-weight: 700;
@@ -72,7 +68,6 @@
             font-size: 14px;
         }
 
-        /* Кнопки */
         .btn {
             padding: 10px 24px;
             border-radius: 40px;
@@ -94,7 +89,6 @@
         .btn-primary:hover {
             background: #166b51;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(30, 123, 94, 0.3);
         }
 
         .btn-outline {
@@ -107,7 +101,6 @@
             border-color: #1e7b5e;
         }
 
-        /* Сетка преимуществ */
         .advantages-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -120,7 +113,6 @@
             border-radius: 20px;
             padding: 20px;
             text-align: center;
-            transition: all 0.2s;
         }
 
         .advantage-card i {
@@ -136,12 +128,6 @@
             margin-bottom: 8px;
         }
 
-        .advantage-card p {
-            font-size: 13px;
-            color: #6c7a8a;
-        }
-
-        /* Сервисные кнопки */
         .services-grid {
             display: flex;
             flex-wrap: wrap;
@@ -165,7 +151,6 @@
 
         .service-card:hover {
             border-color: #1e7b5e;
-            background: #fefefe;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
@@ -180,7 +165,6 @@
             color: #2c3e50;
         }
 
-        /* Адресные карточки */
         .address-item {
             background: #f8fafc;
             border-radius: 16px;
@@ -192,7 +176,6 @@
             border-left: 4px solid #1e7b5e;
         }
 
-        /* Формы */
         .form-group {
             margin-bottom: 18px;
         }
@@ -220,7 +203,6 @@
             box-shadow: 0 0 0 3px rgba(30, 123, 94, 0.1);
         }
 
-        /* Модальные окна */
         .modal {
             position: fixed;
             top: 0;
@@ -336,7 +318,6 @@
 </head>
 <body>
 <div class="container" id="app">
-    <!-- Главный дашборд -->
     <div id="dashboard" style="display: none;">
         <div class="card">
             <div class="card-header">
@@ -379,7 +360,6 @@
     </div>
 </div>
 
-<!-- Приветственная модалка -->
 <div id="welcomeModal" class="modal active">
     <div class="modal-content">
         <div style="text-align: center;">
@@ -403,7 +383,6 @@
     </div>
 </div>
 
-<!-- Регистрация -->
 <div id="regModal" class="modal">
     <div class="modal-content">
         <h3>Регистрация</h3>
@@ -418,7 +397,6 @@
     </div>
 </div>
 
-<!-- Вход -->
 <div id="loginModal" class="modal">
     <div class="modal-content">
         <h3>Вход в аккаунт</h3>
@@ -431,7 +409,6 @@
     </div>
 </div>
 
-<!-- Управление адресами -->
 <div id="addressManagerModal" class="modal">
     <div class="modal-content">
         <div class="flex-between"><h3>Мои адреса</h3><button id="closeAddressManagerBtn" class="icon-btn"><i class="fas fa-times"></i></button></div>
@@ -440,7 +417,6 @@
     </div>
 </div>
 
-<!-- Редактирование адреса -->
 <div id="addressEditModal" class="modal">
     <div class="modal-content">
         <h3 id="addressEditTitle">Добавить адрес</h3>
@@ -459,7 +435,6 @@
     </div>
 </div>
 
-<!-- Заказ ПВЗ -->
 <div id="orderPvzModal" class="modal">
     <div class="modal-content" style="max-width: 680px;">
         <h3><i class="fas fa-box-open"></i> Заберем ваш заказ из любого ПВЗ</h3>
@@ -491,7 +466,6 @@
     </div>
 </div>
 
-<!-- Мои доставки -->
 <div id="myOrdersModal" class="modal">
     <div class="modal-content" style="max-width: 750px;">
         <div class="flex-between"><h3><i class="fas fa-list"></i> Мои доставки</h3><button id="closeOrdersBtn" class="icon-btn"><i class="fas fa-times"></i></button></div>
@@ -500,7 +474,7 @@
 </div>
 
 <script>
-    // УЛИЦЫ МОСКВЫ (полный список)
+    // УЛИЦЫ МОСКВЫ
     const moscowStreets = [
         "Тверская", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Мясницкая", "Покровка", "Арбат", "Большая Дмитровка",
         "Пятницкая", "Смоленская", "Садовое кольцо", "Мира проспект", "Профсоюзная", "Ленинградский проспект", "Варшавское шоссе",
@@ -593,9 +567,13 @@
         showMainUI(false);
     }
 
+    // ИСПРАВЛЕННАЯ ФУНКЦИЯ showMainUI
     function showMainUI(showDashboard) {
+        closeAllModals(); // сначала закрыли всё
+
         const dashboard = document.getElementById('dashboard');
         const welcome = document.getElementById('welcomeModal');
+
         if (showDashboard && currentUser) {
             dashboard.style.display = 'block';
             welcome.classList.remove('active');
@@ -607,7 +585,6 @@
             dashboard.style.display = 'none';
             welcome.classList.add('active');
         }
-        closeAllModals();
     }
 
     function renderAddressList() {
