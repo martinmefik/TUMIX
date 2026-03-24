@@ -10,11 +10,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
         }
 
         body {
-            background: #f0f4f8;
+            background: #eef2f8;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,28 +22,28 @@
             padding: 20px;
         }
 
-        /* Основной контейнер */
-        .app-container {
+        /* основной контейнер */
+        .app {
             max-width: 1300px;
             width: 100%;
             background: white;
-            border-radius: 28px;
+            border-radius: 32px;
             box-shadow: 0 20px 35px rgba(0,0,0,0.05);
             overflow: hidden;
         }
 
-        .app-panel {
+        .app-inner {
             padding: 28px;
         }
 
-        /* Карточки */
+        /* карточки */
         .card {
             background: #ffffff;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.05);
             border: 1px solid #eef2f8;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
         .flex-between {
@@ -56,11 +56,11 @@
 
         h1 {
             font-size: 28px;
+            font-weight: 800;
             background: linear-gradient(135deg, #1a5f7a, #2c9c6e);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-weight: 800;
         }
 
         h2 {
@@ -73,11 +73,11 @@
             font-size: 20px;
             font-weight: 600;
             color: #2c3e4e;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .text-muted {
-            color: #5a6e7c;
+            color: #5e7a8c;
             font-size: 14px;
         }
 
@@ -86,11 +86,11 @@
             padding: 8px 20px;
             border-radius: 40px;
             font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             transition: 0.2s;
             background: #f0f2f5;
             color: #1e4663;
-            font-size: 14px;
         }
 
         .btn-primary {
@@ -112,12 +112,12 @@
             background: #f8fafc;
         }
 
-        /* Сервисные кнопки */
-        .service-grid {
+        /* сервисные кнопки */
+        .services {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
-            margin: 20px 0 24px;
+            margin: 16px 0 24px;
         }
 
         .service-btn {
@@ -130,8 +130,8 @@
             font-weight: 600;
             color: #1f4a6e;
             cursor: pointer;
-            transition: 0.2s;
             border: 1px solid #e2e8f0;
+            transition: 0.2s;
         }
 
         .service-btn i {
@@ -144,7 +144,7 @@
             transform: translateY(-2px);
         }
 
-        /* Преимущества */
+        /* преимущества */
         .advantages {
             display: flex;
             flex-wrap: wrap;
@@ -152,21 +152,21 @@
             margin-top: 8px;
         }
 
-        .advantage-item {
+        .advantage {
             background: #f8fafc;
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 16px;
             flex: 1;
             min-width: 160px;
             text-align: center;
         }
 
-        /* Формы */
+        /* формы */
         input, select {
             width: 100%;
             padding: 10px 16px;
             border: 1px solid #cbd5e1;
-            border-radius: 16px;
+            border-radius: 20px;
             font-size: 14px;
             outline: none;
         }
@@ -187,8 +187,8 @@
             color: #2d3e50;
         }
 
-        /* Адресная карточка */
-        .address-card {
+        /* адресная карточка */
+        .address-item {
             background: #f8fafc;
             border-radius: 16px;
             padding: 12px 16px;
@@ -199,7 +199,7 @@
             border-left: 4px solid #2c9c6e;
         }
 
-        /* Модальные окна */
+        /* модальные окна */
         .modal {
             position: fixed;
             top: 0;
@@ -222,27 +222,27 @@
             opacity: 1;
         }
 
-        .modal-content {
+        .modal-card {
             background: white;
-            border-radius: 24px;
+            border-radius: 28px;
             max-width: 650px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            padding: 24px;
+            padding: 28px;
             box-shadow: 0 20px 35px rgba(0,0,0,0.2);
         }
 
-        .action-icon {
+        .icon-btn {
             background: none;
             border: none;
             font-size: 18px;
             cursor: pointer;
-            margin-left: 8px;
+            margin-left: 10px;
             color: #5f7f9e;
         }
 
-        .action-icon:hover {
+        .icon-btn:hover {
             color: #2c9c6e;
         }
 
@@ -275,13 +275,12 @@
             left: -120px;
             z-index: 10;
             white-space: normal;
-            text-align: left;
         }
 
-        .warning-text {
+        .warning {
             color: #dc2626;
             font-size: 13px;
-            margin-top: 4px;
+            margin-top: 5px;
         }
 
         .order-item {
@@ -290,41 +289,46 @@
         }
 
         @media (max-width: 700px) {
-            .app-panel { padding: 16px; }
+            .app-inner { padding: 16px; }
         }
     </style>
 </head>
 <body>
-<div class="app-container" id="appRoot">
-    <div class="app-panel" id="mainDashboard" style="display: none;">
-        <div class="flex-between" style="margin-bottom: 16px;">
+
+<div class="app" id="app">
+    <div class="app-inner" id="dashboard" style="display: none;">
+        <div class="flex-between" style="margin-bottom: 20px;">
             <h1><i class="fas fa-truck-fast"></i> TUMIX</h1>
             <div>
                 <button id="myOrdersBtn" class="btn btn-outline" style="margin-right: 10px;"><i class="fas fa-list"></i> Мои доставки</button>
                 <button id="logoutBtn" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Выйти</button>
             </div>
         </div>
+
         <div class="card">
             <div class="flex-between">
-                <h2>Привет, <span id="userNameDisplay"></span>! <i class="fas fa-smile-wink"></i></h2>
-                <p><i class="fas fa-envelope"></i> <span id="userEmailDisplay"></span> &nbsp;|&nbsp; <i class="fas fa-phone-alt"></i> <span id="userPhoneDisplay"></span></p>
+                <h2>Привет, <span id="userName"></span>! <i class="fas fa-smile-wink"></i></h2>
+                <p><i class="fas fa-envelope"></i> <span id="userEmail"></span> &nbsp;|&nbsp; <i class="fas fa-phone-alt"></i> <span id="userPhone"></span></p>
             </div>
         </div>
+
         <div class="card">
             <h3>Почему выбирают TUMIX?</h3>
             <div class="advantages">
-                <div class="advantage-item"><i class="fas fa-shield-alt" style="color:#2c9c6e; font-size:24px;"></i><br>Гарантия доставки, курьер не украдет заказ</div>
-                <div class="advantage-item"><i class="fas fa-boxes" style="color:#2c9c6e; font-size:24px;"></i><br>Бережное отношение к товарам</div>
-                <div class="advantage-item"><i class="fas fa-truck" style="color:#2c9c6e; font-size:24px;"></i><br>Перевозка крупногабарита на авто</div>
-                <div class="advantage-item"><i class="fas fa-tools" style="color:#2c9c6e; font-size:24px;"></i><br>Помощь со стройматериалами</div>
+                <div class="advantage"><i class="fas fa-shield-alt" style="color:#2c9c6e; font-size:24px;"></i><br>Гарантия доставки</div>
+                <div class="advantage"><i class="fas fa-boxes" style="color:#2c9c6e; font-size:24px;"></i><br>Бережное отношение</div>
+                <div class="advantage"><i class="fas fa-truck" style="color:#2c9c6e; font-size:24px;"></i><br>Крупногабарит на авто</div>
+                <div class="advantage"><i class="fas fa-tools" style="color:#2c9c6e; font-size:24px;"></i><br>Помощь со стройматериалами</div>
             </div>
         </div>
-        <div class="service-grid">
+
+        <div class="services">
             <div class="service-btn" data-action="pvz"><i class="fas fa-box-open"></i> Забрать заказ из ПВЗ</div>
             <div class="service-btn" data-action="internet"><i class="fas fa-shopping-cart"></i> Забрать интернет заказ</div>
             <div class="service-btn" data-action="shop"><i class="fas fa-store"></i> Заехать в магазин</div>
             <div class="service-btn" data-action="multi"><i class="fas fa-map-marker-alt"></i> Заехать в несколько точек</div>
         </div>
+
         <div class="card">
             <div class="flex-between">
                 <h3><i class="fas fa-map-pin"></i> Мои адреса доставки</h3>
@@ -337,12 +341,12 @@
 
 <!-- Приветственная модалка -->
 <div id="welcomeModal" class="modal active">
-    <div class="modal-content">
+    <div class="modal-card">
         <div style="text-align: center;">
             <i class="fas fa-rocket" style="font-size: 48px; color:#2c9c6e;"></i>
             <h2 style="margin: 20px 0;">Не успеваете за заказом?</h2>
             <p>Заказ далеко, или не хотите выходить на улицу?<br><strong>TUMIX</strong> заберет, отменит лишнее и довезет в сохранности!</p>
-            <div style="background: #f0f9f4; border-radius: 16px; padding: 16px; margin: 20px 0; text-align: left;">
+            <div style="background: #f0f9f4; border-radius: 20px; padding: 16px; margin: 20px 0; text-align: left;">
                 <p><strong>Наши преимущества:</strong></p>
                 <ul style="margin-left: 20px;">
                     <li>✅ Гарантия доставки, а не кражи курьером</li>
@@ -361,7 +365,7 @@
 
 <!-- Регистрация -->
 <div id="regModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-card">
         <h3>Регистрация</h3>
         <form id="regForm">
             <div class="form-group"><input type="text" id="regName" placeholder="Имя (только русские буквы)"></div>
@@ -369,28 +373,28 @@
             <div class="form-group"><input type="tel" id="regPhone" placeholder="+7XXXXXXXXXX"></div>
             <div class="form-group"><input type="password" id="regPassword" placeholder="Пароль (мин. 8 символов)"></div>
             <button type="submit" class="btn btn-primary" style="width:100%">Зарегистрироваться</button>
-            <button type="button" id="closeRegBtn" class="btn btn-outline" style="width:100%; margin-top:8px;">Назад</button>
+            <button type="button" id="closeRegBtn" class="btn btn-outline" style="width:100%; margin-top:10px;">Назад</button>
         </form>
     </div>
 </div>
 
 <!-- Вход -->
 <div id="loginModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-card">
         <h3>Вход</h3>
         <form id="loginForm">
             <div class="form-group"><input type="email" id="loginEmail" placeholder="Email"></div>
             <div class="form-group"><input type="password" id="loginPassword" placeholder="Пароль"></div>
             <button type="submit" class="btn btn-primary" style="width:100%">Войти</button>
-            <button type="button" id="closeLoginBtn" class="btn btn-outline" style="width:100%; margin-top:8px;">Назад</button>
+            <button type="button" id="closeLoginBtn" class="btn btn-outline" style="width:100%; margin-top:10px;">Назад</button>
         </form>
     </div>
 </div>
 
 <!-- Управление адресами -->
 <div id="addressManagerModal" class="modal">
-    <div class="modal-content" style="max-width: 650px;">
-        <div class="flex-between"><h3>Мои адреса</h3><button id="closeAddressManager" class="btn btn-outline">✕</button></div>
+    <div class="modal-card" style="max-width: 650px;">
+        <div class="flex-between"><h3>Мои адреса</h3><button id="closeAddressManagerBtn" class="btn btn-outline">✕</button></div>
         <div id="addressManagerList"></div>
         <button id="addAddressBtn" class="btn btn-primary" style="width:100%; margin-top:16px;">+ Добавить адрес</button>
     </div>
@@ -398,7 +402,7 @@
 
 <!-- Редактирование адреса -->
 <div id="addressEditModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-card">
         <h3 id="addressEditTitle">Добавить адрес</h3>
         <form id="addressEditForm">
             <div class="form-group"><input type="text" id="editCity" placeholder="Город * (только Москва)"></div>
@@ -410,24 +414,24 @@
             <div class="form-group"><input type="text" id="editFloor" placeholder="Этаж *"></div>
             <div class="form-group"><input type="text" id="editApartment" placeholder="Квартира *"></div>
             <div class="form-group"><input type="text" id="editIntercom" placeholder="Домофон *"></div>
-            <div style="display:flex; gap:12px;"><button type="submit" class="btn btn-primary">Сохранить</button><button type="button" id="closeEditModal" class="btn btn-outline">Отмена</button></div>
+            <div style="display:flex; gap:12px;"><button type="submit" class="btn btn-primary">Сохранить</button><button type="button" id="closeEditBtn" class="btn btn-outline">Отмена</button></div>
         </form>
     </div>
 </div>
 
 <!-- Заказ ПВЗ -->
 <div id="orderPvzModal" class="modal">
-    <div class="modal-content" style="max-width: 700px;">
+    <div class="modal-card" style="max-width: 720px;">
         <h3><i class="fas fa-box-open"></i> Заберем ваш заказ из любого ПВЗ</h3>
         <form id="pvzOrderForm">
             <div class="form-group"><label>Название маркетплейса *</label><input type="text" id="marketplace" required></div>
             <div class="form-group">
-                <label>Номер заказа * <span class="help-icon" data-tooltip="Номер заказа: это код по которому сотрудник ПВЗ найдет ваш заказ. На OZON он примерно выглядит так: 1234 5678 * 9123, на WB: 123456, на Яндекс маркете номер заказа (LO...), AE если это AliExpress, PO если Авито. На Авито также потребуется код выдачи.">?</span></label>
+                <label>Номер заказа * <span class="help-icon" data-tooltip="Номер заказа: код по которому сотрудник ПВЗ найдет заказ. OZON: 1234 5678 * 9123, WB: 123456, Яндекс Маркет: LO..., AE для AliExpress, PO для Авито. Для Авито также нужен код выдачи.">?</span></label>
                 <input type="text" id="orderNumber" required>
             </div>
             <div class="form-group"><label>Код выдачи (для Авито, необязательно)</label><input type="text" id="issueCode"></div>
             <div class="form-group"><label>Количество товаров * (от 1)</label><input type="number" id="itemsCount" min="1" value="1" required></div>
-            <div class="form-group"><label><input type="checkbox" id="adultCheck"> Есть товары 18+</label><div id="adultWarning" class="warning-text" style="display:none;">Курьер проверит ваши документы!</div></div>
+            <div class="form-group"><label><input type="checkbox" id="adultCheck"> Есть товары 18+</label><div id="adultWarning" class="warning" style="display:none;">Курьер проверит ваши документы!</div></div>
             <div class="form-group"><label>Номер телефона * (+7XXXXXXXXXX)</label><input type="tel" id="phoneOrder" placeholder="+7" required></div>
             <div class="form-group">
                 <label>ФИО *</label>
@@ -435,77 +439,74 @@
                 <label><input type="checkbox" id="noPatronymic"> Нет отчества</label>
             </div>
             <div class="form-group">
-                <label>Адрес доставки (из вашего профиля) <button type="button" id="editAddressFromOrder" class="action-icon"><i class="fas fa-cog"></i></button></label>
-                <div id="selectedAddressDisplay" style="background:#f1f5f9; padding:8px; border-radius:12px;"></div>
+                <label>Адрес доставки (из вашего профиля) <button type="button" id="editAddressFromOrderBtn" class="icon-btn"><i class="fas fa-cog"></i></button></label>
+                <div id="selectedAddressDisplay" style="background:#f1f5f9; padding:8px; border-radius:16px;"></div>
             </div>
             <div class="form-group"><label>Улица ПВЗ *</label><input type="text" id="pvzStreet" required></div>
             <div class="form-group"><label>Дом ПВЗ *</label><input type="text" id="pvzHouse" required></div>
             <div class="form-group"><label>Дата *</label><input type="date" id="deliveryDate" required></div>
             <div class="form-group"><label>Время (09:00 - 22:00) *</label><input type="time" id="deliveryTime" min="09:00" max="22:00" required></div>
-            <div style="display:flex; gap:12px;"><button type="submit" class="btn btn-primary">Оформить доставку</button><button type="button" id="closeOrderModal" class="btn btn-outline">Отмена</button></div>
+            <div style="display:flex; gap:12px;"><button type="submit" class="btn btn-primary">Оформить доставку</button><button type="button" id="closeOrderModalBtn" class="btn btn-outline">Отмена</button></div>
         </form>
     </div>
 </div>
 
 <!-- Мои доставки -->
 <div id="myOrdersModal" class="modal">
-    <div class="modal-content" style="max-width: 750px;">
-        <div class="flex-between"><h3><i class="fas fa-list"></i> Мои доставки</h3><button id="closeOrdersModal" class="btn btn-outline">✕</button></div>
+    <div class="modal-card" style="max-width: 750px;">
+        <div class="flex-between"><h3><i class="fas fa-list"></i> Мои доставки</h3><button id="closeOrdersBtn" class="btn btn-outline">✕</button></div>
         <div id="ordersList"></div>
     </div>
 </div>
 
 <script>
     // --------------------------------------------------------------
-    // 1. Генерация списка улиц Москвы (более 1000)
+    // 1. СПИСОК УЛИЦ МОСКВЫ (большой, регистронезависимый)
     // --------------------------------------------------------------
-    const generateMoscowStreets = () => {
-        const base = [
-            "Тверская", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Мясницкая", "Покровка", "Арбат", "Большая Дмитровка",
-            "Пятницкая", "Смоленская", "Садовое кольцо", "Мира проспект", "Профсоюзная", "Ленинградский проспект", "Варшавское шоссе",
-            "Каширское шоссе", "Дмитровское шоссе", "Ярославское шоссе", "Рязанский проспект", "Волгоградский проспект", "Люблинская",
-            "Краснопролетарская", "Цветной бульвар", "Чистопрудный бульвар", "Покровский бульвар", "Гоголевский бульвар", "Остоженка",
-            "Пречистенка", "Воздвиженка", "Моховая", "Никольская", "Кузнецкий Мост", "Петровка", "Неглинная", "Каретный Ряд",
-            "Павелецкая набережная", "Крымская набережная", "Фрунзенская набережная", "Мичуринский проспект", "Вернадского проспект",
-            "Ломоносовский проспект", "Университетский проспект", "Нахимовский проспект", "Севастопольский проспект", "Балаклавский проспект",
-            "Чертановская", "Андропова проспект", "Марьино", "Братиславская", "Перерва", "Волжский бульвар", "Ореховый бульвар",
-            "Ясеневый бульвар", "Новоясеневский проспект", "Тёплый Стан", "Тропарёво", "Раменки", "Мосфильмовская", "Крылатская",
-            "Рублёвское шоссе", "Можайское шоссе", "Звенигородское шоссе", "Хорошёвское шоссе", "Беговая", "Ходынский бульвар",
-            "Сокол", "Аэропорт", "Войковская", "Коптевская", "Головинское шоссе", "Кронштадтский бульвар", "Смольная", "Фестивальная",
-            "Ленинградское шоссе", "Волоколамское шоссе", "Сходненская", "Тушинская", "Свободы", "Планерная", "Митинская", "Дубравная",
-            "Молодёжная", "Осенний бульвар", "Поклонная", "Давыдковская", "Славянский бульвар", "Аминьевское шоссе", "Очаковская",
-            "Лобачевского", "Винницкая", "Академика Пилюгина", "Новаторов", "Удальцова", "Воронцовские пруды", "Архитектора Власова",
-            "Гарибальди", "Нагорная", "Симферопольский бульвар", "Кировоградская", "Подольских Курсантов", "Дорожная", "Бульвар Дмитрия Донского",
-            "Старокачаловская", "Академика Янгеля", "Россошанская", "Феодосийская", "Азовская", "Каховка", "Чонгарский бульвар", "Изюмская",
-            "Красного Маяка", "Черноморский бульвар", "Борисовские пруды", "Мячковский бульвар", "Шипиловская", "Ленинские горы", "Воробьевы горы",
-            "Хамовники", "Замоскворечье", "Таганка", "Лефортово", "Сокольники", "Измайлово", "Преображенская"
-        ];
-        let all = [...new Set(base)];
-        for (let i = 1; i <= 50; i++) all.push(`улица ${i}-я`);
-        return all.sort();
-    };
-    const MOSCOW_STREETS = generateMoscowStreets();
+    const streetsMoscow = [
+        "Тверская", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Мясницкая", "Покровка", "Арбат", "Большая Дмитровка",
+        "Пятницкая", "Смоленская", "Садовое кольцо", "Мира проспект", "Профсоюзная", "Ленинградский проспект", "Варшавское шоссе",
+        "Каширское шоссе", "Дмитровское шоссе", "Ярославское шоссе", "Рязанский проспект", "Волгоградский проспект", "Люблинская",
+        "Краснопролетарская", "Цветной бульвар", "Чистопрудный бульвар", "Покровский бульвар", "Гоголевский бульвар", "Остоженка",
+        "Пречистенка", "Воздвиженка", "Моховая", "Никольская", "Кузнецкий Мост", "Петровка", "Неглинная", "Каретный Ряд",
+        "Павелецкая набережная", "Крымская набережная", "Фрунзенская набережная", "Мичуринский проспект", "Вернадского проспект",
+        "Ломоносовский проспект", "Университетский проспект", "Нахимовский проспект", "Севастопольский проспект", "Балаклавский проспект",
+        "Чертановская", "Андропова проспект", "Марьино", "Братиславская", "Перерва", "Волжский бульвар", "Ореховый бульвар",
+        "Ясеневый бульвар", "Новоясеневский проспект", "Тёплый Стан", "Тропарёво", "Раменки", "Мосфильмовская", "Крылатская",
+        "Рублёвское шоссе", "Можайское шоссе", "Звенигородское шоссе", "Хорошёвское шоссе", "Беговая", "Ходынский бульвар",
+        "Сокол", "Аэропорт", "Войковская", "Коптевская", "Головинское шоссе", "Кронштадтский бульвар", "Смольная", "Фестивальная",
+        "Ленинградское шоссе", "Волоколамское шоссе", "Сходненская", "Тушинская", "Свободы", "Планерная", "Митинская", "Дубравная",
+        "Молодёжная", "Осенний бульвар", "Поклонная", "Давыдковская", "Славянский бульвар", "Аминьевское шоссе", "Очаковская",
+        "Лобачевского", "Винницкая", "Академика Пилюгина", "Новаторов", "Удальцова", "Воронцовские пруды", "Архитектора Власова",
+        "Гарибальди", "Нагорная", "Симферопольский бульвар", "Кировоградская", "Подольских Курсантов", "Дорожная", "Бульвар Дмитрия Донского",
+        "Старокачаловская", "Академика Янгеля", "Россошанская", "Феодосийская", "Азовская", "Каховка", "Чонгарский бульвар", "Изюмская",
+        "Красного Маяка", "Черноморский бульвар", "Борисовские пруды", "Мячковский бульвар", "Шипиловская", "Ленинские горы", "Воробьевы горы",
+        "Хамовники", "Замоскворечье", "Таганка", "Лефортово", "Сокольники", "Измайлово", "Преображенская"
+    ];
+    // Дополним
+    for (let i=1; i<=50; i++) streetsMoscow.push(`улица ${i}-я`);
+    const ALL_STREETS = [...new Set(streetsMoscow)].sort();
 
     // --------------------------------------------------------------
-    // 2. Глобальные переменные и функции
+    // 2. Глобальные данные
     // --------------------------------------------------------------
     let currentUser = null;
 
-    function showToast(msg, isError = false) {
-        const toast = document.createElement('div');
-        toast.textContent = msg;
-        toast.style.position = 'fixed';
-        toast.style.bottom = '20px';
-        toast.style.left = '50%';
-        toast.style.transform = 'translateX(-50%)';
-        toast.style.backgroundColor = isError ? '#dc2626' : '#2c9c6e';
-        toast.style.color = 'white';
-        toast.style.padding = '10px 20px';
-        toast.style.borderRadius = '40px';
-        toast.style.zIndex = '9999';
-        toast.style.fontWeight = '500';
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+    function showMessage(msg, isError = false) {
+        const div = document.createElement('div');
+        div.textContent = msg;
+        div.style.position = 'fixed';
+        div.style.bottom = '20px';
+        div.style.left = '50%';
+        div.style.transform = 'translateX(-50%)';
+        div.style.backgroundColor = isError ? '#dc2626' : '#2c9c6e';
+        div.style.color = 'white';
+        div.style.padding = '10px 20px';
+        div.style.borderRadius = '40px';
+        div.style.zIndex = '9999';
+        div.style.fontWeight = '500';
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 3000);
     }
 
     function saveUser() {
@@ -517,9 +518,9 @@
         const data = localStorage.getItem('tumix_user');
         if (data) {
             try {
-                const user = JSON.parse(data);
-                if (user && user.email) {
-                    currentUser = user;
+                const u = JSON.parse(data);
+                if (u && u.email) {
+                    currentUser = u;
                     if (!currentUser.addresses) currentUser.addresses = [];
                     if (!currentUser.orders) currentUser.orders = [];
                     return true;
@@ -562,14 +563,14 @@
     }
 
     function showMainUI(showDashboard) {
-        const dashboard = document.getElementById('mainDashboard');
+        const dashboard = document.getElementById('dashboard');
         const welcome = document.getElementById('welcomeModal');
         if (showDashboard && currentUser) {
             dashboard.style.display = 'block';
             welcome.classList.remove('active');
-            document.getElementById('userNameDisplay').innerText = currentUser.name;
-            document.getElementById('userEmailDisplay').innerText = currentUser.email;
-            document.getElementById('userPhoneDisplay').innerText = currentUser.phone;
+            document.getElementById('userName').innerText = currentUser.name;
+            document.getElementById('userEmail').innerText = currentUser.email;
+            document.getElementById('userPhone').innerText = currentUser.phone;
             renderAddressList();
         } else {
             dashboard.style.display = 'none';
@@ -588,7 +589,7 @@
         currentUser.addresses.forEach(addr => {
             let short = `${addr.city}, ${addr.street}, д.${addr.house}`;
             if (addr.apartment) short += `, кв.${addr.apartment}`;
-            html += `<div class="address-card"><span><i class="fas fa-location-dot"></i> ${short}</span></div>`;
+            html += `<div class="address-item"><span><i class="fas fa-location-dot"></i> ${short}</span></div>`;
         });
         container.innerHTML = html;
     }
@@ -602,37 +603,37 @@
         let html = '';
         currentUser.addresses.forEach((a, idx) => {
             let short = `${a.city}, ${a.street}, д.${a.house}, кв.${a.apartment}`;
-            html += `<div class="address-card">
+            html += `<div class="address-item">
                         <span>${short}</span>
                         <div>
-                            <button class="action-icon editAddr" data-idx="${idx}"><i class="fas fa-cog"></i></button>
-                            <button class="action-icon delAddr" data-idx="${idx}"><i class="fas fa-times"></i></button>
+                            <button class="icon-btn editAddr" data-idx="${idx}"><i class="fas fa-cog"></i></button>
+                            <button class="icon-btn delAddr" data-idx="${idx}"><i class="fas fa-times"></i></button>
                         </div>
                     </div>`;
         });
         container.innerHTML = html;
         document.querySelectorAll('.editAddr').forEach(btn => {
             btn.addEventListener('click', () => {
-                const idx = parseInt(btn.dataset.idx);
+                const idx = parseInt(btn.getAttribute('data-idx'));
                 document.getElementById('addressManagerModal').classList.remove('active');
                 openAddressEdit(idx);
             });
         });
         document.querySelectorAll('.delAddr').forEach(btn => {
             btn.addEventListener('click', () => {
-                const idx = parseInt(btn.dataset.idx);
+                const idx = parseInt(btn.getAttribute('data-idx'));
                 if (confirm('Удалить адрес?')) {
                     currentUser.addresses.splice(idx, 1);
                     saveUser();
                     renderAddressList();
                     renderAddressManager();
-                    showToast('Адрес удален', false);
+                    showMessage('Адрес удален', false);
                 }
             });
         });
     }
 
-    let editIndex = null;
+    let editAddressIndex = null;
     function openAddressEdit(index = null) {
         document.getElementById('addressEditForm').reset();
         if (index !== null && currentUser.addresses[index]) {
@@ -647,9 +648,9 @@
             document.getElementById('editApartment').value = a.apartment;
             document.getElementById('editIntercom').value = a.intercom;
             document.getElementById('addressEditTitle').innerText = 'Редактировать адрес';
-            editIndex = index;
+            editAddressIndex = index;
         } else {
-            editIndex = null;
+            editAddressIndex = null;
             document.getElementById('addressEditTitle').innerText = 'Добавить адрес';
         }
         document.getElementById('addressEditModal').classList.add('active');
@@ -665,16 +666,16 @@
         const intercom = document.getElementById('editIntercom').value.trim();
 
         if (city.toLowerCase() !== 'москва') {
-            showToast('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.', true);
+            showMessage('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.', true);
             return false;
         }
-        const streetExists = MOSCOW_STREETS.some(s => s.toLowerCase() === street.toLowerCase());
+        const streetExists = ALL_STREETS.some(s => s.toLowerCase() === street.toLowerCase());
         if (!streetExists) {
-            showToast('Улица должна быть в Москве. Выберите из подсказок.', true);
+            showMessage('Улица должна быть в Москве. Выберите из подсказок.', true);
             return false;
         }
         if (!house || !entrance || !floor || !apartment || !intercom) {
-            showToast('Заполните все обязательные поля (*)', true);
+            showMessage('Заполните все обязательные поля (*)', true);
             return false;
         }
 
@@ -684,18 +685,19 @@
             building: document.getElementById('editBuilding').value.trim(),
             entrance, floor, apartment, intercom
         };
-        if (editIndex !== null) currentUser.addresses[editIndex] = newAddr;
+        if (editAddressIndex !== null) currentUser.addresses[editAddressIndex] = newAddr;
         else currentUser.addresses.push(newAddr);
         saveUser();
         renderAddressList();
         document.getElementById('addressEditModal').classList.remove('active');
-        showToast('Адрес сохранен', false);
+        showMessage('Адрес сохранен', false);
         return true;
     }
 
+    // Заказ ПВЗ
     function openPvzOrder() {
         if (!currentUser.addresses.length) {
-            showToast('Сначала добавьте адрес доставки в профиле.', true);
+            showMessage('Сначала добавьте адрес доставки в профиле.', true);
             return;
         }
         document.getElementById('pvzOrderForm').reset();
@@ -731,40 +733,40 @@
         const noPatr = document.getElementById('noPatronymic').checked;
 
         if (noPatr && fullName.split(' ').length !== 2) {
-            showToast('ФИО: укажите фамилию и имя (без отчества)', true);
+            showMessage('ФИО: укажите фамилию и имя (без отчества)', true);
             return;
         }
         if (!noPatr && fullName.split(' ').length < 3) {
-            showToast('Укажите полные фамилию, имя и отчество', true);
+            showMessage('Укажите полные фамилию, имя и отчество', true);
             return;
         }
         if (!/^\+7\d{10}$/.test(phone)) {
-            showToast('Телефон должен быть +7XXXXXXXXXX', true);
+            showMessage('Телефон должен быть +7XXXXXXXXXX', true);
             return;
         }
         if (!marketplace || !orderNumber || isNaN(itemsCount) || itemsCount < 1) {
-            showToast('Заполните обязательные поля', true);
+            showMessage('Заполните обязательные поля', true);
             return;
         }
         const pvzStreet = document.getElementById('pvzStreet').value.trim();
         const pvzHouse = document.getElementById('pvzHouse').value.trim();
         if (!pvzStreet || !pvzHouse) {
-            showToast('Укажите улицу и дом ПВЗ', true);
+            showMessage('Укажите улицу и дом ПВЗ', true);
             return;
         }
         const date = document.getElementById('deliveryDate').value;
         const time = document.getElementById('deliveryTime').value;
         if (!time) {
-            showToast('Выберите время', true);
+            showMessage('Выберите время', true);
             return;
         }
         const hour = parseInt(time.split(':')[0]);
         if (hour < 9 || hour > 22) {
-            showToast('Время должно быть с 09:00 до 22:00', true);
+            showMessage('Время должно быть с 09:00 до 22:00', true);
             return;
         }
         if (!currentUser.addresses[0]) {
-            showToast('Добавьте адрес доставки', true);
+            showMessage('Добавьте адрес доставки', true);
             return;
         }
         const order = {
@@ -777,7 +779,7 @@
         };
         currentUser.orders.unshift(order);
         saveUser();
-        showToast('Спасибо за доверие, ваша доставка находится в статусе обработка, пожалуйста ожидайте.', false);
+        showMessage('Спасибо за доверие, ваша доставка находится в статусе обработка, пожалуйста ожидайте.', false);
         document.getElementById('orderPvzModal').classList.remove('active');
     }
 
@@ -820,42 +822,42 @@
     }
 
     // --------------------------------------------------------------
-    // 3. Инициализация
+    // 3. ИНИЦИАЛИЗАЦИЯ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ
     // --------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
-        // Заполняем datalist улиц
-        const streetDatalist = document.getElementById('streetList');
-        MOSCOW_STREETS.forEach(s => {
+        // заполняем datalist улиц
+        const datalist = document.getElementById('streetList');
+        ALL_STREETS.forEach(s => {
             const opt = document.createElement('option');
             opt.value = s;
-            streetDatalist.appendChild(opt);
+            datalist.appendChild(opt);
         });
 
         if (loadUser()) showMainUI(true);
         else showMainUI(false);
 
-        // Кнопки
+        // кнопки
         document.getElementById('showRegBtn').onclick = () => { closeAllModals(); document.getElementById('regModal').classList.add('active'); };
         document.getElementById('showLoginBtn').onclick = () => { closeAllModals(); document.getElementById('loginModal').classList.add('active'); };
         document.getElementById('closeRegBtn').onclick = () => { closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
         document.getElementById('closeLoginBtn').onclick = () => { closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
         document.getElementById('openAddressManager').onclick = () => { renderAddressManager(); document.getElementById('addressManagerModal').classList.add('active'); };
-        document.getElementById('closeAddressManager').onclick = () => document.getElementById('addressManagerModal').classList.remove('active');
+        document.getElementById('closeAddressManagerBtn').onclick = () => document.getElementById('addressManagerModal').classList.remove('active');
         document.getElementById('addAddressBtn').onclick = () => { document.getElementById('addressManagerModal').classList.remove('active'); openAddressEdit(null); };
-        document.getElementById('closeEditModal').onclick = () => document.getElementById('addressEditModal').classList.remove('active');
-        document.getElementById('closeOrderModal').onclick = () => document.getElementById('orderPvzModal').classList.remove('active');
-        document.getElementById('closeOrdersModal').onclick = () => document.getElementById('myOrdersModal').classList.remove('active');
+        document.getElementById('closeEditBtn').onclick = () => document.getElementById('addressEditModal').classList.remove('active');
+        document.getElementById('closeOrderModalBtn').onclick = () => document.getElementById('orderPvzModal').classList.remove('active');
+        document.getElementById('closeOrdersBtn').onclick = () => document.getElementById('myOrdersModal').classList.remove('active');
         document.getElementById('myOrdersBtn').onclick = showMyOrders;
         document.getElementById('logoutBtn').onclick = logout;
-        document.getElementById('editAddressFromOrder').onclick = () => { document.getElementById('orderPvzModal').classList.remove('active'); openAddressEdit(0); };
+        document.getElementById('editAddressFromOrderBtn').onclick = () => { document.getElementById('orderPvzModal').classList.remove('active'); openAddressEdit(0); };
 
-        // Сервисные кнопки
+        // сервисные кнопки
         document.querySelectorAll('.service-btn').forEach(btn => {
             if (btn.dataset.action === 'pvz') btn.onclick = openPvzOrder;
-            else btn.onclick = () => showToast('Функция в разработке, скоро появится!', false);
+            else btn.onclick = () => showMessage('Функция в разработке, скоро появится!', false);
         });
 
-        // Регистрация
+        // формы
         document.getElementById('regForm').onsubmit = (e) => {
             e.preventDefault();
             const err = register(
@@ -864,31 +866,25 @@
                 document.getElementById('regPhone').value,
                 document.getElementById('regPassword').value
             );
-            if (err) showToast(err, true);
-            else { closeAllModals(); showMainUI(true); showToast('Регистрация успешна!', false); }
+            if (err) showMessage(err, true);
+            else { closeAllModals(); showMainUI(true); showMessage('Регистрация успешна!', false); }
         };
-
-        // Вход
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
             const err = login(
                 document.getElementById('loginEmail').value,
                 document.getElementById('loginPassword').value
             );
-            if (err) showToast(err, true);
-            else { closeAllModals(); showMainUI(true); showToast('Добро пожаловать!', false); }
+            if (err) showMessage(err, true);
+            else { closeAllModals(); showMainUI(true); showMessage('Добро пожаловать!', false); }
         };
-
-        // Адрес
         document.getElementById('addressEditForm').onsubmit = (e) => {
             e.preventDefault();
             saveAddress();
         };
-
-        // Заказ
         document.getElementById('pvzOrderForm').onsubmit = submitOrder;
 
-        // Чекбоксы
+        // чекбоксы
         document.getElementById('adultCheck').onchange = function() {
             document.getElementById('adultWarning').style.display = this.checked ? 'block' : 'none';
         };
@@ -897,12 +893,13 @@
             if (this.checked) fn.placeholder = 'Иванов Иван';
             else fn.placeholder = 'Иванов Иван Иванович';
         };
-        // Валидация города при потере фокуса
+
+        // валидация города при потере фокуса
         const cityField = document.getElementById('editCity');
         if (cityField) {
             cityField.addEventListener('blur', function() {
                 if (this.value.trim().toLowerCase() !== 'москва' && this.value.trim() !== '') {
-                    showToast('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.', true);
+                    showMessage('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.', true);
                 }
             });
         }
