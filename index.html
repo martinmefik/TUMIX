@@ -3,759 +3,692 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Достависта | Реальная доставка из магазинов Москвы</title>
-    <!-- 2GIS API (карты и геокодер) -->
-    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
-    <!-- Font Awesome 6 -->
+    <title>TUMIX — Экспресс-доставка из маркетплейсов</title>
+    <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter + Fallback -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: all 0.2s ease;
-        }
-
-        /* Тёмная и светлая темы */
-        :root {
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e9eef5 100%);
-            --surface: rgba(255, 255, 255, 0.95);
-            --surface-2: #ffffff;
-            --text-primary: #1a2c3e;
-            --text-secondary: #4a627a;
-            --border: #e2edf2;
-            --accent: #e31e24;
-            --accent-light: #ffe5e5;
-            --accent-glow: rgba(227, 30, 36, 0.2);
-            --shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
-            --card-radius: 1.5rem;
-        }
-
-        body.dark {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #0a0f1a 100%);
-            --surface: rgba(30, 41, 59, 0.95);
-            --surface-2: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border: #334155;
-            --accent-light: #2d1f1f;
-            --accent-glow: rgba(227, 30, 36, 0.3);
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-primary);
             min-height: 100vh;
-        }
-
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
+            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 1.5rem;
         }
 
-        /* Современная шапка */
-        .header {
-            background: var(--surface);
-            backdrop-filter: blur(10px);
+        /* Glassmorphic container */
+        .glass-panel {
+            background: rgba(15, 25, 45, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-radius: 2rem;
-            padding: 0.8rem 1.5rem;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 255, 255, 0.2);
+            width: 100%;
+            max-width: 1400px;
+            transition: all 0.3s ease;
         }
 
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(120deg, var(--accent), #f97316);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        /* main content wrapper */
+        .app-container {
+            padding: 2rem 2rem 2.5rem;
         }
 
-        .address-chip {
-            background: var(--accent-light);
-            padding: 0.5rem 1rem;
+        /* neon headings */
+        .neon-text {
+            color: #fff;
+            text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #00aaff;
+            letter-spacing: -0.3px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 1.75rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 0 18px rgba(0, 255, 255, 0.3);
+            border-color: rgba(0, 255, 255, 0.7);
+        }
+
+        .btn-neon {
+            background: rgba(0, 255, 255, 0.12);
+            border: 1px solid #0ff;
+            color: #0ff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-neon:hover {
+            background: #0ff;
+            color: #0a0f1e;
+            box-shadow: 0 0 14px #0ff;
+            border-color: #0ff;
+        }
+
+        .btn-primary-solid {
+            background: linear-gradient(135deg, #0ff, #0a6c8c);
+            border: none;
+            color: #0a0f1e;
+            font-weight: bold;
+            padding: 0.7rem 1.5rem;
             border-radius: 3rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-weight: 500;
-            border: 1px solid var(--accent);
+            transition: 0.2s;
         }
 
-        .user-actions {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
+        .btn-primary-solid:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 12px cyan;
         }
 
-        .glass-btn {
-            background: var(--surface-2);
-            border: 1px solid var(--border);
+        input, select {
+            background: rgba(10, 20, 30, 0.7);
+            border: 1px solid rgba(0, 255, 255, 0.4);
             border-radius: 2rem;
-            padding: 0.5rem 1.2rem;
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        /* Основная сетка */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 1.8rem;
-        }
-
-        @media (max-width: 800px) {
-            .main-grid { grid-template-columns: 1fr; }
-        }
-
-        /* Панель магазинов */
-        .stores-panel, .catalog-panel {
-            background: var(--surface);
-            backdrop-filter: blur(10px);
-            border-radius: var(--card-radius);
-            padding: 1.2rem;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-
-        .store-card {
-            background: var(--surface-2);
-            border-radius: 1rem;
-            padding: 0.8rem;
-            margin-bottom: 0.8rem;
-            cursor: pointer;
-            border-left: 3px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .store-card.active {
-            border-left-color: var(--accent);
-            background: var(--accent-light);
-            transform: translateX(5px);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 1rem;
-            max-height: 65vh;
-            overflow-y: auto;
-        }
-
-        .product-card {
-            background: var(--surface-2);
-            border-radius: 1rem;
-            padding: 0.8rem;
-            border: 1px solid var(--border);
-        }
-
-        .add-cart {
-            background: var(--accent-light);
-            border: none;
+            padding: 0.7rem 1.2rem;
+            color: white;
+            outline: none;
+            transition: 0.2s;
             width: 100%;
-            border-radius: 2rem;
-            padding: 0.4rem;
-            margin-top: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--accent);
         }
 
-        /* Модальные окна */
+        input:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .error-input {
+            border-color: #ff4d4d;
+            background: rgba(255, 70, 70, 0.1);
+            box-shadow: 0 0 5px #ff4d4d;
+        }
+
         .modal {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
         }
 
         .modal.active {
-            display: flex;
+            visibility: visible;
+            opacity: 1;
         }
 
         .modal-content {
-            background: var(--surface);
+            background: rgba(20, 30, 50, 0.9);
+            backdrop-filter: blur(20px);
             border-radius: 2rem;
-            max-width: 90vw;
-            width: 550px;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            max-width: 550px;
+            width: 90%;
+            padding: 2rem;
+            border: 1px solid cyan;
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.3);
         }
 
-        .form-group {
-            margin-bottom: 1rem;
+        .address-item {
+            background: rgba(0, 255, 255, 0.08);
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid #0ff;
         }
 
-        input, button {
-            font-family: inherit;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.7rem 1rem;
-            border-radius: 2rem;
-            border: 1px solid var(--border);
-            background: var(--surface-2);
-            color: var(--text-primary);
-        }
-
-        .error-highlight {
-            border-color: #e31e24 !important;
-            box-shadow: 0 0 0 2px rgba(227, 30, 36, 0.3);
-        }
-
-        .city-error-scale {
-            background: linear-gradient(90deg, #e31e24, #ff8a5c);
-            height: 4px;
-            width: 0%;
-            transition: width 0.3s;
-            border-radius: 4px;
-        }
-
-        .strength-bar {
-            height: 4px;
-            border-radius: 4px;
-            margin-top: 5px;
-            transition: width 0.2s;
-        }
-
-        .map-container {
-            height: 400px;
-            width: 100%;
-            border-radius: 1rem;
-            margin: 1rem 0;
-        }
-
-        .cart-item {
+        .grid-actions {
             display: flex;
-            justify-content: space-between;
-            padding: 0.6rem;
-            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0 2rem;
         }
 
-        .checkout {
-            background: var(--accent);
-            color: white;
-            width: 100%;
-            border: none;
-            padding: 0.7rem;
+        .service-btn {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 255, 255, 0.5);
             border-radius: 2rem;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-
-        .address-list-item {
-            padding: 0.6rem;
-            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.8rem;
+            font-weight: 600;
+            color: #bbffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
             cursor: pointer;
         }
 
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .service-btn i {
+            font-size: 1.5rem;
+            color: #0ff;
+        }
+
+        .service-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .street-suggest {
+            position: relative;
+        }
+
+        /* helper */
+        .text-glow {
+            color: #b0f0ff;
+        }
+
+        hr {
+            border-color: rgba(0, 255, 255, 0.3);
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 700px) {
+            .app-container {
+                padding: 1.2rem;
+            }
+            .grid-actions {
+                gap: 0.8rem;
+            }
+            .service-btn {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header">
-        <div class="logo">
-            <h1><i class="fas fa-rocket"></i> Достависта</h1>
-            <div style="font-size: 0.7rem;">доставка из реальных магазинов</div>
-        </div>
-        <div class="address-chip" id="addressChip">
-            <i class="fas fa-map-marker-alt"></i>
-            <span id="currentAddressShort">Адрес не выбран</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-        <div class="user-actions">
-            <button id="themeToggle" class="glass-btn"><i class="fas fa-moon"></i></button>
-            <button id="cartBtn" class="glass-btn"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></button>
-            <button id="profileBtn" class="glass-btn"><i class="fas fa-user"></i></button>
-        </div>
-    </div>
 
-    <div class="main-grid">
-        <div class="stores-panel">
-            <h3><i class="fas fa-store"></i> Ближайшие магазины</h3>
-            <div id="storesList" class="store-list">📍 Укажите адрес для отображения магазинов</div>
-            <button id="refreshStores" class="glass-btn" style="margin-top:1rem; width:100%">Обновить по адресу</button>
-        </div>
-        <div class="catalog-panel">
-            <div id="catalogHeader"><h2>Выберите магазин</h2></div>
-            <div id="productsContainer" class="products-grid"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Модалка регистрации -->
-<div id="registerModal" class="modal">
-    <div class="modal-content">
-        <h2>Регистрация</h2>
-        <div id="registerForm">
-            <div class="form-group"><input type="text" id="regName" placeholder="Имя (только русские буквы)"></div>
-            <div class="form-group"><input type="text" id="regLogin" placeholder="Логин"></div>
-            <div class="form-group"><input type="password" id="regPassword" placeholder="Пароль"></div>
-            <div class="strength-bar" id="strengthBar" style="background:#e2e8f0;"></div>
-            <div id="passwordHint" style="font-size:0.7rem; margin-bottom:0.5rem;"></div>
-            <div class="form-group"><input type="password" id="regConfirm" placeholder="Подтвердите пароль"></div>
-            <button id="doRegister" class="glass-btn" style="width:100%; background:var(--accent); color:white;">Зарегистрироваться</button>
-        </div>
-    </div>
-</div>
-
-<!-- Модалка адреса (с картой) -->
-<div id="addressModal" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
-        <h3>Адрес доставки</h3>
-        <div class="flex-between">
-            <div style="flex:1; margin-right:1rem;">
-                <div class="form-group"><input type="text" id="city" placeholder="Город * (только Москва)"></div>
-                <div id="cityScale" class="city-error-scale"></div>
-                <div class="form-group"><input type="text" id="street" placeholder="Улица *"></div>
-                <div class="form-group"><input type="text" id="house" placeholder="Дом *"></div>
-                <div class="form-group"><input type="text" id="building" placeholder="Корпус/строение"></div>
-                <div class="form-group"><input type="text" id="entrance" placeholder="Подъезд *"></div>
-                <div class="form-group"><input type="text" id="floor" placeholder="Этаж *"></div>
-                <div class="form-group"><input type="text" id="apartment" placeholder="Квартира *"></div>
-                <div class="form-group"><input type="text" id="intercom" placeholder="Домофон *"></div>
+<div class="glass-panel" id="appRoot">
+    <div class="app-container">
+        <!-- Главный контент (виден только после регистрации/входа) -->
+        <div id="mainApp" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                <h1 class="neon-text"><i class="fas fa-rocket"></i> TUMIX</h1>
+                <button id="logoutBtn" class="btn-neon"><i class="fas fa-sign-out-alt"></i> Выйти</button>
             </div>
-            <div style="width: 300px;">
-                <div id="addressMap" class="map-container" style="height: 350px;"></div>
-                <button id="pickOnMapBtn" class="glass-btn" style="width:100%; margin-top:0.5rem;"><i class="fas fa-hand-pointer"></i> Уточнить адрес на карте</button>
+            <div class="glass-card" style="padding: 1.5rem; margin-bottom: 2rem;">
+                <h2 class="neon-text" style="font-size: 1.5rem;">✨ Привет, <span id="userNameDisplay"></span>!</h2>
+                <p><i class="fas fa-envelope"></i> <span id="userEmailDisplay"></span> &nbsp;|&nbsp; <i class="fas fa-phone"></i> <span id="userPhoneDisplay"></span></p>
+            </div>
+
+            <!-- Кнопки сервисов -->
+            <div class="grid-actions">
+                <div class="service-btn" data-service="pvz"><i class="fas fa-box-open"></i> Забрать заказ из ПВЗ</div>
+                <div class="service-btn" data-service="internet"><i class="fas fa-shopping-cart"></i> Забрать интернет заказ</div>
+                <div class="service-btn" data-service="shop"><i class="fas fa-store"></i> Заехать в магазин</div>
+                <div class="service-btn" data-service="multi"><i class="fas fa-map-marker-alt"></i> Заехать в несколько точек</div>
+            </div>
+
+            <!-- Блок адресов / личный кабинет -->
+            <div class="glass-card" style="padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <h3 class="neon-text"><i class="fas fa-map-pin"></i> Мои адреса доставки</h3>
+                    <button id="manageAddressBtn" class="btn-neon" style="padding: 0.4rem 1.2rem;"><i class="fas fa-plus-circle"></i> Управление адресами</button>
+                </div>
+                <div id="addressListContainer">
+                    <!-- динамический список адресов -->
+                    <p class="text-glow" style="opacity: 0.7;"><i class="fas fa-info-circle"></i> Адреса не добавлены. Нажмите "Управление адресами", чтобы добавить.</p>
+                </div>
             </div>
         </div>
-        <button id="saveAddressBtn" class="glass-btn" style="width:100%; background:var(--accent); color:white; margin-top:1rem;">Сохранить адрес</button>
-        <hr style="margin:1rem 0">
-        <h4>Мои адреса</h4>
-        <div id="savedAddressesList"></div>
-        <button class="glass-btn close-modal" style="margin-top:1rem;">Закрыть</button>
     </div>
 </div>
 
-<!-- Модалка корзины -->
-<div id="cartModal" class="modal">
+<!-- МОДАЛЬНОЕ ОКНО ПРИВЕТСТВИЯ (не зарегистрирован) -->
+<div id="welcomeModal" class="modal active">
     <div class="modal-content">
-        <h3>Корзина</h3>
-        <div id="cartItems"></div>
-        <div id="cartTotal" class="flex-between" style="margin-top:1rem;"></div>
-        <button id="checkoutBtn" class="checkout">Оформить заказ</button>
-        <button class="glass-btn close-modal" style="margin-top:1rem;">Закрыть</button>
+        <div style="text-align: center;">
+            <i class="fas fa-truck-fast" style="font-size: 3rem; color: #0ff; margin-bottom: 1rem;"></i>
+            <h2 class="neon-text">Не успеваете за заказом?</h2>
+            <p style="margin: 1rem 0; line-height: 1.4;">Заказ далеко, или просто не хотите выходить на улицу? Компания TUMIX готова решить вашу проблему! Мы заберем ваш заказ, отменим всё лишнее и в полной сохранности довезём вам!</p>
+            <div style="background: rgba(0,255,255,0.1); border-radius: 1rem; padding: 1rem; margin: 1rem 0; text-align: left;">
+                <p><i class="fas fa-check-circle" style="color:#0ff;"></i> <strong>Почему стоит выбрать нас, а не доставку маркетплейса:</strong></p>
+                <ul style="margin-left: 1.2rem;">
+                    <li>✅ Гарантия, что заказ доставлен, а не украден курьером.</li>
+                    <li>✅ Бережное отношение к товарам.</li>
+                    <li>✅ Привезём тяжёлое или крупногабаритное на авто.</li>
+                    <li>✅ Помощь со стройматериалами — курьер заедет в магазин и выберет лучший вариант.</li>
+                </ul>
+            </div>
+            <button id="showRegFromWelcomeBtn" class="btn-primary-solid" style="font-size: 1.2rem; margin-top: 0.5rem;"><i class="fas fa-user-plus"></i> РЕГИСТРАЦИЯ</button>
+        </div>
     </div>
 </div>
 
-<!-- Модалка профиля -->
-<div id="profileModal" class="modal">
+<!-- МОДАЛКА РЕГИСТРАЦИИ -->
+<div id="regModal" class="modal">
     <div class="modal-content">
-        <h3>Профиль</h3>
-        <p id="profileInfo"></p>
-        <button id="logoutBtn" class="glass-btn">Выйти</button>
-        <button class="glass-btn close-modal">Закрыть</button>
+        <h2 class="neon-text"><i class="fas fa-id-card"></i> Регистрация TUMIX</h2>
+        <form id="regForm">
+            <input type="text" id="regName" placeholder="Имя (только русские буквы)" autocomplete="off" style="margin: 10px 0;">
+            <input type="email" id="regEmail" placeholder="Электронная почта" style="margin: 10px 0;">
+            <input type="tel" id="regPhone" placeholder="Телефон +7XXXXXXXXXX" style="margin: 10px 0;">
+            <input type="password" id="regPassword" placeholder="Пароль (минимум 8 символов)" style="margin: 10px 0;">
+            <div id="regError" style="color:#ff7777; font-size:0.85rem; margin: 8px 0;"></div>
+            <div style="display: flex; gap: 12px; margin-top: 12px;">
+                <button type="submit" class="btn-primary-solid">Зарегистрироваться</button>
+                <button type="button" id="closeRegModalBtn" class="btn-neon">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- МОДАЛКА ДОБАВЛЕНИЯ / РЕДАКТИРОВАНИЯ АДРЕСА -->
+<div id="addressFormModal" class="modal">
+    <div class="modal-content" style="max-width: 600px; max-height: 85vh; overflow-y: auto;">
+        <h3 class="neon-text" id="addressFormTitle">Добавить адрес</h3>
+        <form id="addressForm">
+            <input type="text" id="addressCity" placeholder="Город * (только Москва)" style="margin: 8px 0;">
+            <div class="street-suggest">
+                <input type="text" id="addressStreet" placeholder="Улица * (Московский регион)" list="moscowStreetsList" autocomplete="off" style="margin: 8px 0;">
+                <datalist id="moscowStreetsList"></datalist>
+            </div>
+            <input type="text" id="addressHouse" placeholder="№ дома *" style="margin: 8px 0;">
+            <div style="display: flex; gap: 12px;">
+                <input type="text" id="addressCorpus" placeholder="Корпус (необязательно)" style="margin: 8px 0; flex:1">
+                <input type="text" id="addressBuilding" placeholder="Строение (необязательно)" style="margin: 8px 0; flex:1">
+            </div>
+            <input type="text" id="addressEntrance" placeholder="Подъезд" style="margin: 8px 0;">
+            <input type="text" id="addressFloor" placeholder="Этаж" style="margin: 8px 0;">
+            <input type="text" id="addressApartment" placeholder="Номер квартиры" style="margin: 8px 0;">
+            <input type="text" id="addressIntercom" placeholder="Домофон" style="margin: 8px 0;">
+            <div id="addressFormError" style="color:#ff8888; margin: 8px 0;"></div>
+            <div style="display: flex; gap: 12px; margin-top: 10px;">
+                <button type="submit" class="btn-primary-solid">Сохранить адрес</button>
+                <button type="button" id="closeAddressFormBtn" class="btn-neon">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- МОДАЛКА УПРАВЛЕНИЯ АДРЕСАМИ (список + удалить / редактировать / добавить) -->
+<div id="addressManagerModal" class="modal">
+    <div class="modal-content" style="max-width: 700px; max-height: 80vh; overflow-y: auto;">
+        <h3 class="neon-text"><i class="fas fa-address-book"></i> Мои адреса</h3>
+        <div id="addressManagerList" style="margin: 1rem 0; max-height: 55vh; overflow-y: auto;"></div>
+        <button id="addNewAddressFromManager" class="btn-primary-solid" style="width: 100%; margin: 6px 0;"><i class="fas fa-plus"></i> Добавить новый адрес</button>
+        <button id="closeManagerBtn" class="btn-neon" style="width: 100%; margin-top: 8px;">Закрыть</button>
     </div>
 </div>
 
 <script>
-    // ======================== КОНФИГУРАЦИЯ 2GIS ========================
-    // ВСТАВЬТЕ СВОЙ API КЛЮЧ 2GIS (бесплатно на maps.api.2gis.ru)
-    const GIS_API_KEY = 'YOUR_2GIS_API_KEY'; // Замените на свой ключ!
-
-    // ======================== РЕАЛЬНЫЙ КАТАЛОГ МАГАЗИНОВ (на основе данных из открытых источников) ========================
-    const storesData = [
-        {
-            id: 1, name: "Пятёрочка", chain: "X5",
-            address: "Москва, ул. Тверская, 10", lat: 55.7602, lng: 37.6139,
-            working: "08:00–23:00", rating: "4.5",
-            products: [
-                { id: 101, name: "Молоко Простоквашино 2.5%", price: 79.9, unit: "1 л", emoji: "🥛", desc: "пастеризованное" },
-                { id: 102, name: "Хлеб Бородинский", price: 49.9, unit: "шт", emoji: "🍞", desc: "ржаной" },
-                { id: 103, name: "Куриное филе", price: 289, unit: "кг", emoji: "🍗", desc: "охлаждённое" },
-                { id: 104, name: "Яйца С1 10шт", price: 119, unit: "уп", emoji: "🥚", desc: "столовые" }
-            ]
-        },
-        {
-            id: 2, name: "Магнит", chain: "Магнит",
-            address: "Москва, пр-т Мира, 48", lat: 55.7736, lng: 37.6331,
-            working: "Круглосуточно", rating: "4.3",
-            products: [
-                { id: 201, name: "Макароны Makfa", price: 89, unit: "450г", emoji: "🍝", desc: "спиральки" },
-                { id: 202, name: "Масло сливочное 82%", price: 139, unit: "180г", emoji: "🧈", desc: "Крестьянское" },
-                { id: 203, name: "Картофель мытый", price: 44.9, unit: "кг", emoji: "🥔", desc: "свежий" }
-            ]
-        },
-        {
-            id: 3, name: "Перекрёсток", chain: "X5",
-            address: "Москва, ул. Арбат, 25", lat: 55.7524, lng: 37.6034,
-            working: "09:00–22:00", rating: "4.7",
-            products: [
-                { id: 301, name: "Лосось слабосоленый", price: 599, unit: "200г", emoji: "🐟", desc: "филе" },
-                { id: 302, name: "Авокадо Хасс", price: 199, unit: "шт", emoji: "🥑", desc: "спелый" },
-                { id: 303, name: "Сыр Маасдам", price: 349, unit: "200г", emoji: "🧀", desc: "полутвёрдый" }
-            ]
-        },
-        {
-            id: 4, name: "ВкусВилл", chain: "ВкусВилл",
-            address: "Москва, Смоленская пл., 3", lat: 55.7537, lng: 37.5829,
-            working: "09:00–23:00", rating: "4.9",
-            products: [
-                { id: 401, name: "Творог 5%", price: 119, unit: "200г", emoji: "🥄", desc: "фермерский" },
-                { id: 402, name: "Печенье овсяное", price: 89, unit: "250г", emoji: "🍪", desc: "без сахара" },
-                { id: 403, name: "Кефир бифидок", price: 79, unit: "500мл", emoji: "🥛", desc: "натуральный" }
-            ]
-        }
+    // ---------- СПИСОК УЛИЦ МОСКВЫ (реальные / для автодополнения) ----------
+    const MOSCOW_STREETS = [
+        "Тверская улица", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Профсоюзная улица",
+        "Мира проспект", "Садовое кольцо", "Мясницкая улица", "Покровка", "Большая Дмитровка",
+        "Пятницкая улица", "Арбат", "Смоленская улица", "Зубовский бульвар", "Комсомольский проспект",
+        "Ленинградский проспект", "Шоссе Энтузиастов", "Рязанский проспект", "Волгоградский проспект",
+        "Каширское шоссе", "Варшавское шоссе", "Можайское шоссе", "Ярославское шоссе", "Алтуфьевское шоссе",
+        "Дмитровское шоссе", "Ленинские горы", "Университетский проспект", "Нахимовский проспект",
+        "Севастопольский проспект", "Балаклавский проспект"
     ];
 
-    // Глобальные переменные
-    let currentUser = null;
-    let userAddresses = [];
-    let selectedAddress = null;
-    let currentStore = null;
-    let cart = [];
-    let map = null;
-    let addressMap = null;
-    let addressMarker = null;
+    // --- вспомогательные функции ---
+    let currentUser = null;     // объект пользователя { name, email, phone, password, addresses: [] }
 
-    // Фильтр матерных слов
-    const badWords = ["хуй", "пизда", "бля", "ебан", "залупа", "мудак", "гандон", "пидор", "сука", "хер"];
-    function isNameValid(name) {
-        const cyrillic = /^[а-яёА-ЯЁ\s\-]+$/;
-        if (!cyrillic.test(name)) return false;
+    function saveUserToLocalStorage() {
+        if (currentUser) {
+            localStorage.setItem('tumix_user', JSON.stringify(currentUser));
+        } else {
+            localStorage.removeItem('tumix_user');
+        }
+    }
+
+    function loadUserFromStorage() {
+        const stored = localStorage.getItem('tumix_user');
+        if (stored) {
+            try {
+                const user = JSON.parse(stored);
+                if (user && user.email && user.addresses === undefined) user.addresses = [];
+                currentUser = user;
+                return true;
+            } catch(e) { return false; }
+        }
+        return false;
+    }
+
+    // проверка имени (русские буквы, пробелы, дефис, без мата)
+    const BAD_WORDS = ['хуй', 'пизд', 'бля', 'мудак', 'говно', 'редиска']; // упрощённый фильтр
+    function isValidName(name) {
+        const nameRegex = /^[А-Яа-яЁё\s\-]+$/;
+        if (!nameRegex.test(name)) return false;
         const lower = name.toLowerCase();
-        for (let w of badWords) if (lower.includes(w)) return false;
+        for (let bad of BAD_WORDS) {
+            if (lower.includes(bad)) return false;
+        }
+        return name.trim().length >= 2;
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
+    }
+
+    function isValidPhone(phone) {
+        return /^\+7\d{10}$/.test(phone);
+    }
+
+    // отрисовка списка адресов в личном кабинете (краткий вид)
+    function renderAddressShortList() {
+        const container = document.getElementById('addressListContainer');
+        if (!currentUser || !currentUser.addresses || currentUser.addresses.length === 0) {
+            container.innerHTML = '<p class="text-glow" style="opacity: 0.7;"><i class="fas fa-info-circle"></i> Адреса не добавлены. Нажмите "Управление адресами", чтобы добавить.</p>';
+            return;
+        }
+        let html = '<div style="display: flex; flex-direction: column; gap: 12px;">';
+        currentUser.addresses.forEach((addr, idx) => {
+            let addrStr = `${addr.city}, ${addr.street}, д. ${addr.house}`;
+            if (addr.corpus) addrStr += `, корп. ${addr.corpus}`;
+            if (addr.building) addrStr += `, стр. ${addr.building}`;
+            if (addr.apartment) addrStr += `, кв. ${addr.apartment}`;
+            html += `<div class="address-item"><i class="fas fa-location-dot"></i> ${addrStr}</div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    // заполнение datalist улиц
+    function fillStreetDatalist() {
+        const datalist = document.getElementById('moscowStreetsList');
+        datalist.innerHTML = '';
+        MOSCOW_STREETS.forEach(street => {
+            const option = document.createElement('option');
+            option.value = street;
+            datalist.appendChild(option);
+        });
+    }
+
+    // валидация адреса: город Москва, улица из списка, дом обязателен
+    function validateAddressForm(city, street, house) {
+        if (!city || city.trim().toLowerCase() !== 'москва') return { ok: false, field: 'city', msg: 'Извините, доставка в вашем городе находится в разработке! Только Москва.' };
+        if (!street || !MOSCOW_STREETS.includes(street.trim())) return { ok: false, field: 'street', msg: 'Улица должна быть в пределах Московского региона. Выберите из списка.' };
+        if (!house || house.trim() === '') return { ok: false, field: 'house', msg: 'Укажите номер дома' };
+        return { ok: true };
+    }
+
+    // модальные окна
+    function showModal(modalId) {
+        document.getElementById(modalId).classList.add('active');
+    }
+    function hideModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+    function closeAllModals() {
+        const modals = ['welcomeModal', 'regModal', 'addressFormModal', 'addressManagerModal'];
+        modals.forEach(id => hideModal(id));
+    }
+
+    // обновление UI в зависимости от авторизации
+    function updateUIBasedOnAuth() {
+        const mainDiv = document.getElementById('mainApp');
+        const welcomeModal = document.getElementById('welcomeModal');
+        if (currentUser) {
+            mainDiv.style.display = 'block';
+            welcomeModal.classList.remove('active');
+            // заполнить данные профиля
+            document.getElementById('userNameDisplay').innerText = currentUser.name;
+            document.getElementById('userEmailDisplay').innerText = currentUser.email;
+            document.getElementById('userPhoneDisplay').innerText = currentUser.phone;
+            renderAddressShortList();
+        } else {
+            mainDiv.style.display = 'none';
+            showModal('welcomeModal');
+        }
+    }
+
+    // регистрация
+    function registerUser(name, email, phone, password) {
+        if (!isValidName(name)) return 'Имя должно содержать только русские буквы и быть без нецензурных слов.';
+        if (!isValidEmail(email)) return 'Введите корректный email.';
+        if (!isValidPhone(phone)) return 'Телефон должен быть в формате +7XXXXXXXXXX (10 цифр после +7).';
+        if (password.length < 8) return 'Пароль должен быть минимум 8 символов.';
+        // создать нового пользователя
+        currentUser = {
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            password: password,
+            addresses: []
+        };
+        saveUserToLocalStorage();
+        updateUIBasedOnAuth();
+        return null;
+    }
+
+    // добавить адрес в массив currentUser
+    function addAddress(addressObj) {
+        if (!currentUser) return false;
+        if (!currentUser.addresses) currentUser.addresses = [];
+        currentUser.addresses.push(addressObj);
+        saveUserToLocalStorage();
+        renderAddressShortList();
         return true;
     }
 
-    // Проверка пароля
-    function checkPasswordStrength(pwd) {
-        let strength = 0;
-        if (pwd.length >= 8) strength++;
-        if (/[a-zA-Z]/.test(pwd) && /\d/.test(pwd)) strength++;
-        if (/[!@#$%^&*]/.test(pwd)) strength++;
-        if (strength === 0) return { width: "20%", color: "#ef4444", text: "очень слабый" };
-        if (strength === 1) return { width: "40%", color: "#f97316", text: "слабый" };
-        if (strength === 2) return { width: "60%", color: "#eab308", text: "средний" };
-        if (strength === 3) return { width: "100%", color: "#10b981", text: "отличный" };
-        return { width: "100%", color: "#10b981", text: "отличный" };
-    }
-
-    // Сохранение в localStorage
-    function saveAll() {
-        let users = JSON.parse(localStorage.getItem('delivery_users') || '[]');
-        if (currentUser) {
-            const idx = users.findIndex(u => u.login === currentUser.login);
-            if (idx >= 0) users[idx] = currentUser;
-            else users.push(currentUser);
-            localStorage.setItem('delivery_users', JSON.stringify(users));
-            localStorage.setItem('currentUserLogin', currentUser.login);
+    function updateAddressAtIndex(index, newAddress) {
+        if (currentUser && currentUser.addresses && currentUser.addresses[index]) {
+            currentUser.addresses[index] = newAddress;
+            saveUserToLocalStorage();
+            renderAddressShortList();
         }
-        localStorage.setItem('delivery_cart', JSON.stringify(cart));
     }
 
-    function loadData() {
-        const users = JSON.parse(localStorage.getItem('delivery_users') || '[]');
-        const login = localStorage.getItem('currentUserLogin');
-        if (login) {
-            currentUser = users.find(u => u.login === login);
-            if (currentUser) {
-                userAddresses = currentUser.addresses || [];
-                selectedAddress = currentUser.currentAddress || (userAddresses.length ? userAddresses[0] : null);
-                updateAddressDisplay();
-            }
+    function deleteAddressAtIndex(index) {
+        if (currentUser && currentUser.addresses && currentUser.addresses[index]) {
+            currentUser.addresses.splice(index, 1);
+            saveUserToLocalStorage();
+            renderAddressShortList();
         }
-        cart = JSON.parse(localStorage.getItem('delivery_cart') || '[]');
-        updateCartUI();
-        if (!currentUser) showRegisterModal();
-        else if (selectedAddress) refreshStoresAndCatalog();
-        else showAddressModal(false);
     }
 
-    function updateAddressDisplay() {
-        if (selectedAddress) {
-            const short = `${selectedAddress.city}, ${selectedAddress.street} ${selectedAddress.house}`;
-            document.getElementById('currentAddressShort').innerText = short;
+    // заполнить форму адреса для редактирования
+    let currentEditAddressIndex = null;
+    function openAddressForm(editIndex = null) {
+        document.getElementById('addressForm').reset();
+        document.getElementById('addressFormError').innerText = '';
+        if (editIndex !== null && currentUser.addresses[editIndex]) {
+            const addr = currentUser.addresses[editIndex];
+            document.getElementById('addressCity').value = addr.city || '';
+            document.getElementById('addressStreet').value = addr.street || '';
+            document.getElementById('addressHouse').value = addr.house || '';
+            document.getElementById('addressCorpus').value = addr.corpus || '';
+            document.getElementById('addressBuilding').value = addr.building || '';
+            document.getElementById('addressEntrance').value = addr.entrance || '';
+            document.getElementById('addressFloor').value = addr.floor || '';
+            document.getElementById('addressApartment').value = addr.apartment || '';
+            document.getElementById('addressIntercom').value = addr.intercom || '';
+            document.getElementById('addressFormTitle').innerText = 'Редактировать адрес';
+            currentEditAddressIndex = editIndex;
         } else {
-            document.getElementById('currentAddressShort').innerText = "Адрес не выбран";
+            document.getElementById('addressForm').reset();
+            document.getElementById('addressFormTitle').innerText = 'Добавить адрес';
+            currentEditAddressIndex = null;
+        }
+        showModal('addressFormModal');
+    }
+
+    function saveAddressFromForm() {
+        const city = document.getElementById('addressCity').value.trim();
+        const street = document.getElementById('addressStreet').value.trim();
+        const house = document.getElementById('addressHouse').value.trim();
+        const validation = validateAddressForm(city, street, house);
+        if (!validation.ok) {
+            document.getElementById('addressFormError').innerText = validation.msg;
+            if (validation.field === 'city') document.getElementById('addressCity').classList.add('error-input');
+            else if (validation.field === 'street') document.getElementById('addressStreet').classList.add('error-input');
+            else if (validation.field === 'house') document.getElementById('addressHouse').classList.add('error-input');
+            return;
+        }
+        // очистка ошибок
+        document.getElementById('addressCity').classList.remove('error-input');
+        document.getElementById('addressStreet').classList.remove('error-input');
+        document.getElementById('addressHouse').classList.remove('error-input');
+        const newAddr = {
+            city: city,
+            street: street,
+            house: house,
+            corpus: document.getElementById('addressCorpus').value.trim() || '',
+            building: document.getElementById('addressBuilding').value.trim() || '',
+            entrance: document.getElementById('addressEntrance').value.trim() || '',
+            floor: document.getElementById('addressFloor').value.trim() || '',
+            apartment: document.getElementById('addressApartment').value.trim() || '',
+            intercom: document.getElementById('addressIntercom').value.trim() || ''
+        };
+        if (currentEditAddressIndex !== null) {
+            updateAddressAtIndex(currentEditAddressIndex, newAddr);
+        } else {
+            addAddress(newAddr);
+        }
+        hideModal('addressFormModal');
+        // если менеджер адресов открыт, обновляем его
+        if (document.getElementById('addressManagerModal').classList.contains('active')) {
+            renderAddressManagerList();
         }
     }
 
-    function showRegisterModal() {
-        const modal = document.getElementById('registerModal');
-        modal.classList.add('active');
-        const pwdInput = document.getElementById('regPassword');
-        const strengthBar = document.getElementById('strengthBar');
-        const hint = document.getElementById('passwordHint');
-        pwdInput.addEventListener('input', () => {
-            const res = checkPasswordStrength(pwdInput.value);
-            strengthBar.style.width = res.width;
-            strengthBar.style.backgroundColor = res.color;
-            hint.innerText = `Надёжность: ${res.text}`;
+    function renderAddressManagerList() {
+        const container = document.getElementById('addressManagerList');
+        if (!currentUser.addresses || currentUser.addresses.length === 0) {
+            container.innerHTML = '<p class="text-glow">Нет сохранённых адресов. Добавьте новый.</p>';
+            return;
+        }
+        let html = '';
+        currentUser.addresses.forEach((addr, idx) => {
+            let short = `${addr.city}, ${addr.street}, д.${addr.house}`;
+            if (addr.apartment) short += `, кв.${addr.apartment}`;
+            html += `
+                <div class="address-item" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div><i class="fas fa-home"></i> ${short}</div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-neon edit-addr-btn" data-index="${idx}" style="padding: 0.2rem 1rem;">Редактировать</button>
+                        <button class="btn-neon delete-addr-btn" data-index="${idx}" style="border-color:#ff7777; color:#ff9999;">Удалить</button>
+                    </div>
+                </div>
+            `;
         });
-        document.getElementById('doRegister').onclick = () => {
-            const name = document.getElementById('regName').value.trim();
-            const login = document.getElementById('regLogin').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirm').value;
-            if (!name || !login || !password) { alert("Заполните все поля"); return; }
-            if (!isNameValid(name)) { alert("Имя должно содержать только русские буквы и не содержать непристойностей"); return; }
-            if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/\d/.test(password)) {
-                alert("Пароль должен быть ≥8 символов, содержать буквы и цифры"); return;
-            }
-            if (password !== confirm) { alert("Пароли не совпадают"); return; }
-            const users = JSON.parse(localStorage.getItem('delivery_users') || '[]');
-            if (users.find(u => u.login === login)) { alert("Логин уже существует"); return; }
-            currentUser = { name, login, password, addresses: [], currentAddress: null };
-            saveAll();
-            modal.classList.remove('active');
-            showAddressModal(true);
-        };
-    }
-
-    // Проверка реального адреса через геокодер 2GIS
-    async function validateAddressWith2GIS(city, street, house) {
-        if (!GIS_API_KEY || GIS_API_KEY === 'YOUR_2GIS_API_KEY') {
-            console.warn("2GIS API ключ не задан, проверка адреса пропущена");
-            return { valid: true, lat: 55.7558, lng: 37.6173 };
-        }
-        const query = `${city}, ${street} ${house}`;
-        const url = `https://catalog.api.2gis.com/3.0/items/geocode?q=${encodeURIComponent(query)}&fields=items.point&key=${GIS_API_KEY}`;
-        try {
-            const resp = await fetch(url);
-            const data = await resp.json();
-            if (data.result && data.result.items && data.result.items.length > 0) {
-                const point = data.result.items[0].point;
-                return { valid: true, lat: point.lat, lng: point.lon };
-            }
-            return { valid: false };
-        } catch (e) {
-            return { valid: false };
-        }
-    }
-
-    async function showAddressModal(forceNew = false) {
-        const modal = document.getElementById('addressModal');
-        modal.classList.add('active');
-        const cityInput = document.getElementById('city');
-        const scale = document.getElementById('cityScale');
-        cityInput.addEventListener('input', () => {
-            if (cityInput.value.trim().toLowerCase() !== 'москва') {
-                scale.style.width = '100%';
-                scale.style.background = 'linear-gradient(90deg, #e31e24, #ff8a5c)';
-                cityInput.classList.add('error-highlight');
-            } else {
-                scale.style.width = '0%';
-                cityInput.classList.remove('error-highlight');
-            }
+        container.innerHTML = html;
+        document.querySelectorAll('.edit-addr-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.getAttribute('data-index'));
+                hideModal('addressManagerModal');
+                openAddressForm(idx);
+            });
         });
-        renderAddressList();
-        // Инициализация карты для выбора адреса
-        if (typeof DG !== 'undefined') {
-            if (!addressMap) {
-                addressMap = DG.map('addressMap', { center: [55.7558, 37.6173], zoom: 14, key: GIS_API_KEY });
-                addressMap.on('click', (e) => {
-                    if (addressMarker) addressMap.removeLayer(addressMarker);
-                    addressMarker = DG.marker([e.latlng.lat, e.latlng.lng]).addTo(addressMap);
-                    // Обратный геокодинг для заполнения полей
-                    fetch(`https://catalog.api.2gis.com/3.0/items/geocode?lon=${e.latlng.lng}&lat=${e.latlng.lat}&fields=items.address&key=${GIS_API_KEY}`)
-                        .then(r => r.json())
-                        .then(data => {
-                            if (data.result && data.result.items[0]) {
-                                const addr = data.result.items[0].address_name || '';
-                                document.getElementById('street').value = addr.split(',')[0] || '';
-                                document.getElementById('house').value = addr.split(',')[1] || '';
-                            }
-                        });
-                });
-            }
-        }
-        document.getElementById('pickOnMapBtn').onclick = () => {
-            if (addressMap) addressMap.setView([55.7558, 37.6173], 15);
-        };
-        document.getElementById('saveAddressBtn').onclick = async () => {
-            const city = document.getElementById('city').value.trim();
-            if (city.toLowerCase() !== 'москва') {
-                alert("Город временно не обслуживается, мы еще не доехали туда :)");
-                return;
-            }
-            const street = document.getElementById('street').value.trim();
-            const house = document.getElementById('house').value.trim();
-            if (!street || !house) { alert("Улица и дом обязательны"); return; }
-            const validation = await validateAddressWith2GIS(city, street, house);
-            if (!validation.valid) {
-                alert("Адрес не найден. Проверьте правильность или уточните на карте.");
-                return;
-            }
-            const entrance = document.getElementById('entrance').value.trim();
-            const floor = document.getElementById('floor').value.trim();
-            const apartment = document.getElementById('apartment').value.trim();
-            const intercom = document.getElementById('intercom').value.trim();
-            if (!entrance || !floor || !apartment || !intercom) {
-                alert("Подъезд, этаж, квартира, домофон — обязательны");
-                return;
-            }
-            const building = document.getElementById('building').value.trim();
-            const newAddr = { city, street, house, building, entrance, floor, apartment, intercom, lat: validation.lat, lng: validation.lng };
-            userAddresses.push(newAddr);
-            selectedAddress = newAddr;
-            currentUser.addresses = userAddresses;
-            currentUser.currentAddress = selectedAddress;
-            saveAll();
-            updateAddressDisplay();
-            modal.classList.remove('active');
-            refreshStoresAndCatalog();
-        };
-    }
-
-    function renderAddressList() {
-        const container = document.getElementById('savedAddressesList');
-        if (!userAddresses.length) { container.innerHTML = '<div>Нет сохранённых адресов</div>'; return; }
-        container.innerHTML = userAddresses.map((addr, idx) => `
-            <div class="address-list-item" data-idx="${idx}">
-                <i class="fas fa-home"></i> ${addr.city}, ${addr.street} ${addr.house} ${addr.building ? 'корп.'+addr.building : ''}, под.${addr.entrance}, кв.${addr.apartment}
-                ${selectedAddress === addr ? ' ✅' : ''}
-            </div>
-        `).join('');
-        document.querySelectorAll('.address-list-item').forEach(el => {
-            el.addEventListener('click', () => {
-                const idx = parseInt(el.dataset.idx);
-                selectedAddress = userAddresses[idx];
-                currentUser.currentAddress = selectedAddress;
-                saveAll();
-                updateAddressDisplay();
-                document.getElementById('addressModal').classList.remove('active');
-                refreshStoresAndCatalog();
+        document.querySelectorAll('.delete-addr-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (confirm('Удалить адрес?')) {
+                    const idx = parseInt(btn.getAttribute('data-index'));
+                    deleteAddressAtIndex(idx);
+                    renderAddressManagerList();
+                    renderAddressShortList();
+                }
             });
         });
     }
 
-    function refreshStoresAndCatalog() {
-        if (!selectedAddress) return;
-        // Рассчёт расстояний
-        const storesWithDist = storesData.map(s => ({
-            ...s,
-            dist: getDistance(selectedAddress.lat || 55.7558, selectedAddress.lng || 37.6173, s.lat, s.lng)
-        }));
-        storesWithDist.sort((a,b) => a.dist - b.dist);
-        const container = document.getElementById('storesList');
-        container.innerHTML = storesWithDist.map(store => `
-            <div class="store-card ${currentStore && currentStore.id === store.id ? 'active' : ''}" data-id="${store.id}">
-                <div><strong>${store.name}</strong></div>
-                <div style="font-size:0.7rem;">${store.address}</div>
-                <div>${store.working} • ${store.dist.toFixed(1)} км</div>
-            </div>
-        `).join('');
-        document.querySelectorAll('.store-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const id = parseInt(card.dataset.id);
-                currentStore = storesData.find(s => s.id === id);
-                renderCatalog(currentStore);
-                refreshStoresAndCatalog(); // для подсветки
-            });
-        });
-        if (!currentStore && storesWithDist.length) {
-            currentStore = storesWithDist[0];
-            renderCatalog(currentStore);
-        }
-    }
-
-    function renderCatalog(store) {
-        const header = document.getElementById('catalogHeader');
-        header.innerHTML = `<h2>${store.name}</h2><div>📍 ${store.address} | ⏰ ${store.working} | ⭐ ${store.rating}</div>`;
-        const container = document.getElementById('productsContainer');
-        container.innerHTML = store.products.map(prod => `
-            <div class="product-card">
-                <div style="font-size:2rem;">${prod.emoji}</div>
-                <div><strong>${prod.name}</strong></div>
-                <div>${prod.price} ₽ / ${prod.unit}</div>
-                <div style="font-size:0.7rem;">${prod.desc}</div>
-                <button class="add-cart" data-prod='${JSON.stringify(prod)}' data-store='${JSON.stringify({id:store.id, name:store.name})}'>В корзину</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.add-cart').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const prod = JSON.parse(btn.dataset.prod);
-                const storeObj = JSON.parse(btn.dataset.store);
-                addToCart(prod, storeObj);
-            });
-        });
-    }
-
-    function addToCart(product, store) {
-        const existing = cart.find(i => i.productId === product.id && i.storeId === store.id);
-        if (existing) existing.quantity++;
-        else cart.push({ productId: product.id, storeId: store.id, storeName: store.name, name: product.name, price: product.price, unit: product.unit, emoji: product.emoji, quantity: 1 });
-        saveAll();
-        updateCartUI();
-    }
-
-    function updateCartUI() {
-        const count = cart.reduce((s,i) => s+i.quantity, 0);
-        document.getElementById('cartCount').innerText = count;
-        const container = document.getElementById('cartItems');
-        if (!container) return;
-        if (!cart.length) { container.innerHTML = '<div>Корзина пуста</div>'; document.getElementById('cartTotal').innerHTML = ''; return; }
-        let total = 0;
-        container.innerHTML = cart.map((item, idx) => {
-            const sum = item.price * item.quantity;
-            total += sum;
-            return `<div class="cart-item"><div>${item.emoji} ${item.name} x${item.quantity}<br><small>${item.storeName}</small></div><div>${sum}₽ <button class="glass-btn" onclick="window.removeFromCart(${idx})"><i class="fas fa-trash"></i></button></div></div>`;
-        }).join('');
-        document.getElementById('cartTotal').innerHTML = `Итого: ${total.toFixed(2)} ₽`;
-    }
-    window.removeFromCart = (idx) => { cart.splice(idx,1); saveAll(); updateCartUI(); };
-
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = (lat2-lat1)*Math.PI/180;
-        const dLon = (lon2-lon1)*Math.PI/180;
-        const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    }
-
-    // Обработчики модалок
-    document.getElementById('addressChip').addEventListener('click', () => showAddressModal(false));
-    document.getElementById('cartBtn').addEventListener('click', () => { updateCartUI(); document.getElementById('cartModal').classList.add('active'); });
-    document.getElementById('profileBtn').addEventListener('click', () => {
-        if (currentUser) document.getElementById('profileInfo').innerHTML = `Имя: ${currentUser.name}<br>Логин: ${currentUser.login}`;
-        document.getElementById('profileModal').classList.add('active');
-    });
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        localStorage.removeItem('currentUserLogin');
+    // logout
+    function logout() {
         currentUser = null;
-        location.reload();
-    });
-    document.getElementById('checkoutBtn').addEventListener('click', () => alert(`Заказ оформлен! Сумма: ${document.getElementById('cartTotal').innerText}`));
-    document.getElementById('refreshStores').addEventListener('click', () => refreshStoresAndCatalog());
-    document.getElementById('themeToggle').addEventListener('click', () => document.body.classList.toggle('dark'));
-    document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', function() { this.closest('.modal').classList.remove('active'); }));
-    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+        localStorage.removeItem('tumix_user');
+        updateUIBasedOnAuth();
+        closeAllModals();
+        showModal('welcomeModal');
+    }
 
-    loadData();
+    // инициализация событий
+    document.addEventListener('DOMContentLoaded', () => {
+        fillStreetDatalist();
+        const isLogged = loadUserFromStorage();
+        if (isLogged && currentUser) {
+            updateUIBasedOnAuth();
+        } else {
+            currentUser = null;
+            updateUIBasedOnAuth();
+        }
+
+        // welcome -> показать регистрацию
+        document.getElementById('showRegFromWelcomeBtn').addEventListener('click', () => {
+            hideModal('welcomeModal');
+            showModal('regModal');
+        });
+        document.getElementById('closeRegModalBtn').addEventListener('click', () => {
+            hideModal('regModal');
+            showModal('welcomeModal');
+        });
+        // регистрация сабмит
+        document.getElementById('regForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const pwd = document.getElementById('regPassword').value;
+            const errMsg = registerUser(name, email, phone, pwd);
+            if (errMsg) {
+                document.getElementById('regError').innerText = errMsg;
+            } else {
+                hideModal('regModal');
+                updateUIBasedOnAuth();
+            }
+        });
+        // управление адресами
+        document.getElementById('manageAddressBtn').addEventListener('click', () => {
+            if (currentUser) {
+                renderAddressManagerList();
+                showModal('addressManagerModal');
+            }
+        });
+        document.getElementById('closeManagerBtn').addEventListener('click', () => hideModal('addressManagerModal'));
+        document.getElementById('addNewAddressFromManager').addEventListener('click', () => {
+            hideModal('addressManagerModal');
+            openAddressForm(null);
+        });
+        document.getElementById('closeAddressFormBtn').addEventListener('click', () => hideModal('addressFormModal'));
+        document.getElementById('addressForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveAddressFromForm();
+        });
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+
+        // кнопки сервисов (уведомления)
+        const serviceBtns = document.querySelectorAll('.service-btn');
+        serviceBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('🚀 Функция доставки в разработке! Скоро мы сможем забрать ваш заказ из ПВЗ/магазина и привезти идеально.');
+            });
+        });
+
+        // сброс подсветки при вводе в полях адреса
+        const addrFields = ['addressCity', 'addressStreet', 'addressHouse'];
+        addrFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', () => el.classList.remove('error-input'));
+        });
+    });
 </script>
 </body>
 </html>
