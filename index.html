@@ -3,179 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>TUMIX | Надёжная доставка.</title>
-    <!-- Font Awesome 6 -->
+    <title>TUMIX — доставка из маркетплейсов</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts: Inter + Outrun -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(ellipse at 20% 30%, #0b0e1a, #020408);
+            background: linear-gradient(145deg, #f5f7fc 0%, #e9eef4 100%);
             min-height: 100vh;
+            padding: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Анимированный фон с неоновыми бликами */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .bg-glow::before {
-            content: '';
-            position: absolute;
-            width: 80vmax;
-            height: 80vmax;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.15) 0%, rgba(0, 255, 255, 0) 70%);
-            top: -20%;
-            left: -20%;
-            border-radius: 50%;
-            filter: blur(90px);
-            animation: drift 25s infinite alternate;
-        }
-        .bg-glow::after {
-            content: '';
-            position: absolute;
-            width: 70vmax;
-            height: 70vmax;
-            background: radial-gradient(circle, rgba(255, 0, 200, 0.12) 0%, rgba(255, 0, 200, 0) 70%);
-            bottom: -30%;
-            right: -20%;
-            border-radius: 50%;
-            filter: blur(100px);
-            animation: drift 22s infinite alternate-reverse;
-        }
-        @keyframes drift {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-            100% { transform: translate(5%, 8%) scale(1.2); opacity: 0.9; }
         }
 
         /* Основной контейнер */
-        .glass-container {
-            background: rgba(10, 18, 28, 0.55);
-            backdrop-filter: blur(20px);
-            border-radius: 2.5rem;
-            border: 1px solid rgba(0, 255, 255, 0.35);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 255, 0.2);
-            width: 100%;
+        .main-container {
             max-width: 1300px;
-            transition: all 0.3s ease;
-            z-index: 2;
+            width: 100%;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
         }
 
-        .app-content {
-            padding: 2.2rem 2.5rem;
-        }
-
-        /* Типография */
-        h1, h2, h3 {
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-        .neon-glow {
-            background: linear-gradient(135deg, #ffffff, #0ff, #f0f);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
-        }
-        .text-light {
-            color: #eef5ff;
+        /* Панель с содержимым */
+        .app-panel {
+            padding: 2rem;
         }
 
         /* Карточки */
-        .card-glass {
-            background: rgba(20, 30, 45, 0.6);
-            backdrop-filter: blur(12px);
-            border-radius: 1.8rem;
-            border: 1px solid rgba(0, 255, 255, 0.25);
-            transition: all 0.25s;
-        }
-        .card-glass:hover {
-            border-color: rgba(0, 255, 255, 0.7);
-            box-shadow: 0 0 18px rgba(0, 255, 255, 0.2);
+        .card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
         }
 
-        /* Кнопки */
-        .btn-neon {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid #0ff;
-            color: #0ff;
-            padding: 0.65rem 1.5rem;
-            border-radius: 3rem;
-            font-weight: 600;
-            transition: 0.2s;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
-        .btn-neon:hover {
-            background: #0ff;
-            color: #0a0f1a;
-            box-shadow: 0 0 20px #0ff;
-            transform: scale(1.02);
+
+        h1 {
+            font-size: 1.9rem;
+            background: linear-gradient(135deg, #1a5f7a, #2c9c6e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e2f3e;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2c3e4e;
+            margin-bottom: 0.75rem;
+        }
+
+        .text-muted {
+            color: #5a6e7c;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            border: none;
+            padding: 0.6rem 1.3rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #f0f2f5;
+            color: #1e4663;
         }
         .btn-primary {
-            background: linear-gradient(95deg, #0ff, #0a9);
-            border: none;
-            color: #0a0f1a;
-            font-weight: 800;
-            padding: 0.75rem 1.8rem;
-            border-radius: 3rem;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
+            background: #2c9c6e;
+            color: white;
+            box-shadow: 0 2px 6px rgba(44,156,110,0.3);
         }
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 28px cyan;
+            background: #238b5e;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            border: 1px solid #cbd5e1;
+            background: white;
+        }
+        .btn-outline:hover {
+            background: #f8fafc;
         }
 
-        /* Поля ввода */
-        input, .fake-input {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 255, 255, 0.45);
+        /* Сервисные кнопки */
+        .service-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0 1.5rem;
+        }
+        .service-btn {
+            background: #f0f4f9;
             border-radius: 2rem;
-            padding: 0.75rem 1.3rem;
-            color: white;
-            font-size: 1rem;
-            outline: none;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #1f4a6e;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        .service-btn i {
+            font-size: 1.3rem;
+            color: #2c9c6e;
+        }
+        .service-btn:hover {
+            background: #e6edf4;
+            transform: translateY(-2px);
+        }
+
+        /* Преимущества */
+        .advantages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .advantage-item {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        /* Формы */
+        input, select {
             width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            outline: none;
             transition: 0.2s;
         }
         input:focus {
-            border-color: #0ff;
-            box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
+            border-color: #2c9c6e;
+            box-shadow: 0 0 0 2px rgba(44,156,110,0.2);
         }
-        .error-field {
-            border-color: #ff4d6d;
-            box-shadow: 0 0 8px #ff4d6d;
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            display: block;
+            color: #2d3e50;
         }
 
-        /* Модальные окна */
-        .modal-overlay {
+        /* Адресные карточки */
+        .address-card {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #2c9c6e;
+        }
+
+        /* Модалки */
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -184,571 +208,519 @@
             opacity: 0;
             transition: 0.2s;
         }
-        .modal-overlay.active {
+        .modal.active {
             visibility: visible;
             opacity: 1;
         }
-        .modal-card {
-            background: rgba(18, 28, 40, 0.96);
-            backdrop-filter: blur(30px);
-            border-radius: 2rem;
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            max-width: 650px;
             width: 90%;
-            max-width: 550px;
-            padding: 2rem;
-            border: 1px solid #0ff;
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
-            transform: scale(0.96);
-            transition: transform 0.2s;
-        }
-        .modal-overlay.active .modal-card {
-            transform: scale(1);
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.8rem;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
         }
 
-        /* Сервисные кнопки */
-        .service-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-        .service-item {
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 255, 255, 0.6);
-            border-radius: 2rem;
-            padding: 0.9rem 1.5rem;
-            font-weight: 600;
-            color: #eef5ff;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        /* иконки-действия */
+        .action-icon {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: 0.2s;
+            margin-left: 8px;
+            color: #5f7f9e;
         }
-        .service-item i {
-            font-size: 1.6rem;
-            color: #0ff;
-        }
-        .service-item:hover {
-            background: rgba(0, 255, 255, 0.25);
-            transform: translateY(-3px);
-            border-color: cyan;
+        .action-icon:hover {
+            color: #2c9c6e;
         }
 
-        /* Адресные блоки */
-        .address-card {
-            background: rgba(0, 255, 255, 0.08);
-            border-radius: 1.2rem;
-            padding: 0.8rem 1rem;
-            margin-bottom: 0.7rem;
-            border-left: 4px solid #0ff;
+        .help-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: #d1dbe8;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #2c3e4e;
+            margin-left: 6px;
+            cursor: help;
+            position: relative;
+        }
+        .help-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: #1e2f3e;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            width: 260px;
+            bottom: 25px;
+            left: -120px;
+            z-index: 10;
+            white-space: normal;
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .warning-text {
+            color: #dc2626;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .order-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 0;
+        }
+        .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
         }
-
-        /* Тосты */
-        .toast-msg {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.9);
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(20px);
-            padding: 0.9rem 2rem;
-            border-radius: 3rem;
-            border-left: 5px solid #ff6666;
-            color: #ffe0b5;
-            font-weight: 500;
-            z-index: 2000;
-            opacity: 0;
-            transition: 0.2s;
-            pointer-events: none;
-            font-size: 0.9rem;
-        }
-        .toast-msg.show {
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-        }
-
-        /* Адаптив */
         @media (max-width: 700px) {
-            .app-content { padding: 1.2rem; }
-            .service-item { padding: 0.6rem 1rem; font-size: 0.85rem; }
+            body { padding: 1rem; }
+            .app-panel { padding: 1rem; }
         }
     </style>
 </head>
 <body>
-<div class="bg-glow"></div>
-<div class="glass-container" id="appShell">
-    <div class="app-content">
-        <!-- Основное приложение (скрыто до входа) -->
-        <div id="mainDashboard" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
-                <h1 class="neon-glow" style="font-size: 2rem;"><i class="fas fa-bolt"></i> TUMIX <span style="font-size: 1rem;">⚡🚀</span></h1>
-                <button id="logoutBtnMain" class="btn-neon"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+<div class="main-container" id="appRoot">
+    <div class="app-panel" id="mainContent" style="display: none;">
+        <!-- Главный экран -->
+        <div class="flex-between" style="margin-bottom: 1rem;">
+            <h1><i class="fas fa-truck-fast"></i> TUMIX</h1>
+            <div>
+                <button id="myDeliveriesBtn" class="btn btn-outline" style="margin-right: 10px;"><i class="fas fa-list"></i> Мои доставки</button>
+                <button id="logoutBtn" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Выйти</button>
             </div>
-            <div class="card-glass" style="padding: 1.5rem; margin-bottom: 1.8rem;">
-                <h2 class="neon-glow" style="font-size: 1.7rem;">Привет, <span id="profileName"></span>! <span>😊</span></h2>
-                <p><i class="fas fa-envelope"></i> <span id="profileEmail"></span> &nbsp;|&nbsp; <i class="fas fa-phone-alt"></i> <span id="profilePhone"></span></p>
+        </div>
+        <div class="card">
+            <div class="flex-between">
+                <h2>Привет, <span id="userName"></span>! <i class="fas fa-smile-wink"></i></h2>
+                <p><i class="fas fa-envelope"></i> <span id="userEmail"></span> &nbsp;|&nbsp; <i class="fas fa-phone"></i> <span id="userPhone"></span></p>
             </div>
-            <div class="service-grid">
-                <div class="service-item" data-action="pvz"><i class="fas fa-box-open"></i> Забрать из ПВЗ</div>
-                <div class="service-item" data-action="internet"><i class="fas fa-shopping-cart"></i> Интернет-заказ</div>
-                <div class="service-item" data-action="shop"><i class="fas fa-store"></i> Заехать в магазин</div>
-                <div class="service-item" data-action="multi"><i class="fas fa-map-marker-alt"></i> Несколько точек</div>
+        </div>
+
+        <!-- Преимущества -->
+        <div class="card">
+            <h3>Почему выбирают TUMIX?</h3>
+            <div class="advantages">
+                <div class="advantage-item"><i class="fas fa-shield-alt" style="color:#2c9c6e; font-size:1.5rem;"></i><br>Гарантия доставки, курьер не украдет заказ</div>
+                <div class="advantage-item"><i class="fas fa-boxes" style="color:#2c9c6e; font-size:1.5rem;"></i><br>Бережное отношение к товарам</div>
+                <div class="advantage-item"><i class="fas fa-truck" style="color:#2c9c6e; font-size:1.5rem;"></i><br>Перевозка крупногабарита на авто</div>
+                <div class="advantage-item"><i class="fas fa-tools" style="color:#2c9c6e; font-size:1.5rem;"></i><br>Помощь со стройматериалами</div>
             </div>
-            <div class="card-glass" style="padding: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
-                    <h3 class="neon-glow"><i class="fas fa-map-pin"></i> Мои адреса 📍</h3>
-                    <button id="openAddressManagerBtn" class="btn-neon" style="padding: 0.4rem 1.2rem;"><i class="fas fa-edit"></i> Управление</button>
-                </div>
-                <div id="addressListShort"></div>
+        </div>
+
+        <!-- Кнопки услуг -->
+        <div class="service-grid">
+            <div class="service-btn" data-action="pvz"><i class="fas fa-box-open"></i> Забрать заказ из ПВЗ</div>
+            <div class="service-btn" data-action="internet"><i class="fas fa-shopping-cart"></i> Забрать интернет заказ</div>
+            <div class="service-btn" data-action="shop"><i class="fas fa-store"></i> Заехать в магазин</div>
+            <div class="service-btn" data-action="multi"><i class="fas fa-map-marker-alt"></i> Заехать в несколько точек</div>
+        </div>
+
+        <!-- Адреса -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-map-pin"></i> Мои адреса доставки</h3>
+                <button id="openAddressManager" class="btn btn-outline"><i class="fas fa-edit"></i> Управление</button>
             </div>
+            <div id="addressList"></div>
         </div>
     </div>
 </div>
 
-<!-- МОДАЛКА ПРИВЕТСТВИЯ (вход/регистрация) -->
-<div id="welcomeModal" class="modal-overlay active">
-    <div class="modal-card" style="max-width: 600px;">
+<!-- Приветственная модалка (вход/регистрация) -->
+<div id="welcomeModal" class="modal active">
+    <div class="modal-content">
         <div style="text-align: center;">
-            <i class="fas fa-rocket" style="font-size: 3.5rem; color: #0ff; filter: drop-shadow(0 0 10px cyan);"></i>
-            <h2 class="neon-glow" style="margin: 1rem 0;">Не успеваете за заказом? 😱</h2>
-            <p style="line-height: 1.5;">Заказ далеко, или не хотите выходить на улицу?<br><strong>TUMIX</strong> заберет, отменит лишнее и довезет в сохранности!</p>
-            <div style="background: rgba(0,255,255,0.1); border-radius: 1.2rem; padding: 1rem; margin: 1rem 0; text-align: left;">
-                <p><i class="fas fa-check-circle" style="color:#0ff;"></i> <strong>Наши преимущества:</strong></p>
+            <i class="fas fa-rocket" style="font-size: 3rem; color:#2c9c6e;"></i>
+            <h2 style="margin: 1rem 0;">Не успеваете за заказом?</h2>
+            <p>Заказ далеко, или не хотите выходить на улицу? <br> <strong>TUMIX</strong> заберет, отменит лишнее и довезет в сохранности!</p>
+            <div style="background: #f0f9f4; border-radius: 1rem; padding: 1rem; margin: 1rem 0; text-align: left;">
+                <p><strong>Наши преимущества:</strong></p>
                 <ul style="margin-left: 1rem;">
                     <li>✅ Гарантия доставки, а не кражи курьером</li>
                     <li>✅ Бережная транспортировка</li>
-                    <li>✅ Перевозка крупногабарита на авто 🚛</li>
+                    <li>✅ Перевозка крупногабарита на авто</li>
                     <li>✅ Помощь со стройматериалами</li>
                 </ul>
             </div>
-            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
-                <button id="welcomeRegisterBtn" class="btn-primary"><i class="fas fa-user-plus"></i> Регистрация</button>
-                <button id="welcomeLoginBtn" class="btn-neon"><i class="fas fa-sign-in-alt"></i> Вход</button>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button id="showRegBtn" class="btn btn-primary"><i class="fas fa-user-plus"></i> Регистрация</button>
+                <button id="showLoginBtn" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i> Вход</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- МОДАЛКА РЕГИСТРАЦИИ -->
-<div id="regModal" class="modal-overlay">
-    <div class="modal-card">
-        <h2 class="neon-glow"><i class="fas fa-id-card"></i> Регистрация</h2>
+<!-- Модалка регистрации -->
+<div id="regModal" class="modal">
+    <div class="modal-content">
+        <h3>Регистрация</h3>
         <form id="regForm">
-            <input type="text" id="regName" placeholder="Имя (только русские буквы)" style="margin: 10px 0;">
-            <input type="email" id="regEmail" placeholder="Email" style="margin: 10px 0;">
-            <input type="tel" id="regPhone" placeholder="+7XXXXXXXXXX" style="margin: 10px 0;">
-            <input type="password" id="regPassword" placeholder="Пароль (мин. 8 символов)" style="margin: 10px 0;">
-            <button type="submit" class="btn-primary" style="width:100%; margin-top: 10px;">Зарегистрироваться</button>
-            <button type="button" id="closeRegBtn" class="btn-neon" style="width:100%; margin-top: 10px;">Назад</button>
+            <div class="form-group"><input type="text" id="regName" placeholder="Имя (только русские буквы)"></div>
+            <div class="form-group"><input type="email" id="regEmail" placeholder="Email"></div>
+            <div class="form-group"><input type="tel" id="regPhone" placeholder="+7XXXXXXXXXX"></div>
+            <div class="form-group"><input type="password" id="regPassword" placeholder="Пароль (мин. 8 символов)"></div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Зарегистрироваться</button>
+            <button type="button" id="closeReg" class="btn btn-outline" style="width:100%; margin-top:8px;">Назад</button>
         </form>
     </div>
 </div>
 
-<!-- МОДАЛКА ВХОДА -->
-<div id="loginModal" class="modal-overlay">
-    <div class="modal-card">
-        <h2 class="neon-glow"><i class="fas fa-key"></i> Вход</h2>
+<!-- Модалка входа -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <h3>Вход</h3>
         <form id="loginForm">
-            <input type="email" id="loginEmail" placeholder="Email" style="margin: 10px 0;">
-            <input type="password" id="loginPassword" placeholder="Пароль" style="margin: 10px 0;">
-            <button type="submit" class="btn-primary" style="width:100%;">Войти</button>
-            <button type="button" id="closeLoginBtn" class="btn-neon" style="width:100%; margin-top: 10px;">Назад</button>
+            <div class="form-group"><input type="email" id="loginEmail" placeholder="Email"></div>
+            <div class="form-group"><input type="password" id="loginPassword" placeholder="Пароль"></div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Войти</button>
+            <button type="button" id="closeLogin" class="btn btn-outline" style="width:100%; margin-top:8px;">Назад</button>
         </form>
     </div>
 </div>
 
-<!-- МОДАЛКА УПРАВЛЕНИЯ АДРЕСАМИ (список + добавить) -->
-<div id="addressManagerModal" class="modal-overlay">
-    <div class="modal-card" style="max-width: 700px; max-height: 85vh; overflow-y: auto;">
-        <h3 class="neon-glow"><i class="fas fa-address-book"></i> Мои адреса</h3>
-        <div id="addressManagerList" style="margin: 1rem 0;"></div>
-        <button id="addNewAddressBtn" class="btn-primary" style="width:100%;"><i class="fas fa-plus"></i> Добавить адрес</button>
-        <button id="closeManagerBtn" class="btn-neon" style="width:100%; margin-top: 10px;">Закрыть</button>
+<!-- Модалка управления адресами -->
+<div id="addressManagerModal" class="modal">
+    <div class="modal-content" style="max-width: 650px;">
+        <div class="flex-between"><h3>Мои адреса</h3><button id="closeAddressManager" class="btn btn-outline">✕</button></div>
+        <div id="addressManagerList"></div>
+        <button id="addAddressBtn" class="btn btn-primary" style="width:100%; margin-top:1rem;">+ Добавить адрес</button>
     </div>
 </div>
 
-<!-- МОДАЛКА ДОБАВЛЕНИЯ/РЕДАКТИРОВАНИЯ АДРЕСА -->
-<div id="addressEditModal" class="modal-overlay">
-    <div class="modal-card" style="max-width: 600px; max-height: 85vh; overflow-y: auto;">
-        <h3 class="neon-glow" id="addressEditTitle">Добавить адрес</h3>
+<!-- Модалка редактирования адреса -->
+<div id="addressEditModal" class="modal">
+    <div class="modal-content">
+        <h3 id="addressEditTitle">Добавить адрес</h3>
         <form id="addressEditForm">
-            <input type="text" id="editCity" placeholder="Город * (только Москва)" style="margin: 8px 0;">
-            <input type="text" id="editStreet" placeholder="Улица *" list="streetDatalist" autocomplete="off" style="margin: 8px 0;">
-            <datalist id="streetDatalist"></datalist>
-            <input type="text" id="editHouse" placeholder="№ дома *" style="margin: 8px 0;">
-            <div style="display: flex; gap: 12px;">
-                <input type="text" id="editCorpus" placeholder="Корпус (необяз.)" style="margin: 8px 0; flex:1">
-                <input type="text" id="editBuilding" placeholder="Строение (необяз.)" style="margin: 8px 0; flex:1">
+            <div class="form-group"><input type="text" id="editCity" placeholder="Город * (только Москва)"></div>
+            <div class="form-group"><input type="text" id="editStreet" placeholder="Улица *" list="streetList"></div>
+            <datalist id="streetList"></datalist>
+            <div class="form-group"><input type="text" id="editHouse" placeholder="№ дома *"></div>
+            <div style="display:flex; gap:8px;"><input type="text" id="editCorpus" placeholder="Корпус"><input type="text" id="editBuilding" placeholder="Строение"></div>
+            <div class="form-group"><input type="text" id="editEntrance" placeholder="Подъезд *"></div>
+            <div class="form-group"><input type="text" id="editFloor" placeholder="Этаж *"></div>
+            <div class="form-group"><input type="text" id="editApartment" placeholder="Квартира *"></div>
+            <div class="form-group"><input type="text" id="editIntercom" placeholder="Домофон *"></div>
+            <div style="display:flex; gap:8px;"><button type="submit" class="btn btn-primary">Сохранить</button><button type="button" id="closeEditModal" class="btn btn-outline">Отмена</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- Модалка заказа из ПВЗ -->
+<div id="orderPvzModal" class="modal">
+    <div class="modal-content" style="max-width: 700px;">
+        <h3><i class="fas fa-box-open"></i> Заберем ваш заказ из любого ПВЗ</h3>
+        <form id="pvzOrderForm">
+            <div class="form-group">
+                <label>Название маркетплейса *</label>
+                <input type="text" id="marketplace" required>
             </div>
-            <input type="text" id="editEntrance" placeholder="Подъезд *" style="margin: 8px 0;">
-            <input type="text" id="editFloor" placeholder="Этаж *" style="margin: 8px 0;">
-            <input type="text" id="editApartment" placeholder="Номер квартиры *" style="margin: 8px 0;">
-            <input type="text" id="editIntercom" placeholder="Домофон *" style="margin: 8px 0;">
-            <div style="display: flex; gap: 12px; margin-top: 15px;">
-                <button type="submit" class="btn-primary">Сохранить</button>
-                <button type="button" id="closeEditModalBtn" class="btn-neon">Отмена</button>
+            <div class="form-group">
+                <label>Номер заказа * <span class="help-icon" data-tooltip="Номер заказа: это код по которому сотрудник ПВЗ найдет ваш заказ. На OZON он примерно выглядит так: 1234 5678 * 9123, на WB: 123456, на Яндекс маркете номер заказа (LO...), AE если это AliExpress, PO если Авито. На Авито также потребуется код выдачи.">?</span></label>
+                <input type="text" id="orderNumber" required>
+            </div>
+            <div class="form-group">
+                <label>Код выдачи (для Авито, необязательно)</label>
+                <input type="text" id="issueCode">
+            </div>
+            <div class="form-group">
+                <label>Количество товаров * (от 1)</label>
+                <input type="number" id="itemsCount" min="1" value="1" required>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="adultCheck"> Есть товары 18+</label>
+                <div id="adultWarning" class="warning-text" style="display:none;">Курьер проверит ваши документы!</div>
+            </div>
+            <div class="form-group">
+                <label>Номер телефона * (+7XXXXXXXXXX)</label>
+                <input type="tel" id="phoneOrder" placeholder="+7" required>
+            </div>
+            <div class="form-group">
+                <label>ФИО *</label>
+                <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
+                <label><input type="checkbox" id="noPatronymic"> Нет отчества</label>
+            </div>
+            <div class="form-group">
+                <label>Адрес доставки (из вашего профиля) <button type="button" id="editAddressFromOrder" class="action-icon"><i class="fas fa-cog"></i></button></label>
+                <div id="selectedAddressDisplay" class="text-muted" style="background:#f1f5f9; padding:0.5rem; border-radius:0.8rem;"></div>
+            </div>
+            <div class="form-group">
+                <label>Улица ПВЗ *</label>
+                <input type="text" id="pvzStreet" required>
+            </div>
+            <div class="form-group">
+                <label>Дом ПВЗ *</label>
+                <input type="text" id="pvzHouse" required>
+            </div>
+            <div class="form-group">
+                <label>Дата *</label>
+                <input type="date" id="deliveryDate" required>
+            </div>
+            <div class="form-group">
+                <label>Время (09:00 - 22:00) *</label>
+                <input type="time" id="deliveryTime" min="09:00" max="22:00" step="600" required>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button type="submit" class="btn btn-primary">Оформить доставку</button>
+                <button type="button" id="closeOrderModal" class="btn btn-outline">Отмена</button>
             </div>
         </form>
     </div>
 </div>
 
-<div id="toastMessage" class="toast-msg"></div>
+<!-- Модалка Мои доставки -->
+<div id="myDeliveriesModal" class="modal">
+    <div class="modal-content" style="max-width: 750px;">
+        <div class="flex-between"><h3><i class="fas fa-list"></i> Мои доставки</h3><button id="closeDeliveriesModal" class="btn btn-outline">✕</button></div>
+        <div id="deliveriesList"></div>
+    </div>
+</div>
 
 <script>
-    // ================== ГЕНЕРАЦИЯ ВСЕХ УЛИЦ МОСКВЫ (макс. количество, регистронезависимые) ==================
-    const generateFullMoscowStreets = () => {
-        const cores = [
-            "Тверская", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Мясницкая", "Покровка", "Арбат", "Большая Дмитровка", "Пятницкая", "Смоленская", "Садовое кольцо",
-            "Мира проспект", "Профсоюзная", "Ленинградский проспект", "Варшавское шоссе", "Каширское шоссе", "Дмитровское шоссе", "Ярославское шоссе", "Рязанский проспект", "Волгоградский проспект",
-            "Люблинская", "Краснопролетарская", "Долгоруковская", "Цветной бульвар", "Чистопрудный бульвар", "Покровский бульвар", "Гоголевский бульвар", "Тверской бульвар", "Остоженка", "Пречистенка",
-            "Воздвиженка", "Моховая", "Никольская", "Кузнецкий Мост", "Петровка", "Неглинная", "Каретный Ряд", "Самотёчная", "Дубининская", "Павелецкая набережная", "Крымская набережная",
-            "Фрунзенская набережная", "Воробьёвское шоссе", "Мичуринский проспект", "Вернадского проспект", "Ломоносовский проспект", "Университетский проспект", "Нахимовский проспект", "Севастопольский проспект",
-            "Балаклавский проспект", "Чертановская", "Варшавское шоссе", "Андропова проспект", "Каширское шоссе", "Марьино", "Братиславская", "Перерва", "Волжский бульвар", "Ореховый бульвар",
-            "Ясеневый бульвар", "Новоясеневский проспект", "Тёплый Стан", "Тропарёво", "Раменки", "Мосфильмовская", "Крылатская", "Рублёвское шоссе", "Можайское шоссе", "Звенигородское шоссе",
-            "Хорошёвское шоссе", "Мневники", "Пресненский Вал", "Беговая", "Ходынский бульвар", "Сокол", "Аэропорт", "Войковская", "Коптевская", "Головинское шоссе", "Кронштадтский бульвар",
-            "Смольная", "Фестивальная", "Ленинградское шоссе", "Волоколамское шоссе", "Сходненская", "Тушинская", "Свободы", "Планерная", "Митинская", "Дубравная", "Молодёжная", "Осенний бульвар",
-            "Поклонная", "Давыдковская", "Славянский бульвар", "Аминьевское шоссе", "Очаковская", "Лобачевского", "Винницкая", "Академика Пилюгина", "Новаторов", "Удальцова", "Воронцовские пруды",
-            "Архитектора Власова", "Гарибальди", "Нагорная", "Симферопольский бульвар", "Кировоградская", "Подольских Курсантов", "Дорожная", "Бульвар Дмитрия Донского", "Старокачаловская", "Академика Янгеля",
-            "Россошанская", "Феодосийская", "Азовская", "Каховка", "Чонгарский бульвар", "Изюмская", "Красного Маяка", "Черноморский бульвар", "Борисовские пруды", "Мячковский бульвар", "Шипиловская",
-            "Ясеневый бульвар", "Новоясеневский", "Теплый Стан", "Озёрная", "Сетунь", "Кунцевская", "Фили", "Багратионовский проезд", "Кутузовский", "Дорогомиловская", "Киевская", "Брянская",
-            "Смоленская", "Новинский бульвар", "Грузинский Вал", "Тишинская площадь", "Скаковая", "Зорге", "Планетная", "Куусинена", "Чапаевский переулок", "Песчаная", "Новопесчаная", "Алабяна",
-            "Балтийская", "Старопетровский проезд", "Михалковская", "Петрозаводская", "Беломорская", "Леваневского", "Фабрициуса", "Походный проезд", "Бульвар Яна Райниса", "Родионовская", "Саломеи Нерис",
-            "Пятницкое шоссе", "Ангелов переулок", "Барышиха", "Немчиновка", "Крылатские холмы", "Рублёво-Успенское шоссе", "Минская", "Верейская", "Генерала Дорохова", "Раменки", "Мичуринский"
-        ];
-        // Добавим вариации с префиксами и номерами для увеличения количества (более 5000)
+    // -------------------- СПИСОК УЛИЦ МОСКВЫ (большой, регистронезависимый) --------------------
+    const generateStreets = () => {
+        const cores = ["Тверская","Новый Арбат","Ленинский проспект","Кутузовский проспект","Мясницкая","Покровка","Арбат","Большая Дмитровка","Пятницкая","Смоленская","Садовое кольцо","Мира проспект","Профсоюзная","Ленинградский проспект","Варшавское шоссе","Каширское шоссе","Дмитровское шоссе","Ярославское шоссе","Рязанский проспект","Волгоградский проспект","Люблинская","Краснопролетарская","Цветной бульвар","Чистопрудный бульвар","Покровский бульвар","Гоголевский бульвар","Остоженка","Пречистенка","Воздвиженка","Моховая","Никольская","Кузнецкий Мост","Петровка","Неглинная","Каретный Ряд","Самотёчная","Дубининская","Павелецкая набережная","Крымская набережная","Фрунзенская набережная","Воробьёвское шоссе","Мичуринский проспект","Вернадского проспект","Ломоносовский проспект","Университетский проспект","Нахимовский проспект","Севастопольский проспект","Балаклавский проспект","Чертановская","Андропова проспект","Марьино","Братиславская","Перерва","Волжский бульвар","Ореховый бульвар","Ясеневый бульвар","Новоясеневский проспект","Тёплый Стан","Тропарёво","Раменки","Мосфильмовская","Крылатская","Рублёвское шоссе","Можайское шоссе","Звенигородское шоссе","Хорошёвское шоссе","Мневники","Пресненский Вал","Беговая","Ходынский бульвар","Сокол","Аэропорт","Войковская","Коптевская","Головинское шоссе","Кронштадтский бульвар","Смольная","Фестивальная","Ленинградское шоссе","Волоколамское шоссе","Сходненская","Тушинская","Свободы","Планерная","Митинская","Дубравная","Молодёжная","Осенний бульвар","Поклонная","Давыдковская","Славянский бульвар","Аминьевское шоссе","Очаковская","Лобачевского","Винницкая","Академика Пилюгина","Новаторов","Удальцова","Воронцовские пруды","Архитектора Власова","Гарибальди","Нагорная","Симферопольский бульвар","Кировоградская","Подольских Курсантов","Дорожная","Бульвар Дмитрия Донского","Старокачаловская","Академика Янгеля","Россошанская","Феодосийская","Азовская","Каховка","Чонгарский бульвар","Изюмская","Красного Маяка","Черноморский бульвар","Борисовские пруды","Мячковский бульвар","Шипиловская"];
         let all = [...new Set(cores)];
-        const prefixes = ["улица", "проезд", "бульвар", "набережная", "шоссе", "переулок", "аллея", "площадь"];
-        for (let i = 1; i <= 100; i++) {
-            all.push(`улица ${i}-я`);
-            all.push(`${i}-я линия`);
-        }
-        for (let core of cores.slice(0, 200)) {
-            for (let p of prefixes) {
-                all.push(`${p} ${core}`);
-                all.push(`${core} ${p}`);
-            }
-        }
-        // Добавим еще реальные районы
-        all.push("Ленинские горы", "Воробьевы горы", "Хамовники", "Замоскворечье", "Таганка", "Лефортово", "Сокольники", "Измайлово", "Преображенская", "Черкизовская", "Богородское", "Гольяново");
-        all = [...new Set(all)].filter(s => s.length > 2);
-        return all;
+        for(let i=1;i<=80;i++) all.push(`улица ${i}-я`);
+        all.push(...["Ленинские горы","Воробьевы горы","Хамовники","Замоскворечье","Таганка","Лефортово","Сокольники","Измайлово","Преображенская"]);
+        return [...new Set(all)].sort();
     };
-    const ALL_MOSCOW_STREETS = generateFullMoscowStreets();
-    console.log(`Улиц загружено: ${ALL_MOSCOW_STREETS.length}`);
+    const ALL_STREETS = generateStreets();
 
-    // ================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==================
+    // -------------------- ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ --------------------
     let currentUser = null;
 
     // Вспомогательные функции
-    function showToast(msg, isError = true) {
-        const toast = document.getElementById('toastMessage');
-        toast.textContent = msg + (isError ? " ⚠️" : " ✅");
-        toast.style.borderLeftColor = isError ? "#ff6666" : "#0ff";
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
+    function showToast(msg, isError=false) {
+        const toast = document.createElement('div');
+        toast.style.position='fixed'; toast.style.bottom='20px'; toast.style.left='50%'; toast.style.transform='translateX(-50%)';
+        toast.style.background= isError ? '#dc2626' : '#2c9c6e'; toast.style.color='white'; toast.style.padding='10px 20px'; toast.style.borderRadius='40px';
+        toast.style.zIndex='9999'; toast.style.fontWeight='500'; toast.innerText=msg;
+        document.body.appendChild(toast);
+        setTimeout(()=>toast.remove(),3000);
     }
 
-    function saveUserToLS() {
-        if (currentUser) localStorage.setItem('tumix_user', JSON.stringify(currentUser));
-        else localStorage.removeItem('tumix_user');
-    }
-
-    function loadUserFromLS() {
-        const raw = localStorage.getItem('tumix_user');
-        if (raw) {
-            try {
-                const u = JSON.parse(raw);
-                if (u && u.email) {
-                    currentUser = u;
-                    if (!currentUser.addresses) currentUser.addresses = [];
-                    return true;
-                }
-            } catch(e) {}
-        }
-        return false;
-    }
-
-    // Проверки
-    function isValidName(name) {
-        return /^[А-Яа-яЁё\s\-]{2,}$/.test(name) && !/(хуй|пизд|бля|мудак|говно|редиска)/i.test(name);
-    }
-    function isValidEmail(email) { return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email); }
-    function isValidPhone(phone) { return /^\+7\d{10}$/.test(phone); }
+    function saveUser() { if(currentUser) localStorage.setItem('tumix_user', JSON.stringify(currentUser)); }
+    function loadUser() { const u=localStorage.getItem('tumix_user'); if(u) { currentUser=JSON.parse(u); if(!currentUser.addresses) currentUser.addresses=[]; if(!currentUser.orders) currentUser.orders=[]; return true; } return false; }
 
     // Регистрация
-    function registerUser(name, email, phone, password) {
-        if (!isValidName(name)) return 'Имя: только русские буквы, без мата.';
-        if (!isValidEmail(email)) return 'Некорректный email.';
-        if (!isValidPhone(phone)) return 'Телефон: +7 и 10 цифр.';
-        if (password.length < 8) return 'Пароль минимум 8 символов.';
-        // Проверка на существование
-        const stored = localStorage.getItem('tumix_user');
-        if (stored) {
-            const exist = JSON.parse(stored);
-            if (exist.email === email) return 'Email уже используется.';
-        }
-        currentUser = { name, email, phone, password, addresses: [] };
-        saveUserToLS();
+    function register(name,email,phone,password) {
+        if(!/^[А-Яа-яЁё\s\-]{2,}$/.test(name) || /(хуй|пизд|бля|мудак)/i.test(name)) return 'Имя только русские буквы, без мата.';
+        if(!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) return 'Некорректный email.';
+        if(!/^\+7\d{10}$/.test(phone)) return 'Телефон: +7 и 10 цифр.';
+        if(password.length<8) return 'Пароль минимум 8 символов.';
+        const existing = localStorage.getItem('tumix_user');
+        if(existing && JSON.parse(existing).email===email) return 'Email уже используется.';
+        currentUser = { name, email, phone, password, addresses: [], orders: [] };
+        saveUser();
         return null;
     }
-
-    // Вход
-    function loginUser(email, password) {
-        const stored = localStorage.getItem('tumix_user');
-        if (!stored) return 'Нет зарегистрированных пользователей.';
-        const user = JSON.parse(stored);
-        if (user.email === email && user.password === password) {
-            currentUser = user;
-            if (!currentUser.addresses) currentUser.addresses = [];
-            saveUserToLS();
-            return null;
-        }
+    function login(email,password) {
+        const stored=localStorage.getItem('tumix_user');
+        if(!stored) return 'Нет зарегистрированных пользователей.';
+        const user=JSON.parse(stored);
+        if(user.email===email && user.password===password) { currentUser=user; if(!currentUser.addresses) currentUser.addresses=[]; if(!currentUser.orders) currentUser.orders=[]; saveUser(); return null; }
         return 'Неверный email или пароль.';
     }
 
-    // Выход
-    function logout() {
-        currentUser = null;
-        saveUserToLS();
-        document.getElementById('mainDashboard').style.display = 'none';
-        document.getElementById('welcomeModal').classList.add('active');
+    function logout() { currentUser=null; localStorage.removeItem('tumix_user'); showMainUI(false); }
+    function showMainUI(loggedIn) {
+        if(loggedIn && currentUser) {
+            document.getElementById('mainContent').style.display='block';
+            document.getElementById('welcomeModal').classList.remove('active');
+            document.getElementById('userName').innerText=currentUser.name;
+            document.getElementById('userEmail').innerText=currentUser.email;
+            document.getElementById('userPhone').innerText=currentUser.phone;
+            renderAddresses();
+        } else {
+            document.getElementById('mainContent').style.display='none';
+            document.getElementById('welcomeModal').classList.add('active');
+        }
         closeAllModals();
     }
 
-    function closeAllModals() {
-        const ids = ['regModal', 'loginModal', 'addressManagerModal', 'addressEditModal', 'welcomeModal'];
-        ids.forEach(id => document.getElementById(id).classList.remove('active'));
-    }
-
-    // UI после входа
-    function showMainUI() {
-        document.getElementById('mainDashboard').style.display = 'block';
-        document.getElementById('welcomeModal').classList.remove('active');
-        document.getElementById('profileName').innerText = currentUser.name;
-        document.getElementById('profileEmail').innerText = currentUser.email;
-        document.getElementById('profilePhone').innerText = currentUser.phone;
-        renderAddressShortList();
-    }
-
-    // Рендер краткого списка адресов
-    function renderAddressShortList() {
-        const container = document.getElementById('addressListShort');
-        if (!currentUser.addresses.length) {
-            container.innerHTML = '<p class="text-light" style="opacity:0.7;"><i class="fas fa-info-circle"></i> Нет адресов. Добавьте через "Управление".</p>';
-            return;
-        }
-        let html = '';
-        currentUser.addresses.forEach(addr => {
-            let short = `${addr.city}, ${addr.street}, д.${addr.house}`;
-            if (addr.apartment) short += `, кв.${addr.apartment}`;
-            html += `<div class="address-card"><i class="fas fa-location-dot"></i> ${short}</div>`;
+    function renderAddresses() {
+        const container=document.getElementById('addressList');
+        if(!currentUser.addresses.length) { container.innerHTML='<div class="text-muted">Нет адресов. Добавьте через "Управление".</div>'; return; }
+        let html='';
+        currentUser.addresses.forEach(addr=>{
+            let short=`${addr.city}, ${addr.street}, д.${addr.house}`;
+            if(addr.apartment) short+=`, кв.${addr.apartment}`;
+            html+=`<div class="address-card"><span><i class="fas fa-location-dot"></i> ${short}</span></div>`;
         });
-        container.innerHTML = html;
+        container.innerHTML=html;
     }
 
-    // Валидация адреса (город + улица + обязательные поля)
-    function validateAddress(city, street, house, entrance, floor, apt, intercom) {
-        if (city.trim().toLowerCase() !== 'москва') {
-            showToast('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.', true);
-            return false;
-        }
-        // Поиск улицы регистронезависимо
-        const streetNorm = street.trim();
-        const found = ALL_MOSCOW_STREETS.some(s => s.toLowerCase() === streetNorm.toLowerCase());
-        if (!found) {
-            showToast('Улица должна быть в пределах Москвы. Выберите из подсказок.', true);
-            return false;
-        }
-        if (!house.trim()) { showToast('Укажите номер дома.', true); return false; }
-        if (!entrance.trim()) { showToast('Укажите подъезд.', true); return false; }
-        if (!floor.trim()) { showToast('Укажите этаж.', true); return false; }
-        if (!apt.trim()) { showToast('Укажите номер квартиры.', true); return false; }
-        if (!intercom.trim()) { showToast('Укажите домофон.', true); return false; }
-        return true;
+    function renderAddressManager() {
+        const container=document.getElementById('addressManagerList');
+        if(!currentUser.addresses.length) { container.innerHTML='<div class="text-muted">Нет адресов. Добавьте.</div>'; return; }
+        let html='';
+        currentUser.addresses.forEach((a,idx)=>{
+            let short=`${a.city}, ${a.street}, д.${a.house}, кв.${a.apartment}`;
+            html+=`<div class="address-card"><span>${short}</span><div><button class="action-icon editAddressBtn" data-idx="${idx}"><i class="fas fa-cog"></i></button><button class="action-icon delAddressBtn" data-idx="${idx}"><i class="fas fa-times"></i></button></div></div>`;
+        });
+        container.innerHTML=html;
+        document.querySelectorAll('.editAddressBtn').forEach(btn=>btn.addEventListener('click',(e)=>{ let idx=btn.dataset.idx; document.getElementById('addressManagerModal').classList.remove('active'); openAddressEdit(idx); }));
+        document.querySelectorAll('.delAddressBtn').forEach(btn=>btn.addEventListener('click',(e)=>{ let idx=btn.dataset.idx; if(confirm('Удалить адрес?')){ currentUser.addresses.splice(idx,1); saveUser(); renderAddresses(); renderAddressManager(); showToast('Адрес удален'); } }));
     }
 
-    let currentEditIndex = null;
-    function openAddressEditModal(editIdx = null) {
+    let editIndex=null;
+    function openAddressEdit(index=null) {
         document.getElementById('addressEditForm').reset();
-        if (editIdx !== null && currentUser.addresses[editIdx]) {
-            const a = currentUser.addresses[editIdx];
-            document.getElementById('editCity').value = a.city;
-            document.getElementById('editStreet').value = a.street;
-            document.getElementById('editHouse').value = a.house;
-            document.getElementById('editCorpus').value = a.corpus || '';
-            document.getElementById('editBuilding').value = a.building || '';
-            document.getElementById('editEntrance').value = a.entrance;
-            document.getElementById('editFloor').value = a.floor;
-            document.getElementById('editApartment').value = a.apartment;
-            document.getElementById('editIntercom').value = a.intercom;
-            document.getElementById('addressEditTitle').innerText = 'Редактировать адрес ✏️';
-            currentEditIndex = editIdx;
-        } else {
-            document.getElementById('addressEditTitle').innerText = 'Добавить адрес 🏡';
-            currentEditIndex = null;
-        }
+        if(index!==null && currentUser.addresses[index]) {
+            let a=currentUser.addresses[index];
+            document.getElementById('editCity').value=a.city;
+            document.getElementById('editStreet').value=a.street;
+            document.getElementById('editHouse').value=a.house;
+            document.getElementById('editCorpus').value=a.corpus||'';
+            document.getElementById('editBuilding').value=a.building||'';
+            document.getElementById('editEntrance').value=a.entrance;
+            document.getElementById('editFloor').value=a.floor;
+            document.getElementById('editApartment').value=a.apartment;
+            document.getElementById('editIntercom').value=a.intercom;
+            document.getElementById('addressEditTitle').innerText='Редактировать адрес';
+            editIndex=index;
+        } else { editIndex=null; document.getElementById('addressEditTitle').innerText='Добавить адрес'; }
         document.getElementById('addressEditModal').classList.add('active');
     }
-
-    function saveAddressFromForm() {
-        const city = document.getElementById('editCity').value.trim();
-        const street = document.getElementById('editStreet').value.trim();
-        const house = document.getElementById('editHouse').value.trim();
-        const entrance = document.getElementById('editEntrance').value.trim();
-        const floor = document.getElementById('editFloor').value.trim();
-        const apt = document.getElementById('editApartment').value.trim();
-        const intercom = document.getElementById('editIntercom').value.trim();
-        if (!validateAddress(city, street, house, entrance, floor, apt, intercom)) return;
-        const newAddr = {
-            city, street, house,
-            corpus: document.getElementById('editCorpus').value.trim(),
-            building: document.getElementById('editBuilding').value.trim(),
-            entrance, floor, apartment: apt, intercom
-        };
-        if (currentEditIndex !== null) {
-            currentUser.addresses[currentEditIndex] = newAddr;
-        } else {
-            currentUser.addresses.push(newAddr);
-        }
-        saveUserToLS();
-        renderAddressShortList();
-        document.getElementById('addressEditModal').classList.remove('active');
-        if (document.getElementById('addressManagerModal').classList.contains('active')) renderAddressManagerList();
-        showToast('Адрес сохранен!', false);
+    function saveAddressFromEdit() {
+        const city=document.getElementById('editCity').value.trim();
+        const street=document.getElementById('editStreet').value.trim();
+        const house=document.getElementById('editHouse').value.trim();
+        const entrance=document.getElementById('editEntrance').value.trim();
+        const floor=document.getElementById('editFloor').value.trim();
+        const apt=document.getElementById('editApartment').value.trim();
+        const intercom=document.getElementById('editIntercom').value.trim();
+        if(city.toLowerCase()!=='москва') { showToast('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.',true); return false; }
+        if(!ALL_STREETS.some(s=>s.toLowerCase()===street.toLowerCase())) { showToast('Улица должна быть в Москве. Выберите из подсказок.',true); return false; }
+        if(!house || !entrance || !floor || !apt || !intercom) { showToast('Заполните все обязательные поля (*)',true); return false; }
+        const newAddr={ city, street, house, corpus:document.getElementById('editCorpus').value.trim(), building:document.getElementById('editBuilding').value.trim(), entrance, floor, apartment:apt, intercom };
+        if(editIndex!==null) currentUser.addresses[editIndex]=newAddr;
+        else currentUser.addresses.push(newAddr);
+        saveUser(); renderAddresses(); document.getElementById('addressEditModal').classList.remove('active'); showToast('Адрес сохранен'); return true;
     }
 
-    function renderAddressManagerList() {
-        const container = document.getElementById('addressManagerList');
-        if (!currentUser.addresses.length) {
-            container.innerHTML = '<p class="text-light">📭 Адресов пока нет. Добавьте новый.</p>';
-            return;
+    // Оформление заказа ПВЗ
+    function openPvzOrder() {
+        if(!currentUser.addresses.length) { showToast('Сначала добавьте адрес доставки в профиле.',true); return; }
+        document.getElementById('pvzOrderForm').reset();
+        const today=new Date().toISOString().split('T')[0];
+        const maxDate=new Date(); maxDate.setDate(maxDate.getDate()+4);
+        document.getElementById('deliveryDate').setAttribute('min',today);
+        document.getElementById('deliveryDate').setAttribute('max',maxDate.toISOString().split('T')[0]);
+        document.getElementById('deliveryDate').value=today;
+        document.getElementById('adultWarning').style.display='none';
+        document.getElementById('adultCheck').checked=false;
+        // подстановка адреса
+        updateSelectedAddressDisplay();
+        document.getElementById('orderPvzModal').classList.add('active');
+    }
+    function updateSelectedAddressDisplay() {
+        const addr=currentUser.addresses[0];
+        if(addr) document.getElementById('selectedAddressDisplay').innerHTML=`${addr.city}, ${addr.street}, д.${addr.house}, кв.${addr.apartment}`;
+        else document.getElementById('selectedAddressDisplay').innerHTML='<span style="color:red;">Нет адреса, добавьте в профиле</span>';
+    }
+    function saveOrder(e) {
+        e.preventDefault();
+        const marketplace=document.getElementById('marketplace').value.trim();
+        const orderNumber=document.getElementById('orderNumber').value.trim();
+        const issueCode=document.getElementById('issueCode').value.trim();
+        const itemsCount=parseInt(document.getElementById('itemsCount').value);
+        const adult=document.getElementById('adultCheck').checked;
+        const phone=document.getElementById('phoneOrder').value.trim();
+        let fullName=document.getElementById('fullName').value.trim();
+        const noPatr=document.getElementById('noPatronymic').checked;
+        if(noPatr && fullName.split(' ').length!==2) { showToast('ФИО: укажите фамилию и имя (без отчества)',true); return; }
+        if(!noPatr && fullName.split(' ').length<3) { showToast('Укажите полные фамилию, имя и отчество',true); return; }
+        if(!/^\+7\d{10}$/.test(phone)) { showToast('Телефон должен быть +7XXXXXXXXXX',true); return; }
+        if(!marketplace || !orderNumber || isNaN(itemsCount) || itemsCount<1) { showToast('Заполните обязательные поля',true); return; }
+        const pvzStreet=document.getElementById('pvzStreet').value.trim();
+        const pvzHouse=document.getElementById('pvzHouse').value.trim();
+        if(!pvzStreet || !pvzHouse) { showToast('Укажите улицу и дом ПВЗ',true); return; }
+        const date=document.getElementById('deliveryDate').value;
+        const time=document.getElementById('deliveryTime').value;
+        if(!time) { showToast('Выберите время',true); return; }
+        const timeHour=parseInt(time.split(':')[0]);
+        if(timeHour<9 || timeHour>22) { showToast('Время должно быть с 09:00 до 22:00',true); return; }
+        if(!currentUser.addresses[0]) { showToast('Добавьте адрес доставки',true); return; }
+        const addressCopy={...currentUser.addresses[0]};
+        const order={
+            id:Date.now(),
+            marketplace, orderNumber, issueCode, itemsCount, adult, phone, fullName, address:addressCopy,
+            pvzStreet, pvzHouse, date, time, status:'обработка', createdAt:new Date().toISOString()
+        };
+        currentUser.orders.unshift(order);
+        saveUser();
+        showToast('Спасибо за доверие, ваша доставка находится в статусе обработка, пожалуйста ожидайте.',false);
+        document.getElementById('orderPvzModal').classList.remove('active');
+    }
+    function showMyDeliveries() {
+        const container=document.getElementById('deliveriesList');
+        if(!currentUser.orders.length) { container.innerHTML='<div class="text-muted">У вас пока нет заказов.</div>'; }
+        else {
+            let html='';
+            currentUser.orders.forEach(o=>{
+                html+=`<div class="order-item"><div class="flex-between"><strong>${o.marketplace}</strong><span>${o.status}</span></div>
+                <div>Заказ №${o.orderNumber} | Кол-во: ${o.itemsCount}</div>
+                <div>Дата: ${o.date} ${o.time}</div>
+                <div>Адрес доставки: ${o.address.street}, д.${o.address.house}, кв.${o.address.apartment}</div>
+                <div>ПВЗ: ${o.pvzStreet}, ${o.pvzHouse}</div>
+                <div class="text-muted" style="font-size:0.8rem;">${new Date(o.createdAt).toLocaleString()}</div></div>`;
+            });
+            container.innerHTML=html;
         }
-        let html = '';
-        currentUser.addresses.forEach((a, idx) => {
-            let short = `${a.city}, ${a.street}, д.${a.house}, кв.${a.apartment}`;
-            html += `
-                <div class="address-card" style="justify-content: space-between;">
-                    <div><i class="fas fa-home"></i> ${short}</div>
-                    <div>
-                        <button class="btn-neon editAddrBtn" data-idx="${idx}" style="padding:0.2rem 1rem;">Ред.</button>
-                        <button class="btn-neon delAddrBtn" data-idx="${idx}" style="border-color:#ff7777; margin-left:5px;">Уд.</button>
-                    </div>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-        document.querySelectorAll('.editAddrBtn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.getAttribute('data-idx'));
-                document.getElementById('addressManagerModal').classList.remove('active');
-                openAddressEditModal(idx);
-            });
-        });
-        document.querySelectorAll('.delAddrBtn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if (confirm('Удалить адрес?')) {
-                    const idx = parseInt(btn.getAttribute('data-idx'));
-                    currentUser.addresses.splice(idx, 1);
-                    saveUserToLS();
-                    renderAddressShortList();
-                    renderAddressManagerList();
-                    showToast('Адрес удален', false);
-                }
-            });
-        });
+        document.getElementById('myDeliveriesModal').classList.add('active');
     }
 
-    // Подготовка datalist улиц
-    function fillStreetDatalist() {
-        const datalist = document.getElementById('streetDatalist');
-        datalist.innerHTML = '';
-        ALL_MOSCOW_STREETS.slice(0, 1000).forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s;
-            datalist.appendChild(opt);
-        });
+    function closeAllModals() {
+        const ids=['regModal','loginModal','addressManagerModal','addressEditModal','orderPvzModal','myDeliveriesModal','welcomeModal'];
+        ids.forEach(id=>document.getElementById(id).classList.remove('active'));
     }
 
-    // Валидация города при потере фокуса (не нужно Enter)
-    function setupCityValidation() {
-        const cityInput = document.getElementById('editCity');
-        if (cityInput) {
-            cityInput.addEventListener('blur', function() {
-                const val = this.value.trim().toLowerCase();
-                if (val !== '' && val !== 'москва') {
-                    showToast('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.', true);
-                    this.classList.add('error-field');
-                } else if (val === 'москва') {
-                    this.classList.remove('error-field');
-                }
-            });
-            cityInput.addEventListener('input', function() {
-                if (this.value.trim().toLowerCase() === 'москва') this.classList.remove('error-field');
-            });
-        }
-    }
+    // инициализация событий и datalist
+    function init() {
+        const streetDatalist=document.getElementById('streetList');
+        ALL_STREETS.forEach(s=>{ let opt=document.createElement('option'); opt.value=s; streetDatalist.appendChild(opt); });
+        if(loadUser()) showMainUI(true); else showMainUI(false);
 
-    // Инициализация событий
-    document.addEventListener('DOMContentLoaded', () => {
-        fillStreetDatalist();
-        setupCityValidation();
-
-        if (loadUserFromLS() && currentUser) {
-            showMainUI();
-        } else {
-            document.getElementById('mainDashboard').style.display = 'none';
-            document.getElementById('welcomeModal').classList.add('active');
-        }
-
-        // Переключение модалок
-        document.getElementById('welcomeRegisterBtn').onclick = () => { closeAllModals(); document.getElementById('regModal').classList.add('active'); };
-        document.getElementById('welcomeLoginBtn').onclick = () => { closeAllModals(); document.getElementById('loginModal').classList.add('active'); };
-        document.getElementById('closeRegBtn').onclick = () => { closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
-        document.getElementById('closeLoginBtn').onclick = () => { closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
-        document.getElementById('closeManagerBtn').onclick = () => document.getElementById('addressManagerModal').classList.remove('active');
-        document.getElementById('closeEditModalBtn').onclick = () => document.getElementById('addressEditModal').classList.remove('active');
-        document.getElementById('openAddressManagerBtn').onclick = () => { renderAddressManagerList(); document.getElementById('addressManagerModal').classList.add('active'); };
-        document.getElementById('addNewAddressBtn').onclick = () => { document.getElementById('addressManagerModal').classList.remove('active'); openAddressEditModal(null); };
-        document.getElementById('logoutBtnMain').onclick = logout;
-
-        // Форма регистрации
-        document.getElementById('regForm').onsubmit = (e) => {
-            e.preventDefault();
-            const err = registerUser(
-                document.getElementById('regName').value,
-                document.getElementById('regEmail').value,
-                document.getElementById('regPhone').value,
-                document.getElementById('regPassword').value
-            );
-            if (err) showToast(err, true);
-            else { closeAllModals(); showMainUI(); showToast('Регистрация успешна! Добро пожаловать.', false); }
-        };
-        // Форма входа
-        document.getElementById('loginForm').onsubmit = (e) => {
-            e.preventDefault();
-            const err = loginUser(
-                document.getElementById('loginEmail').value,
-                document.getElementById('loginPassword').value
-            );
-            if (err) showToast(err, true);
-            else { closeAllModals(); showMainUI(); showToast('Вход выполнен!', false); }
-        };
-        // Форма адреса
-        document.getElementById('addressEditForm').onsubmit = (e) => {
-            e.preventDefault();
-            saveAddressFromForm();
-        };
-        // Сервисные кнопки
-        document.querySelectorAll('.service-item').forEach(btn => {
-            btn.onclick = () => showToast('🚀 Функция доставки в разработке! Скоро заработает.', false);
+        document.getElementById('showRegBtn').onclick=()=>{ closeAllModals(); document.getElementById('regModal').classList.add('active'); };
+        document.getElementById('showLoginBtn').onclick=()=>{ closeAllModals(); document.getElementById('loginModal').classList.add('active'); };
+        document.getElementById('closeReg').onclick=()=>{ closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
+        document.getElementById('closeLogin').onclick=()=>{ closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
+        document.getElementById('openAddressManager').onclick=()=>{ renderAddressManager(); document.getElementById('addressManagerModal').classList.add('active'); };
+        document.getElementById('closeAddressManager').onclick=()=>document.getElementById('addressManagerModal').classList.remove('active');
+        document.getElementById('addAddressBtn').onclick=()=>{ document.getElementById('addressManagerModal').classList.remove('active'); openAddressEdit(null); };
+        document.getElementById('closeEditModal').onclick=()=>document.getElementById('addressEditModal').classList.remove('active');
+        document.getElementById('closeOrderModal').onclick=()=>document.getElementById('orderPvzModal').classList.remove('active');
+        document.getElementById('closeDeliveriesModal').onclick=()=>document.getElementById('myDeliveriesModal').classList.remove('active');
+        document.getElementById('myDeliveriesBtn').onclick=showMyDeliveries;
+        document.getElementById('logoutBtn').onclick=logout;
+        document.getElementById('editAddressFromOrder').onclick=()=>{ document.getElementById('orderPvzModal').classList.remove('active'); openAddressEdit(0); };
+        document.querySelectorAll('.service-btn').forEach(btn=>{
+            if(btn.dataset.action==='pvz') btn.onclick=openPvzOrder;
+            else btn.onclick=()=>showToast('Функция в разработке, скоро появится!',false);
         });
-    });
+        document.getElementById('regForm').onsubmit=(e)=>{ e.preventDefault(); const err=register(regName.value,regEmail.value,regPhone.value,regPassword.value); if(err) showToast(err,true); else { closeAllModals(); showMainUI(true); showToast('Регистрация успешна!',false); } };
+        document.getElementById('loginForm').onsubmit=(e)=>{ e.preventDefault(); const err=login(loginEmail.value,loginPassword.value); if(err) showToast(err,true); else { closeAllModals(); showMainUI(true); showToast('Добро пожаловать!',false); } };
+        document.getElementById('addressEditForm').onsubmit=(e)=>{ e.preventDefault(); saveAddressFromEdit(); };
+        document.getElementById('pvzOrderForm').onsubmit=saveOrder;
+        document.getElementById('adultCheck').onchange=function(){ document.getElementById('adultWarning').style.display=this.checked?'block':'none'; };
+        document.getElementById('noPatronymic').onchange=function(){ const fn=document.getElementById('fullName'); if(this.checked) fn.placeholder='Иванов Иван'; else fn.placeholder='Иванов Иван Иванович'; };
+        document.getElementById('deliveryDate').value=new Date().toISOString().split('T')[0];
+    }
+    init();
 </script>
 </body>
 </html>
