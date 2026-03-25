@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f0f2f5;
+            background: #eef2f5;
             min-height: 100vh;
             padding: 20px;
             overflow-x: hidden;
@@ -37,14 +37,14 @@
             flex: 1;
         }
 
-        /* Деловой стиль - спокойные тона */
+        /* Деловой стиль - спокойные серые тона */
         .card {
             background: #ffffff;
             border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.02);
             padding: 20px;
             margin-bottom: 20px;
-            border: 1px solid #e8eaed;
+            border: 1px solid #e2e6ea;
         }
 
         @media (min-width: 768px) {
@@ -62,14 +62,14 @@
             gap: 16px;
             margin-bottom: 20px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #eef2f6;
+            border-bottom: 1px solid #eef2f5;
         }
 
         h1 {
             font-size: 24px;
             font-weight: 600;
             color: #2c3e50;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.2px;
         }
 
         h1 i {
@@ -97,11 +97,11 @@
         }
 
         .text-muted {
-            color: #7f8c8d;
+            color: #8b9ab0;
             font-size: 13px;
         }
 
-        /* Кнопки в деловом стиле */
+        /* Кнопки */
         .btn {
             padding: 8px 20px;
             border-radius: 40px;
@@ -110,7 +110,7 @@
             cursor: pointer;
             transition: all 0.2s;
             border: none;
-            background: #f5f6f8;
+            background: #f0f2f5;
             color: #2c3e50;
         }
 
@@ -124,17 +124,17 @@
         }
 
         .btn-outline {
-            border: 1px solid #d0d5dd;
+            border: 1px solid #d4dce4;
             background: white;
         }
 
         .btn-outline:hover {
-            background: #f8f9fc;
+            background: #f8fafc;
             border-color: #2c7a5e;
         }
 
         .btn-danger {
-            background: #dc2626;
+            background: #dc3545;
             color: white;
         }
 
@@ -151,11 +151,11 @@
         }
 
         .advantage-card {
-            background: #f8fafd;
+            background: #f9fbfd;
             border-radius: 16px;
             padding: 16px;
             text-align: center;
-            border: 1px solid #eef2f6;
+            border: 1px solid #eef2f5;
         }
 
         .advantage-card i {
@@ -173,7 +173,7 @@
 
         .advantage-card p {
             font-size: 12px;
-            color: #7f8c8d;
+            color: #8b9ab0;
         }
 
         .services-grid {
@@ -187,7 +187,7 @@
             flex: 1;
             min-width: 160px;
             background: #ffffff;
-            border: 1px solid #e8eaed;
+            border: 1px solid #e2e6ea;
             border-radius: 16px;
             padding: 12px 16px;
             display: flex;
@@ -199,7 +199,7 @@
 
         .service-card:hover {
             border-color: #2c7a5e;
-            background: #fafcfd;
+            background: #fefefe;
             transform: translateY(-1px);
         }
 
@@ -215,7 +215,7 @@
         }
 
         .address-item {
-            background: #fafcfd;
+            background: #f9fbfd;
             border-radius: 14px;
             padding: 12px 16px;
             margin-bottom: 10px;
@@ -225,7 +225,7 @@
             flex-wrap: wrap;
             gap: 12px;
             border-left: 3px solid #2c7a5e;
-            border: 1px solid #eef2f6;
+            border: 1px solid #eef2f5;
             border-left: 3px solid #2c7a5e;
         }
 
@@ -256,7 +256,7 @@
         input, select, textarea {
             width: 100%;
             padding: 10px 14px;
-            border: 1px solid #d0d5dd;
+            border: 1px solid #d4dce4;
             border-radius: 12px;
             font-size: 14px;
             transition: all 0.2s;
@@ -266,29 +266,22 @@
 
         input:focus, select:focus, textarea:focus {
             border-color: #2c7a5e;
-            box-shadow: 0 0 0 3px rgba(44, 122, 94, 0.08);
+            box-shadow: 0 0 0 3px rgba(44, 122, 94, 0.05);
         }
 
         input[readonly] {
-            background: #f8fafd;
+            background: #f9fbfd;
             cursor: pointer;
         }
 
-        /* Увеличенный интервал между колонками */
         .two-columns {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
 
-        .three-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px;
-        }
-
         @media (max-width: 640px) {
-            .two-columns, .three-columns {
+            .two-columns {
                 grid-template-columns: 1fr;
                 gap: 12px;
             }
@@ -340,7 +333,7 @@
             font-size: 18px;
             cursor: pointer;
             padding: 6px;
-            color: #9aa6b5;
+            color: #9aaebf;
         }
 
         .icon-btn:hover {
@@ -353,23 +346,23 @@
             justify-content: center;
             width: 18px;
             height: 18px;
-            background: #eef2f6;
+            background: #eef2f5;
             border-radius: 50%;
             font-size: 11px;
             font-weight: bold;
             margin-left: 6px;
             cursor: pointer;
-            color: #5a6e7c;
+            color: #6c7e94;
         }
 
         .warning-text {
-            color: #dc2626;
+            color: #dc3545;
             font-size: 12px;
             margin-top: 6px;
         }
 
         .order-item {
-            border-bottom: 1px solid #eef2f6;
+            border-bottom: 1px solid #eef2f5;
             padding: 16px 0;
         }
 
@@ -389,8 +382,8 @@
         }
 
         .status-processing { color: #2c7a5e; font-weight: 600; }
-        .status-cancelled { color: #dc2626; font-weight: 600; }
-        .status-delivered { color: #9aa6b5; font-weight: 600; }
+        .status-cancelled { color: #dc3545; font-weight: 600; }
+        .status-delivered { color: #8b9ab0; font-weight: 600; }
 
         .alert-modal, .confirm-modal {
             position: fixed;
@@ -432,9 +425,9 @@
         .footer {
             text-align: center;
             padding: 24px 16px;
-            color: #9aa6b5;
+            color: #9aaebf;
             font-size: 12px;
-            border-top: 1px solid #e8eaed;
+            border-top: 1px solid #e2e6ea;
             margin-top: 24px;
             width: 100%;
             max-width: 1280px;
@@ -447,15 +440,19 @@
 
         .char-counter {
             font-size: 11px;
-            color: #9aa6b5;
+            color: #9aaebf;
             text-align: right;
             margin-top: 4px;
         }
 
         .city-hint {
             font-size: 11px;
-            color: #9aa6b5;
+            color: #8b9ab0;
             margin-top: 4px;
+        }
+
+        .city-success {
+            color: #2c7a5e;
         }
     </style>
 </head>
@@ -531,7 +528,7 @@
             <i class="fas fa-rocket" style="font-size: 48px; color: #2c7a5e;"></i>
             <h2 style="margin: 16px 0;">Не успеваете за заказом?</h2>
             <p style="margin-bottom: 16px; line-height: 1.5;">Заказ далеко, или не хотите выходить на улицу?<br><strong>TUMIX</strong> заберет, отменит лишнее и довезет в сохранности!</p>
-            <div style="background: #f8fafd; border-radius: 16px; padding: 16px; margin-bottom: 20px; text-align: left;">
+            <div style="background: #f9fbfd; border-radius: 16px; padding: 16px; margin-bottom: 20px; text-align: left;">
                 <p><strong>Почему выбирают нас:</strong></p>
                 <ul style="margin-left: 20px; margin-top: 8px;">
                     <li>✅ Гарантия доставки, а не кражи курьером</li>
@@ -552,7 +549,7 @@
 <div id="regModal" class="modal">
     <div class="modal-content">
         <h3>Регистрация в TUMIX</h3>
-        <div style="background: #f8fafd; border-radius: 12px; padding: 12px; margin-bottom: 20px; font-size: 13px;">
+        <div style="background: #f9fbfd; border-radius: 12px; padding: 12px; margin-bottom: 20px; font-size: 13px;">
             <i class="fas fa-gift"></i> При регистрации вы получаете:<br>
             • Скидку 10% на первую доставку<br>
             • Приоритетную поддержку<br>
@@ -595,7 +592,7 @@
         <form id="addressEditForm">
             <div class="form-group">
                 <input type="text" id="editCity" placeholder="Город *">
-                <div class="city-hint">Только Москва</div>
+                <div class="city-hint" id="cityHint">Только Москва</div>
             </div>
             <div class="form-group"><input type="text" id="editStreet" placeholder="Улица *" list="streetList"></div>
             <datalist id="streetList"></datalist>
@@ -646,7 +643,7 @@
             </div>
             <div class="form-group">
                 <label>Адрес доставки <button type="button" id="editAddressFromOrderBtn" class="icon-btn"><i class="fas fa-cog"></i></button></label>
-                <div id="selectedAddressDisplay" style="background:#f8fafd; padding:12px; border-radius:12px;"></div>
+                <div id="selectedAddressDisplay" style="background:#f9fbfd; padding:12px; border-radius:12px;"></div>
             </div>
             <div class="form-group"><label>Адрес ПВЗ *</label><input type="text" id="pvzAddress" placeholder="Например: ул. Тверская, д. 15" required></div>
             <div class="two-columns">
@@ -682,7 +679,7 @@
 </div>
 
 <script>
-    const moscowStreets = ["Тверская", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Мясницкая", "Покровка", "Арбат", "Большая Дмитровка", "Пятницкая", "Смоленская", "Садовое кольцо", "Мира проспект", "Профсоюзная", "Ленинградский проспект", "Варшавское шоссе", "Каширское шоссе", "Дмитровское шоссе", "Ярославское шоссе", "Рязанский проспект", "Волгоградский проспект", "Люблинская", "Краснопролетарская", "Цветной бульвар", "Чистопрудный бульвар", "Покровский бульвар", "Гоголевский бульвар", "Остоженка", "Пречистенка", "Воздвиженка", "Моховая", "Никольская", "Кузнецкий Мост", "Петровка"];
+    const moscowStreets = ["Тверская", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Мясницкая", "Покровка", "Арбат", "Большая Дмитровка", "Пятницкая", "Смоленская", "Садовое кольцо", "Мира проспект", "Профсоюзная", "Ленинградский проспект", "Варшавское шоссе", "Каширское шоссе", "Дмитровское шоссе", "Ярославское шоссе", "Рязанский проспект", "Волгоградский проспект", "Люблинская"];
     for (let i = 1; i <= 50; i++) moscowStreets.push(`улица ${i}-я`);
     const ALL_STREETS = [...new Set(moscowStreets)].sort();
 
@@ -758,6 +755,7 @@
     }
 
     function logout() { currentUser = null; showMainUI(false); }
+    
     function showMainUI(showDashboard) {
         closeAllModals();
         const dashboard = document.getElementById('dashboard');
@@ -820,6 +818,11 @@
         document.getElementById('addressEditModal').classList.add('active');
     }
 
+    function isMoscowCity(city) {
+        const normalized = city.trim().toLowerCase();
+        return normalized === 'москва' || normalized === 'moscow';
+    }
+
     function saveAddress() {
         let city = document.getElementById('editCity').value.trim();
         let street = document.getElementById('editStreet').value.trim();
@@ -829,11 +832,21 @@
         const apartment = document.getElementById('editApartment').value.trim();
         const intercom = document.getElementById('editIntercom').value.trim();
 
-        city = capitalizeWords(city);
+        // Проверка города - исправленная логика
+        if (!isMoscowCity(city)) {
+            showAlert('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.');
+            document.getElementById('editCity').focus();
+            return false;
+        }
+        
+        // Устанавливаем корректное написание
+        city = 'Москва';
         street = capitalizeWords(street);
         
-        if (city.toLowerCase() !== 'Москва') { showAlert('Извините, доставка в вашем городе находится в разработке! Сейчас доставляем только в Москве.'); return false; }
-        if (!house || !entrance || !floor || !apartment || !intercom) { showAlert('Заполните все обязательные поля (*)'); return false; }
+        if (!house || !entrance || !floor || !apartment || !intercom) {
+            showAlert('Заполните все обязательные поля (*)');
+            return false;
+        }
 
         const newAddr = { city, street, house, corpus: document.getElementById('editCorpus').value.trim(), building: document.getElementById('editBuilding').value.trim(), entrance, floor, apartment, intercom };
         if (editAddressIndex !== null) currentUser.addresses[editAddressIndex] = newAddr;
@@ -877,17 +890,21 @@
         const today = now.toISOString().split('T')[0];
         const maxDate = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
         
-        dateInput.addEventListener('click', () => dateInput.showPicker?.());
-        timeInput.addEventListener('click', () => timeInput.showPicker?.());
-        
-        dateInput.addEventListener('change', function() {
-            const selectedDate = new Date(this.value);
-            if (selectedDate < new Date(now.setHours(0,0,0,0))) { showAlert('Дата не может быть раньше сегодняшней'); this.value = today; }
-            if (selectedDate > new Date(maxDate)) { showAlert('Дата не может быть позже чем через 2 дня'); this.value = today; }
-            updateTimeMin();
-        });
+        if (dateInput) {
+            dateInput.addEventListener('click', () => dateInput.showPicker?.());
+            dateInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                if (selectedDate < new Date(now.setHours(0,0,0,0))) { showAlert('Дата не может быть раньше сегодняшней'); this.value = today; }
+                if (selectedDate > new Date(maxDate)) { showAlert('Дата не может быть позже чем через 2 дня'); this.value = today; }
+                updateTimeMin();
+            });
+        }
+        if (timeInput) {
+            timeInput.addEventListener('click', () => timeInput.showPicker?.());
+        }
         
         function updateTimeMin() {
+            if (!dateInput || !timeInput) return;
             const selectedDate = new Date(dateInput.value);
             const nowDate = new Date();
             if (selectedDate.toDateString() === nowDate.toDateString()) {
@@ -899,9 +916,11 @@
             timeInput.max = '22:00';
         }
         
-        dateInput.min = today;
-        dateInput.max = maxDate;
-        updateTimeMin();
+        if (dateInput) {
+            dateInput.min = today;
+            dateInput.max = maxDate;
+            updateTimeMin();
+        }
     }
 
     function submitOrder(e) {
@@ -1068,12 +1087,17 @@
         document.getElementById('regPhone').addEventListener('input', function() { if (!this.value.startsWith('+7')) this.value = '+7'; });
         document.getElementById('phoneOrder').addEventListener('input', function() { if (!this.value.startsWith('+7')) this.value = '+7'; });
         
+        // Дополнительная обработка поля города
         const cityInput = document.getElementById('editCity');
         if (cityInput) {
             cityInput.addEventListener('blur', function() {
-                let val = this.value.trim();
-                if (val.toLowerCase() === 'москва' || val.toLowerCase() === 'moscow') {
+                if (isMoscowCity(this.value)) {
                     this.value = 'Москва';
+                    document.getElementById('cityHint').innerHTML = '✓ Москва принята';
+                    document.getElementById('cityHint').style.color = '#2c7a5e';
+                } else if (this.value.trim() !== '') {
+                    document.getElementById('cityHint').innerHTML = 'Только Москва';
+                    document.getElementById('cityHint').style.color = '#8b9ab0';
                 }
             });
         }
