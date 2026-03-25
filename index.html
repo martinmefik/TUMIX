@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0">
     <title>TUMIX — Профессиональная доставка из маркетплейсов</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -17,6 +18,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
             min-height: 100vh;
             padding: 16px;
+            overflow-x: hidden;
         }
 
         @media (min-width: 768px) {
@@ -27,6 +29,7 @@
 
         .container {
             max-width: 1280px;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -135,10 +138,6 @@
             color: white;
         }
 
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-
         .btn-warning {
             background: #f59e0b;
             color: white;
@@ -146,7 +145,7 @@
 
         .advantages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 16px;
             margin-top: 8px;
         }
@@ -173,7 +172,7 @@
 
         .service-card {
             flex: 1;
-            min-width: 160px;
+            min-width: 150px;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 20px;
@@ -215,21 +214,16 @@
             font-size: 14px;
         }
 
-        label input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
-            display: inline-block;
-        }
-
         .checkbox-label {
             display: flex;
             align-items: center;
             cursor: pointer;
+            gap: 8px;
         }
 
         .checkbox-label input {
             width: auto;
-            margin-right: 8px;
+            margin: 0;
         }
 
         input, select {
@@ -253,15 +247,23 @@
             box-shadow: 0 0 0 3px rgba(30, 123, 94, 0.1);
         }
 
-        .two-columns {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+        input:disabled {
+            background: #f1f5f9;
+            color: #334155;
+            cursor: not-allowed;
         }
 
-        .two-columns > div {
-            flex: 1;
-            min-width: 120px;
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 640px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
         }
 
         .modal {
@@ -327,27 +329,6 @@
             font-weight: bold;
             margin-left: 6px;
             cursor: pointer;
-            position: relative;
-        }
-
-        .help-icon.active-tooltip::after {
-            content: attr(data-tooltip);
-            position: fixed;
-            background: #2c3e50;
-            color: white;
-            font-size: 12px;
-            padding: 10px;
-            border-radius: 12px;
-            width: 260px;
-            z-index: 1001;
-            white-space: normal;
-            text-align: left;
-            bottom: auto;
-            left: auto;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         .warning-text {
@@ -365,6 +346,7 @@
             display: flex;
             gap: 12px;
             margin-top: 12px;
+            flex-wrap: wrap;
         }
 
         .flex-between {
@@ -375,10 +357,9 @@
             gap: 12px;
         }
 
-        .status-pending { color: #f59e0b; font-weight: 600; }
         .status-processing { color: #1e7b5e; font-weight: 600; }
-        .status-delivered { color: #6c7a8a; font-weight: 600; }
         .status-cancelled { color: #dc2626; font-weight: 600; }
+        .status-delivered { color: #6c7a8a; font-weight: 600; }
 
         .alert-modal {
             position: fixed;
@@ -414,19 +395,6 @@
             margin-bottom: 24px;
             font-size: 16px;
         }
-
-        @media (max-width: 640px) {
-            .two-columns {
-                flex-direction: column;
-            }
-            .service-card {
-                min-width: auto;
-            }
-            .address-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
     </style>
 </head>
 <body>
@@ -452,7 +420,7 @@
                 <div class="advantage-card"><i class="fas fa-shield-alt"></i><h4>Гарантия сохранности</h4><p>Курьер не украдет заказ</p></div>
                 <div class="advantage-card"><i class="fas fa-boxes"></i><h4>Бережная транспортировка</h4><p>Аккуратная доставка</p></div>
                 <div class="advantage-card"><i class="fas fa-truck"></i><h4>Крупногабарит</h4><p>Перевозка на авто</p></div>
-                <div class="advantage-card"><i class="fas fa-tools"></i><h4>Стройматериалы</h4><p>Помощь с ремонтом</p></div>
+                <div class="advantage-card"><i class="fas fa-tools"></i><h4>Доставка стройматериалов</h4><p>Которые вы скажете</p></div>
             </div>
         </div>
 
@@ -473,7 +441,6 @@
     </div>
 </div>
 
-<!-- Модальное окно для ошибок/уведомлений -->
 <div id="alertModal" class="alert-modal">
     <div class="alert-content">
         <p id="alertMessage"></p>
@@ -493,7 +460,7 @@
                     <li>✅ Гарантия доставки, а не кражи курьером</li>
                     <li>✅ Бережная транспортировка</li>
                     <li>✅ Перевозка крупногабарита на авто</li>
-                    <li>✅ Помощь со стройматериалами</li>
+                    <li>✅ Доставка стройматериалов которые вы скажете</li>
                     <li>✅ Работаем с OZON, WB, Яндекс Маркет, Лемана Про и другими</li>
                 </ul>
             </div>
@@ -517,7 +484,7 @@
         <form id="regForm">
             <div class="form-group"><input type="text" id="regName" placeholder="Имя (только русские буквы)"></div>
             <div class="form-group"><input type="email" id="regEmail" placeholder="Email"></div>
-            <div class="form-group"><input type="tel" id="regPhone" placeholder="+7XXXXXXXXXX"></div>
+            <div class="form-group"><input type="tel" id="regPhone" value="+7" readonly disabled style="background:#f1f5f9; color:#334155;"></div>
             <div class="form-group"><input type="password" id="regPassword" placeholder="Пароль (мин. 8 символов)"></div>
             <button type="submit" class="btn btn-primary" style="width:100%">Зарегистрироваться</button>
             <button type="button" id="closeRegBtn" class="btn btn-outline" style="width:100%; margin-top:12px;">Назад</button>
@@ -554,16 +521,16 @@
             <datalist id="streetList"></datalist>
             <div class="form-group"><input type="text" id="editHouse" placeholder="№ дома *"></div>
             <div class="two-columns">
-                <div><input type="text" id="editCorpus" placeholder="Корпус"></div>
-                <div><input type="text" id="editBuilding" placeholder="Строение"></div>
+                <input type="text" id="editCorpus" placeholder="Корпус">
+                <input type="text" id="editBuilding" placeholder="Строение">
             </div>
             <div class="two-columns">
-                <div><input type="text" id="editEntrance" placeholder="Подъезд *" inputmode="numeric" pattern="\d*"></div>
-                <div><input type="text" id="editFloor" placeholder="Этаж *" inputmode="numeric" pattern="\d*"></div>
+                <input type="text" id="editEntrance" placeholder="Подъезд *" inputmode="numeric">
+                <input type="text" id="editFloor" placeholder="Этаж *" inputmode="numeric">
             </div>
             <div class="two-columns">
-                <div><input type="text" id="editApartment" placeholder="Квартира *" inputmode="numeric" pattern="\d*"></div>
-                <div><input type="text" id="editIntercom" placeholder="Домофон *"></div>
+                <input type="text" id="editApartment" placeholder="Квартира *" inputmode="numeric">
+                <input type="text" id="editIntercom" placeholder="Домофон *">
             </div>
             <div style="display:flex; gap:12px; margin-top:8px;"><button type="submit" class="btn btn-primary">Сохранить</button><button type="button" id="closeEditBtn" class="btn btn-outline">Отмена</button></div>
         </form>
@@ -585,19 +552,23 @@
                 <label class="checkbox-label"><input type="checkbox" id="adultCheck"> Есть товары 18+</label>
                 <div id="adultWarning" class="warning-text" style="display:none;">Курьер проверит ваши документы!</div>
             </div>
-            <div class="form-group"><label>Номер телефона * (+7XXXXXXXXXX)</label><input type="tel" id="phoneOrder" value="+7" required></div>
+            <div class="form-group"><label>Номер телефона * (+7XXXXXXXXXX)</label><input type="tel" id="phoneOrder" value="+7" readonly disabled style="background:#f1f5f9; color:#334155;"></div>
             <div class="form-group">
                 <label>ФИО *</label>
                 <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
-                <label class="checkbox-label"><input type="checkbox" id="noPatronymic"> Нет отчества</label>
+                <div style="margin-top: 8px;">
+                    <label class="checkbox-label"><input type="checkbox" id="noPatronymic"> Нет отчества</label>
+                </div>
             </div>
             <div class="form-group">
                 <label>Адрес доставки <button type="button" id="editAddressFromOrderBtn" class="icon-btn"><i class="fas fa-cog"></i></button></label>
                 <div id="selectedAddressDisplay" style="background:#f8fafc; padding:12px; border-radius:16px;"></div>
             </div>
             <div class="form-group"><label>Адрес ПВЗ *</label><input type="text" id="pvzAddress" placeholder="Например: ул. Тверская, д. 15" required></div>
-            <div class="form-group"><label>Дата *</label><input type="date" id="deliveryDate" required></div>
-            <div class="form-group"><label>Время (09:00 - 22:00) *</label><input type="time" id="deliveryTime" min="09:00" max="22:00" required></div>
+            <div class="two-columns">
+                <div class="form-group"><label>Дата *</label><input type="date" id="deliveryDate" required></div>
+                <div class="form-group"><label>Время (09:00 - 22:00) *</label><input type="time" id="deliveryTime" min="09:00" max="22:00" required></div>
+            </div>
             <div style="display:flex; gap:12px; flex-wrap:wrap;"><button type="submit" class="btn btn-primary">Оформить доставку</button><button type="button" id="closeOrderModalBtn" class="btn btn-outline">Отмена</button></div>
         </form>
     </div>
@@ -651,9 +622,8 @@
     function register(name, email, phone, password) {
         if (!/^[А-Яа-яЁё\s\-]{2,}$/.test(name) || /(хуй|пизд|бля|мудак)/i.test(name)) return 'Имя: только русские буквы, без мата.';
         if (!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) return 'Некорректный email.';
-        if (!/^\+7\d{10}$/.test(phone)) return 'Телефон: +7 и 10 цифр.';
         if (password.length < 8) return 'Пароль минимум 8 символов.';
-        currentUser = { name, email, phone, password, addresses: [], orders: [] };
+        currentUser = { name, email, phone: '+79123456789', password, addresses: [], orders: [] };
         saveUser();
         return null;
     }
@@ -841,7 +811,7 @@
         const issueCode = document.getElementById('issueCode').value.trim();
         const itemsCount = parseInt(document.getElementById('itemsCount').value);
         const adult = document.getElementById('adultCheck').checked;
-        let phone = document.getElementById('phoneOrder').value.trim();
+        const phone = '+7' + currentUser.phone.slice(2);
         let fullName = document.getElementById('fullName').value.trim();
         const noPatr = document.getElementById('noPatronymic').checked;
 
@@ -852,10 +822,6 @@
         }
         if (!noPatr && fullName.split(' ').length < 3) {
             showAlert('Укажите полные фамилию, имя и отчество');
-            return;
-        }
-        if (!/^\+7\d{10}$/.test(phone)) {
-            showAlert('Телефон должен быть +7 и 10 цифр');
             return;
         }
         if (!marketplace || !orderNumber || isNaN(itemsCount) || itemsCount < 1) {
@@ -1029,7 +995,7 @@
             const err = register(
                 document.getElementById('regName').value,
                 document.getElementById('regEmail').value,
-                document.getElementById('regPhone').value,
+                '+79123456789',
                 document.getElementById('regPassword').value
             );
             if (err) showAlert(err);
@@ -1056,12 +1022,6 @@
             document.getElementById('adultWarning').style.display = this.checked ? 'block' : 'none';
         };
         
-        document.getElementById('noPatronymic').onchange = function() {
-            const fn = document.getElementById('fullName');
-            if (this.checked) fn.placeholder = 'Иванов Иван';
-            else fn.placeholder = 'Иванов Иван Иванович';
-        };
-        
         document.getElementById('fullName').addEventListener('blur', function() {
             this.value = formatFullName(this.value);
         });
@@ -1085,10 +1045,6 @@
         
         document.getElementById('itemsCount').addEventListener('input', function() {
             this.value = this.value.replace(/[^\d]/g, '');
-        });
-        
-        document.getElementById('phoneOrder').addEventListener('focus', function() {
-            if (this.value === '') this.value = '+7';
         });
     });
 </script>
