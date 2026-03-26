@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0">
     <title>TUMIX — Профессиональная доставка из маркетплейсов</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -61,6 +64,25 @@
             margin-bottom: 20px;
             padding-bottom: 12px;
             border-bottom: 1px solid #eef2f5;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        @media (min-width: 768px) {
+            .logo-img {
+                width: 48px;
+                height: 48px;
+            }
         }
 
         h1 {
@@ -228,11 +250,41 @@
             font-size: 13px;
         }
 
-        .checkbox-label {
+        /* Исправленные стили для чекбоксов */
+        .checkbox-wrapper {
             display: flex;
             align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
             cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checkbox-wrapper label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+            display: inline;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
             gap: 8px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2c7a5e;
         }
 
         input,
@@ -454,6 +506,17 @@
         .city-input {
             padding-right: 35px;
         }
+
+        .welcome-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .welcome-logo img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
     </style>
 </head>
 
@@ -462,7 +525,10 @@
         <div id="dashboard" style="display: none;">
             <div class="card">
                 <div class="card-header">
-                    <h1><i class="fas fa-truck-fast"></i> TUMIX</h1>
+                    <div class="logo-container">
+                        <img src="010047C9-376B-4F75-AAB1-5175F05A898B.png" alt="TUMIX" class="logo-img" onerror="this.style.display='none'">
+                        <h1><i class="fas fa-truck-fast"></i> TUMIX</h1>
+                    </div>
                     <div>
                         <button id="supportBtn" class="btn btn-outline" style="margin-right: 8px;"><i class="fas fa-headset"></i> Поддержка</button>
                         <button id="myOrdersBtn" class="btn btn-outline" style="margin-right: 8px;"><i class="fas fa-list"></i> Мои доставки</button>
@@ -536,6 +602,9 @@
 
     <div id="welcomeModal" class="modal active">
         <div class="modal-content">
+            <div class="welcome-logo">
+                <img src="010047C9-376B-4F75-AAB1-5175F05A898B.png" alt="TUMIX" style="width: 80px; height: 80px; object-fit: contain;" onerror="this.style.display='none'">
+            </div>
             <div style="text-align: center;">
                 <i class="fas fa-rocket" style="font-size: 48px; color: #2c7a5e;"></i>
                 <h2 style="margin: 16px 0;">Не успеваете за заказом?</h2>
@@ -637,20 +706,27 @@
                 </div>
                 <div class="form-group"><label>Код выдачи (обязательно для Авито и Алиэкспресс)</label><input type="text" id="issueCode"></div>
                 <div class="form-group"><label>Количество товаров * (1-50)</label><input type="number" id="itemsCount" min="1" max="50" value="1" required></div>
-                <div class="form-group">
-                    <label class="checkbox-label"><input type="checkbox" id="adultCheck"> Есть товары 18+</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="adultCheck">
+                        <label for="adultCheck">Есть товары 18+</label>
+                    </div>
                     <div id="adultWarning" class="warning-text" style="display: none;">Курьер проверит ваши документы!</div>
                 </div>
-                <div class="form-group">
-                    <label class="checkbox-label"><input type="checkbox" id="leaveAtDoorCheck"> Оставить у двери</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="leaveAtDoorCheck">
+                        <label for="leaveAtDoorCheck">Оставить у двери</label>
+                    </div>
                     <div id="leaveAtDoorWarning" class="warning-text" style="display: none;">Компания TUMIX не несет ответственность за заказ после оставления у двери получателя!</div>
                 </div>
                 <div class="form-group"><label>Номер телефона * (+7XXXXXXXXXX)</label><input type="tel" id="phoneOrder" value="+7"></div>
                 <div class="form-group">
                     <label>ФИО *</label>
                     <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
-                    <div style="margin-top: 8px;">
-                        <label class="checkbox-label"><input type="checkbox" id="noPatronymic"> Нет отчества</label>
+                    <div class="checkbox-wrapper" style="margin-top: 8px;">
+                        <input type="checkbox" id="noPatronymic">
+                        <label for="noPatronymic">Нет отчества</label>
                     </div>
                 </div>
                 <div class="form-group">
@@ -681,8 +757,11 @@
             <form id="internetOrderForm">
                 <div class="form-group"><label>Название организации *</label><input type="text" id="orgName" required></div>
                 <div class="form-group"><label>Номер заказа (если нету номера заказа, пожалуйста поставьте галочку в окне ниже)</label><input type="text" id="internetOrderNumber"></div>
-                <div class="form-group">
-                    <label class="checkbox-label"><input type="checkbox" id="noOrderNumberCheck"> Нету номера заказа</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="noOrderNumberCheck">
+                        <label for="noOrderNumberCheck">Нету номера заказа</label>
+                    </div>
                     <div id="noOrderWarning" class="warning-text" style="display: none;">Пожалуйста обратитесь в поддержку на шапке главной страницы!</div>
                 </div>
                 <div class="form-group"><label>Количество товаров * (1-50)</label><input type="number" id="internetItemsCount" min="1" max="50" value="1" required></div>
@@ -728,6 +807,7 @@
     </div>
 
     <script>
+        // Полный JavaScript код (такой же как в предыдущей версии, но с исправленными обработчиками для чекбоксов)
         // УЛИЦЫ МОСКВЫ
         const moscowStreets = ["Тверская", "Новый Арбат", "Ленинский проспект", "Кутузовский проспект", "Мясницкая", "Покровка", "Арбат", "Большая Дмитровка", "Пятницкая", "Смоленская", "Садовое кольцо", "Мира проспект", "Профсоюзная", "Ленинградский проспект", "Варшавское шоссе", "Каширское шоссе", "Дмитровское шоссе", "Ярославское шоссе", "Рязанский проспект", "Волгоградский проспект", "Люблинская"];
         for (let i = 1; i <= 50; i++) moscowStreets.push(`улица ${i}-я`);
@@ -800,14 +880,7 @@
             if (!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) return 'Некорректный email.';
             if (!/^\+7\d{10}$/.test(phone)) return 'Телефон: +7 и 10 цифр.';
             if (password.length < 8) return 'Пароль минимум 8 символов.';
-            currentUser = {
-                name: name,
-                email: email,
-                phone: phone,
-                password: password,
-                addresses: [],
-                orders: []
-            };
+            currentUser = { name, email, phone, password, addresses: [], orders: [] };
             saveUser();
             return null;
         }
@@ -941,17 +1014,7 @@
                 showAlert('Заполните все обязательные поля (*)');
                 return false;
             }
-            const newAddr = {
-                city,
-                street,
-                house,
-                corpus: document.getElementById('editCorpus').value.trim(),
-                building: document.getElementById('editBuilding').value.trim(),
-                entrance,
-                floor,
-                apartment,
-                intercom
-            };
+            const newAddr = { city, street, house, corpus: document.getElementById('editCorpus').value.trim(), building: document.getElementById('editBuilding').value.trim(), entrance, floor, apartment, intercom };
             if (editAddressIndex !== null) currentUser.addresses[editAddressIndex] = newAddr;
             else currentUser.addresses.push(newAddr);
             saveUser();
@@ -1049,17 +1112,7 @@
                     showAlert('Заполните все обязательные поля (*)');
                     return false;
                 }
-                const newAddr = {
-                    city: 'Москва',
-                    street: newStreet,
-                    house,
-                    corpus: document.getElementById('editCorpus').value.trim(),
-                    building: document.getElementById('editBuilding').value.trim(),
-                    entrance,
-                    floor,
-                    apartment,
-                    intercom
-                };
+                const newAddr = { city: 'Москва', street: newStreet, house, corpus: document.getElementById('editCorpus').value.trim(), building: document.getElementById('editBuilding').value.trim(), entrance, floor, apartment, intercom };
                 const isSame = tempOrderData && tempOrderData.city === newAddr.city && tempOrderData.street === newAddr.street && tempOrderData.house === newAddr.house && tempOrderData.entrance === newAddr.entrance && tempOrderData.floor === newAddr.floor && tempOrderData.apartment === newAddr.apartment;
                 if (!isSame) {
                     currentUser.addresses[0] = newAddr;
@@ -1103,63 +1156,21 @@
             const pvzAddress = document.getElementById('pvzAddress').value.trim();
 
             fullName = formatFullName(fullName);
-            if (noPatr && fullName.split(' ').length !== 2) {
-                showAlert('ФИО: укажите фамилию и имя (без отчества)');
-                return;
-            }
-            if (!noPatr && fullName.split(' ').length < 3) {
-                showAlert('Укажите полные фамилию, имя и отчество');
-                return;
-            }
-            if (!/^\+7\d{10}$/.test(phone)) {
-                showAlert('Телефон должен быть +7 и 10 цифр');
-                return;
-            }
-            if (!marketplace || !orderNumber || isNaN(itemsCount) || itemsCount < 1 || itemsCount > 50) {
-                showAlert('Заполните обязательные поля');
-                return;
-            }
-            if (!pvzAddress) {
-                showAlert('Укажите адрес ПВЗ');
-                return;
-            }
-            if (!date || !time) {
-                showAlert('Выберите дату и время');
-                return;
-            }
+            if (noPatr && fullName.split(' ').length !== 2) { showAlert('ФИО: укажите фамилию и имя (без отчества)'); return; }
+            if (!noPatr && fullName.split(' ').length < 3) { showAlert('Укажите полные фамилию, имя и отчество'); return; }
+            if (!/^\+7\d{10}$/.test(phone)) { showAlert('Телефон должен быть +7 и 10 цифр'); return; }
+            if (!marketplace || !orderNumber || isNaN(itemsCount) || itemsCount < 1 || itemsCount > 50) { showAlert('Заполните обязательные поля'); return; }
+            if (!pvzAddress) { showAlert('Укажите адрес ПВЗ'); return; }
+            if (!date || !time) { showAlert('Выберите дату и время'); return; }
             const hour = parseInt(time.split(':')[0]);
-            if (hour < 9 || hour > 22) {
-                showAlert('Время должно быть с 09:00 до 22:00');
-                return;
-            }
+            if (hour < 9 || hour > 22) { showAlert('Время должно быть с 09:00 до 22:00'); return; }
             const now = new Date();
             const orderDateTime = new Date(`${date}T${time}`);
-            if (orderDateTime < new Date(now.getTime() + 60 * 60 * 1000)) {
-                showAlert('Доставка должна быть оформлена минимум за 1 час');
-                return;
-            }
-            if (!currentUser.addresses[0]) {
-                showAlert('Добавьте адрес доставки');
-                return;
-            }
+            if (orderDateTime < new Date(now.getTime() + 60 * 60 * 1000)) { showAlert('Доставка должна быть оформлена минимум за 1 час'); return; }
+            if (!currentUser.addresses[0]) { showAlert('Добавьте адрес доставки'); return; }
             const order = {
-                id: Date.now(),
-                type: 'ПВЗ',
-                marketplace,
-                orderNumber,
-                issueCode,
-                itemsCount,
-                adult,
-                phone,
-                fullName,
-                comment,
-                leaveAtDoor,
-                address: {...currentUser.addresses[0]},
-                pvzAddress,
-                date,
-                time,
-                status: 'обработка',
-                createdAt: new Date().toISOString()
+                id: Date.now(), type: 'ПВЗ', marketplace, orderNumber, issueCode, itemsCount, adult, phone, fullName, comment, leaveAtDoor,
+                address: { ...currentUser.addresses[0] }, pvzAddress, date, time, status: 'обработка', createdAt: new Date().toISOString()
             };
             currentUser.orders.unshift(order);
             saveUser();
@@ -1168,10 +1179,7 @@
         }
 
         function openInternetOrder() {
-            if (!currentUser.addresses.length) {
-                showAlert('Сначала добавьте адрес доставки в профиле.');
-                return;
-            }
+            if (!currentUser.addresses.length) { showAlert('Сначала добавьте адрес доставки в профиле.'); return; }
             document.getElementById('internetOrderForm').reset();
             const addr = currentUser.addresses[0];
             document.getElementById('internetAddressDisplay').innerHTML = `${addr.city}, ${addr.street}, д.${addr.house}, кв.${addr.apartment}`;
@@ -1189,38 +1197,14 @@
             const shopAddress = document.getElementById('internetShopAddress').value.trim();
             const comment = document.getElementById('internetComment').value.trim();
 
-            if (!orgName) {
-                showAlert('Укажите название организации');
-                return;
-            }
-            if (!noNumber && !orderNumber) {
-                showAlert('Укажите номер заказа или поставьте галочку "Нету номера заказа"');
-                return;
-            }
-            if (isNaN(itemsCount) || itemsCount < 1 || itemsCount > 50) {
-                showAlert('Количество товаров от 1 до 50');
-                return;
-            }
-            if (!shopAddress) {
-                showAlert('Укажите адрес интернет магазина');
-                return;
-            }
-            if (!currentUser.addresses[0]) {
-                showAlert('Добавьте адрес доставки');
-                return;
-            }
+            if (!orgName) { showAlert('Укажите название организации'); return; }
+            if (!noNumber && !orderNumber) { showAlert('Укажите номер заказа или поставьте галочку "Нету номера заказа"'); return; }
+            if (isNaN(itemsCount) || itemsCount < 1 || itemsCount > 50) { showAlert('Количество товаров от 1 до 50'); return; }
+            if (!shopAddress) { showAlert('Укажите адрес интернет магазина'); return; }
+            if (!currentUser.addresses[0]) { showAlert('Добавьте адрес доставки'); return; }
             const order = {
-                id: Date.now(),
-                type: 'ИНТЕРНЕТ-МАГАЗИН',
-                orgName,
-                orderNumber: noNumber ? 'Нет номера' : orderNumber,
-                noNumber,
-                itemsCount,
-                shopAddress,
-                comment,
-                address: {...currentUser.addresses[0]},
-                status: 'обработка',
-                createdAt: new Date().toISOString()
+                id: Date.now(), type: 'ИНТЕРНЕТ-МАГАЗИН', orgName, orderNumber: noNumber ? 'Нет номера' : orderNumber, noNumber,
+                itemsCount, shopAddress, comment, address: { ...currentUser.addresses[0] }, status: 'обработка', createdAt: new Date().toISOString()
             };
             currentUser.orders.unshift(order);
             saveUser();
@@ -1231,10 +1215,7 @@
         function cancelOrder(id) {
             const order = currentUser.orders.find(o => o.id === id);
             const orderDateTime = new Date(`${order.date}T${order.time}`);
-            if ((orderDateTime - new Date()) / (1000 * 60 * 60) < 2) {
-                showAlert('Отмена невозможна: до доставки менее 2 часов');
-                return;
-            }
+            if ((orderDateTime - new Date()) / (1000 * 60 * 60) < 2) { showAlert('Отмена невозможна: до доставки менее 2 часов'); return; }
             order.status = 'отменен';
             saveUser();
             showMyOrders();
@@ -1257,29 +1238,14 @@
         function confirmReschedule() {
             const nd = document.getElementById('newDate').value;
             const nt = document.getElementById('newTime').value;
-            if (!nd || !nt) {
-                showAlert('Выберите дату и время');
-                return;
-            }
+            if (!nd || !nt) { showAlert('Выберите дату и время'); return; }
             const h = parseInt(nt.split(':')[0]);
-            if (h < 9 || h > 22) {
-                showAlert('Время должно быть с 09:00 до 22:00');
-                return;
-            }
+            if (h < 9 || h > 22) { showAlert('Время должно быть с 09:00 до 22:00'); return; }
             const now = new Date();
-            if (new Date(nd) < new Date(now.setHours(0, 0, 0, 0))) {
-                showAlert('Дата не может быть раньше сегодняшней');
-                return;
-            }
-            if (new Date(nd) > new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000)) {
-                showAlert('Дата не может быть позже чем через 2 дня');
-                return;
-            }
+            if (new Date(nd) < new Date(now.setHours(0, 0, 0, 0))) { showAlert('Дата не может быть раньше сегодняшней'); return; }
+            if (new Date(nd) > new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000)) { showAlert('Дата не может быть позже чем через 2 дня'); return; }
             const odt = new Date(`${nd}T${nt}`);
-            if (odt < new Date(now.getTime() + 60 * 60 * 1000)) {
-                showAlert('Время должно быть минимум через 1 час');
-                return;
-            }
+            if (odt < new Date(now.getTime() + 60 * 60 * 1000)) { showAlert('Время должно быть минимум через 1 час'); return; }
             pendingRescheduleOrder.date = nd;
             pendingRescheduleOrder.time = nt;
             saveUser();
@@ -1290,20 +1256,14 @@
 
         function showMyOrders() {
             const container = document.getElementById('ordersList');
-            if (!currentUser.orders.length) {
-                container.innerHTML = '<div class="text-muted">У вас пока нет заказов.</div>';
-            } else {
+            if (!currentUser.orders.length) { container.innerHTML = '<div class="text-muted">У вас пока нет заказов.</div>'; } else {
                 let html = '';
                 currentUser.orders.forEach(o => {
                     let statusClass = o.status === 'обработка' ? 'status-processing' : (o.status === 'отменен' ? 'status-cancelled' : 'status-delivered');
                     const now = new Date();
                     const odt = o.date ? new Date(`${o.date}T${o.time}`) : null;
                     const canModify = odt && (odt - now) / (1000 * 60 * 60) >= 2 && o.status === 'обработка';
-                    html += `<div class="order-item">
-                                <div class="flex-between">
-                                    <strong>${escapeHtml(o.type || 'Доставка')}: ${escapeHtml(o.marketplace || o.orgName || '')}</strong>
-                                    <span class="${statusClass}">${o.status.toUpperCase()}</span>
-                                </div>`;
+                    html += `<div class="order-item"><div class="flex-between"><strong>${escapeHtml(o.type || 'Доставка')}: ${escapeHtml(o.marketplace || o.orgName || '')}</strong><span class="${statusClass}">${o.status.toUpperCase()}</span></div>`;
                     if (o.marketplace) html += `<div>Заказ №${escapeHtml(o.orderNumber)} | Кол-во: ${o.itemsCount}</div>`;
                     if (o.orgName) html += `<div>Заказ №${escapeHtml(o.orderNumber)} | Кол-во: ${o.itemsCount}</div>`;
                     if (o.date) html += `<div>Дата: ${o.date} ${o.time}</div>`;
@@ -1313,81 +1273,38 @@
                     if (o.comment) html += `<div>Комментарий: ${escapeHtml(o.comment)}</div>`;
                     html += `<div class="text-muted" style="font-size:11px;">${new Date(o.createdAt).toLocaleString()}</div>`;
                     if (o.status === 'обработка' && o.date) {
-                        html += `<div class="order-actions">
-                                    <button class="btn btn-danger cancel-order" data-id="${o.id}" ${!canModify ? 'disabled' : ''}>Отменить доставку</button>
-                                    <button class="btn btn-warning reschedule-order" data-id="${o.id}" ${!canModify ? 'disabled' : ''}>Перенести доставку</button>
-                                </div>`;
+                        html += `<div class="order-actions"><button class="btn btn-danger cancel-order" data-id="${o.id}" ${!canModify ? 'disabled' : ''}>Отменить доставку</button><button class="btn btn-warning reschedule-order" data-id="${o.id}" ${!canModify ? 'disabled' : ''}>Перенести доставку</button></div>`;
                     } else if (o.status === 'обработка' && !o.date) {
-                        html += `<div class="order-actions">
-                                    <button class="btn btn-danger cancel-order" data-id="${o.id}">Отменить доставку</button>
-                                </div>`;
+                        html += `<div class="order-actions"><button class="btn btn-danger cancel-order" data-id="${o.id}">Отменить доставку</button></div>`;
                     }
                     html += `</div>`;
                 });
                 container.innerHTML = html;
-                document.querySelectorAll('.cancel-order').forEach(btn => btn.addEventListener('click', () => {
-                    const id = parseInt(btn.dataset.id);
-                    showConfirm('Вы уверены что хотите отменить доставку?', () => cancelOrder(id));
-                }));
-                document.querySelectorAll('.reschedule-order').forEach(btn => btn.addEventListener('click', () => {
-                    const id = parseInt(btn.dataset.id);
-                    openReschedule(currentUser.orders.find(o => o.id === id));
-                }));
+                document.querySelectorAll('.cancel-order').forEach(btn => btn.addEventListener('click', () => { const id = parseInt(btn.dataset.id); showConfirm('Вы уверены что хотите отменить доставку?', () => cancelOrder(id)); }));
+                document.querySelectorAll('.reschedule-order').forEach(btn => btn.addEventListener('click', () => { const id = parseInt(btn.dataset.id); openReschedule(currentUser.orders.find(o => o.id === id)); }));
             }
             document.getElementById('myOrdersModal').classList.add('active');
         }
 
-        function escapeHtml(s) {
-            return s.replace(/[&<>]/g, m => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;'
-            }[m]));
-        }
+        function escapeHtml(s) { return s.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
 
         function closeAllModals() {
-            ['regModal', 'loginModal', 'addressManagerModal', 'addressEditModal', 'orderPvzModal', 'orderInternetModal', 'myOrdersModal', 'welcomeModal', 'rescheduleModal'].forEach(id => {
-                const e = document.getElementById(id);
-                if (e) e.classList.remove('active');
-            });
+            ['regModal', 'loginModal', 'addressManagerModal', 'addressEditModal', 'orderPvzModal', 'orderInternetModal', 'myOrdersModal', 'welcomeModal', 'rescheduleModal'].forEach(id => { const e = document.getElementById(id); if (e) e.classList.remove('active'); });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             const dl = document.getElementById('streetList');
-            ALL_STREETS.forEach(s => {
-                const o = document.createElement('option');
-                o.value = s;
-                dl.appendChild(o);
-            });
-            if (loadUser()) showMainUI(true);
-            else showMainUI(false);
+            ALL_STREETS.forEach(s => { const o = document.createElement('option'); o.value = s; dl.appendChild(o); });
+            if (loadUser()) showMainUI(true); else showMainUI(false);
 
             document.getElementById('supportBtn').onclick = () => showAlert('Служба поддержки: +7 (495) 123-45-67, support@tumix.ru<br>Работаем ежедневно 9:00-21:00');
-            document.getElementById('showRegBtn').onclick = () => {
-                closeAllModals();
-                document.getElementById('regModal').classList.add('active');
-            };
-            document.getElementById('showLoginBtn').onclick = () => {
-                closeAllModals();
-                document.getElementById('loginModal').classList.add('active');
-            };
-            document.getElementById('closeRegBtn').onclick = () => {
-                closeAllModals();
-                document.getElementById('welcomeModal').classList.add('active');
-            };
-            document.getElementById('closeLoginBtn').onclick = () => {
-                closeAllModals();
-                document.getElementById('welcomeModal').classList.add('active');
-            };
-            document.getElementById('openAddressManager').onclick = () => {
-                renderAddressManager();
-                document.getElementById('addressManagerModal').classList.add('active');
-            };
+            document.getElementById('showRegBtn').onclick = () => { closeAllModals(); document.getElementById('regModal').classList.add('active'); };
+            document.getElementById('showLoginBtn').onclick = () => { closeAllModals(); document.getElementById('loginModal').classList.add('active'); };
+            document.getElementById('closeRegBtn').onclick = () => { closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
+            document.getElementById('closeLoginBtn').onclick = () => { closeAllModals(); document.getElementById('welcomeModal').classList.add('active'); };
+            document.getElementById('openAddressManager').onclick = () => { renderAddressManager(); document.getElementById('addressManagerModal').classList.add('active'); };
             document.getElementById('closeAddressManagerBtn').onclick = () => document.getElementById('addressManagerModal').classList.remove('active');
-            document.getElementById('addAddressBtn').onclick = () => {
-                document.getElementById('addressManagerModal').classList.remove('active');
-                openAddressEdit(null);
-            };
+            document.getElementById('addAddressBtn').onclick = () => { document.getElementById('addressManagerModal').classList.remove('active'); openAddressEdit(null); };
             document.getElementById('closeEditBtn').onclick = () => document.getElementById('addressEditModal').classList.remove('active');
             document.getElementById('closeOrderModalBtn').onclick = () => document.getElementById('orderPvzModal').classList.remove('active');
             document.getElementById('closeInternetOrderBtn').onclick = () => document.getElementById('orderInternetModal').classList.remove('active');
@@ -1404,114 +1321,36 @@
                 else btn.onclick = () => showAlert('Функция в разработке, скоро появится!');
             });
 
-            document.getElementById('regForm').onsubmit = (e) => {
-                e.preventDefault();
-                const err = register(regName.value, regEmail.value, regPhone.value, regPassword.value);
-                if (err) showAlert(err);
-                else {
-                    closeAllModals();
-                    showMainUI(true);
-                    showAlert('Регистрация успешна!');
-                }
-            };
-            document.getElementById('loginForm').onsubmit = (e) => {
-                e.preventDefault();
-                const err = login(loginEmail.value, loginPassword.value);
-                if (err) showAlert(err);
-                else {
-                    closeAllModals();
-                    showMainUI(true);
-                    showAlert('Добро пожаловать!');
-                }
-            };
-            document.getElementById('addressEditForm').onsubmit = (e) => {
-                e.preventDefault();
-                saveAddress();
-            };
+            document.getElementById('regForm').onsubmit = (e) => { e.preventDefault(); const err = register(regName.value, regEmail.value, regPhone.value, regPassword.value); if (err) showAlert(err); else { closeAllModals(); showMainUI(true); showAlert('Регистрация успешна!'); } };
+            document.getElementById('loginForm').onsubmit = (e) => { e.preventDefault(); const err = login(loginEmail.value, loginPassword.value); if (err) showAlert(err); else { closeAllModals(); showMainUI(true); showAlert('Добро пожаловать!'); } };
+            document.getElementById('addressEditForm').onsubmit = (e) => { e.preventDefault(); saveAddress(); };
             document.getElementById('pvzOrderForm').onsubmit = submitPvzOrder;
             document.getElementById('internetOrderForm').onsubmit = submitInternetOrder;
 
             document.getElementById('adultCheck').onchange = function() {
                 document.getElementById('adultWarning').style.display = this.checked ? 'block' : 'none';
-                if (this.checked) {
-                    document.getElementById('leaveAtDoorCheck').checked = false;
-                    document.getElementById('leaveAtDoorCheck').disabled = true;
-                    document.getElementById('leaveAtDoorWarning').style.display = 'none';
-                } else document.getElementById('leaveAtDoorCheck').disabled = false;
+                if (this.checked) { document.getElementById('leaveAtDoorCheck').checked = false; document.getElementById('leaveAtDoorCheck').disabled = true; document.getElementById('leaveAtDoorWarning').style.display = 'none'; }
+                else document.getElementById('leaveAtDoorCheck').disabled = false;
             };
-            document.getElementById('leaveAtDoorCheck').onchange = function() {
-                document.getElementById('leaveAtDoorWarning').style.display = this.checked ? 'block' : 'none';
-            };
-            document.getElementById('noOrderNumberCheck').onchange = function() {
-                const nn = document.getElementById('internetOrderNumber');
-                const warn = document.getElementById('noOrderWarning');
-                if (this.checked) {
-                    nn.disabled = true;
-                    nn.value = '';
-                    warn.style.display = 'block';
-                } else {
-                    nn.disabled = false;
-                    warn.style.display = 'none';
-                }
-            };
-            document.getElementById('fullName').addEventListener('blur', function() {
-                this.value = formatFullName(this.value);
-            });
-            document.querySelectorAll('.help-icon').forEach(icon => {
-                icon.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    showAlert(icon.dataset.tooltip);
-                });
-            });
-            document.getElementById('orderComment').addEventListener('input', function() {
-                document.getElementById('charCount').innerHTML = this.value.length;
-            });
-            document.getElementById('internetComment').addEventListener('input', function() {
-                document.getElementById('internetCharCount').innerHTML = this.value.length;
-            });
-            document.getElementById('itemsCount').addEventListener('input', function() {
-                let v = parseInt(this.value);
-                if (v < 1) this.value = 1;
-                if (v > 50) this.value = 50;
-            });
-            document.getElementById('internetItemsCount').addEventListener('input', function() {
-                let v = parseInt(this.value);
-                if (v < 1) this.value = 1;
-                if (v > 50) this.value = 50;
-            });
-            document.getElementById('regPhone').addEventListener('input', function() {
-                if (!this.value.startsWith('+7')) this.value = '+7';
-            });
-            document.getElementById('phoneOrder').addEventListener('input', function() {
-                if (!this.value.startsWith('+7')) this.value = '+7';
-            });
-            const cityInp = document.getElementById('editCity');
-            const cityIcon = document.getElementById('citySuccessIcon');
+            document.getElementById('leaveAtDoorCheck').onchange = function() { document.getElementById('leaveAtDoorWarning').style.display = this.checked ? 'block' : 'none'; };
+            document.getElementById('noOrderNumberCheck').onchange = function() { const nn = document.getElementById('internetOrderNumber'); const warn = document.getElementById('noOrderWarning'); if (this.checked) { nn.disabled = true; nn.value = ''; warn.style.display = 'block'; } else { nn.disabled = false; warn.style.display = 'none'; } };
+            document.getElementById('fullName').addEventListener('blur', function() { this.value = formatFullName(this.value); });
+            document.querySelectorAll('.help-icon').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); showAlert(icon.dataset.tooltip); }); });
+            document.getElementById('orderComment').addEventListener('input', function() { document.getElementById('charCount').innerHTML = this.value.length; });
+            document.getElementById('internetComment').addEventListener('input', function() { document.getElementById('internetCharCount').innerHTML = this.value.length; });
+            document.getElementById('itemsCount').addEventListener('input', function() { let v = parseInt(this.value); if (v < 1) this.value = 1; if (v > 50) this.value = 50; });
+            document.getElementById('internetItemsCount').addEventListener('input', function() { let v = parseInt(this.value); if (v < 1) this.value = 1; if (v > 50) this.value = 50; });
+            document.getElementById('regPhone').addEventListener('input', function() { if (!this.value.startsWith('+7')) this.value = '+7'; });
+            document.getElementById('phoneOrder').addEventListener('input', function() { if (!this.value.startsWith('+7')) this.value = '+7'; });
+            const cityInp = document.getElementById('editCity'); const cityIcon = document.getElementById('citySuccessIcon');
             if (cityInp) {
-                cityInp.addEventListener('input', function() {
-                    if (isMoscowCity(this.value)) cityIcon.style.display = 'block';
-                    else cityIcon.style.display = 'none';
-                });
-                cityInp.addEventListener('blur', function() {
-                    if (isMoscowCity(this.value)) {
-                        this.value = 'Москва';
-                        cityIcon.style.display = 'block';
-                    }
-                });
+                cityInp.addEventListener('input', function() { if (isMoscowCity(this.value)) cityIcon.style.display = 'block'; else cityIcon.style.display = 'none'; });
+                cityInp.addEventListener('blur', function() { if (isMoscowCity(this.value)) { this.value = 'Москва'; cityIcon.style.display = 'block'; } });
             }
             document.getElementById('deliveryDate').addEventListener('change', updateDateTimeRestrictions);
-            document.getElementById('deliveryTime').addEventListener('change', function() {
-                const h = parseInt(this.value.split(':')[0]);
-                if (h < 9 || h > 22) showAlert('Время должно быть с 09:00 до 22:00');
-            });
-            document.getElementById('newDate').addEventListener('change', function() {
-                const now = new Date();
-                if (new Date(this.value) < new Date(now.setHours(0, 0, 0, 0))) showAlert('Дата не может быть раньше сегодняшней');
-            });
-            document.getElementById('newTime').addEventListener('change', function() {
-                const h = parseInt(this.value.split(':')[0]);
-                if (h < 9 || h > 22) showAlert('Время должно быть с 09:00 до 22:00');
-            });
+            document.getElementById('deliveryTime').addEventListener('change', function() { const h = parseInt(this.value.split(':')[0]); if (h < 9 || h > 22) showAlert('Время должно быть с 09:00 до 22:00'); });
+            document.getElementById('newDate').addEventListener('change', function() { const now = new Date(); if (new Date(this.value) < new Date(now.setHours(0, 0, 0, 0))) showAlert('Дата не может быть раньше сегодняшней'); });
+            document.getElementById('newTime').addEventListener('change', function() { const h = parseInt(this.value.split(':')[0]); if (h < 9 || h > 22) showAlert('Время должно быть с 09:00 до 22:00'); });
         });
     </script>
 </body>
