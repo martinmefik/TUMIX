@@ -216,7 +216,7 @@
         .modal.closed { visibility: hidden; opacity: 0; }
         
         .modal-content { 
-            background: linear-gradient(135deg, rgba(25, 55, 70, 0.95), rgba(15, 40, 55, 0.95)); 
+            background: linear-gradient(135deg, rgba(25, 55, 70, 0.98), rgba(15, 40, 55, 0.98)); 
             border-radius: 32px; 
             max-width: 800px; 
             width: 90%; 
@@ -239,6 +239,7 @@
         }
         .close-modal-x:hover { transform: rotate(90deg); }
         
+        /* Убираем blur у окон личного кабинета */
         .profile-sidebar { 
             position: fixed; 
             right: -400px; 
@@ -252,7 +253,6 @@
             z-index: 1100; 
             padding: 30px 20px; 
             overflow-y: auto; 
-            backdrop-filter: blur(15px);
         }
         .profile-sidebar.active { right: 0; }
         .profile-sidebar .close-profile { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #4ac7e0; transition: transform 0.2s; }
@@ -405,7 +405,7 @@
 <div id="workModal" class="modal closed"><div class="modal-content" style="text-align:center;position:relative;"><i class="fas fa-times close-modal-x" id="closeWorkBtn"></i><i class="fas fa-briefcase" style="font-size:48px;color:#4ac7e0;margin-bottom:16px;"></i><h3>Хотите стать частью нашей команды?</h3><p style="margin:16px 0;">Напишите нам письмо на почту:</p><h4 style="color:#4ac7e0;">tumix.support@gmail.com</h4><p style="color:#ffaa66;font-weight:bold;margin-top:16px;">Работа с 16 лет, до 18 необходимо согласие родителей!</p></div></div>
 <div id="supportModal" class="modal closed"><div class="modal-content support-content" style="position:relative;"><i class="fas fa-times close-modal-x" id="closeSupportBtn"></i><i class="fas fa-headset"></i><h3>Служба поддержки</h3><p><i class="fas fa-envelope"></i> <strong>tumix.support@gmail.com</strong></p><p><i class="fas fa-clock"></i> <strong>Ежедневно: 9:00 - 22:00</strong></p><p><i class="fas fa-comment"></i> Среднее время ответа: 5-10 минут</p></div></div>
 <div id="photoModal" class="modal closed"><div class="modal-content" style="text-align:center;"><h3 style="color:#4ac7e0;">Подтверждение возраста</h3><p style="margin:20px 0;">Нам нужно убедиться что вам есть 18+ лет, для этого сделайте селфи, которое проверят наши специалисты.</p><p><strong>Требования к фото:</strong> лицо по центру, хорошее освещение, четкое изображение.</p><input type="file" id="photoInput" accept="image/*" capture="environment" style="margin:20px 0;"><button id="takePhotoBtn" class="btn btn-primary" style="margin:10px;"><i class="fas fa-camera"></i> Сделать фото</button><div id="photoLoading" style="display:none; margin:20px;"><div class="spinner" style="display:block; margin:0 auto 10px;"></div><p>Пожалуйста подождите, это не займет много времени!</p></div><button id="closePhotoModalBtn" class="btn btn-outline">Отмена</button></div></div>
-<div id="photoRequestsModal" class="modal closed"><div class="modal-content"><div class="flex-between"><h3 style="color:#4ac7e0;">Заявки на фотоконтроль</h3><i class="fas fa-times close-modal-x" id="closePhotoRequestsBtn" style="position:static;margin-left:auto;"></i></div><div id="photoRequestsList"></div></div></div>
+<div id="photoRequestsModal" class="modal closed"><div class="modal-content"><div class="flex-between"><h3 style="color:#4ac7e0;">Заявки на фотоконтроль</h3><i class="fas fa-times close-modal-x" id="closePhotoRequestsBtn" style="position:static;margin-left:auto;"></i></div><p>Пожалуйста, дождитесь результат проверки.</p><div id="photoRequestsList"></div></div></div>
 <div id="consentModal" class="modal closed"><div class="modal-content"><h3 style="color:#4ac7e0;">Соглашение на обработку данных</h3><div class="rules-content" id="consentRulesContent"><ol><li>Я даю согласие на обработку персональных данных</li><li>Я ознакомлен с правилами пользования</li><li>Я подтверждаю свое совершеннолетие (18+)</li></ol></div><div class="accept-buttons"><button id="rejectConsentBtn" class="btn btn-outline">Отказаться</button><button id="acceptConsentBtn" class="btn btn-primary" disabled>Принять</button></div></div></div>
 
 <script>
@@ -455,7 +455,14 @@
         document.getElementById('closePhotoModalBtn').onclick=()=>{modal.classList.add('closed'); if(pendingAdultCheck)pendingAdultCheck(false);};
     }
     
-    function showPhotoRequests(){const container=document.getElementById('photoRequestsList'); const userRequests=photoRequests; if(!userRequests.length){container.innerHTML='<div class="text-muted">Нет заявок на фотоконтроль</div>';}else{let html=''; userRequests.forEach(req=>{let statusText=req.status==='pending'?'Ожидает проверки':(req.status==='approved'?'Одобрено':'Отклонено'); let statusClass=req.status==='pending'?'status-pending':(req.status==='approved'?'status-approved':'status-rejected'); html+=`<div class="photo-item"><div><strong>Заказ: ${req.orderType}</strong></div><div>Статус: <span class="${statusClass}">${statusText}</span></div><div>Дата: ${new Date(req.date).toLocaleString()}</div><img src="${req.photo}" class="photo-img" alt="Фото"></div>`;}); container.innerHTML=html;} document.getElementById('photoRequestsModal').classList.remove('closed');}
+    function showPhotoRequests(){
+        const container=document.getElementById('photoRequestsList'); 
+        const userRequests=photoRequests; 
+        if(!userRequests.length){container.innerHTML='<div class="text-muted">Нет заявок на фотоконтроль</div>';}
+        else{let html=''; userRequests.forEach(req=>{let statusText=req.status==='pending'?'Ожидает проверки':(req.status==='approved'?'Одобрено':'Отклонено'); let statusClass=req.status==='pending'?'status-pending':(req.status==='approved'?'status-approved':'status-rejected'); html+=`<div class="photo-item"><div><strong>Заказ: ${req.orderType}</strong></div><div>Статус: <span class="${statusClass}">${statusText}</span></div><div>Дата: ${new Date(req.date).toLocaleString()}</div><img src="${req.photo}" class="photo-img" alt="Фото"></div>`;}); 
+        container.innerHTML=html;} 
+        document.getElementById('photoRequestsModal').classList.remove('closed');
+    }
     
     function submitPvzOrder(e){e.preventDefault(); const adult=document.getElementById('adultCheck').checked; if(adult){const orderId='pvz_'+Date.now(); openPhotoModal((verified)=>{if(verified){savePvzOrder(e, orderId);}}, 'ПВЗ', orderId);}else{savePvzOrder(e, null);}}
     function savePvzOrder(e, photoRequestId){const marketplace=document.getElementById('marketplace').value.trim(); const orderNumber=document.getElementById('orderNumber').value.trim(); const itemsCount=parseInt(document.getElementById('itemsCount').value); const phone=document.getElementById('phoneOrder').value.trim(); let fullName=document.getElementById('fullName').value.trim(); const noPatr=document.getElementById('noPatronymic').checked; const comment=document.getElementById('orderComment').value.trim(); const date=document.getElementById('deliveryDate').value; const time=document.getElementById('deliveryTime').value; const pvzAddress=document.getElementById('pvzAddress').value.trim(); fullName=formatFullName(fullName); if(noPatr&&fullName.split(' ').length!==2){showAlert('Укажите фамилию и имя'); return;} if(!noPatr&&fullName.split(' ').length<3){showAlert('Укажите полные ФИО'); return;} if(!/^\+7\d{10}$/.test(phone)){showAlert('Телефон +7 и 10 цифр'); return;} if(!marketplace||!orderNumber||itemsCount<1){showAlert('Заполните поля'); return;} if(!pvzAddress){showAlert('Укажите адрес ПВЗ'); return;} const order={id:Date.now(),type:'ПВЗ',marketplace,orderNumber,itemsCount,phone,fullName,comment,address:{...currentUser.addresses[0]},pvzAddress,date,time,status:'обработка',createdAt:new Date().toISOString(),photoRequestId:photoRequestId}; currentUser.orders.unshift(order); saveUser(); showAlert('Заказ оформлен!'); document.getElementById('orderPvzModal').classList.add('closed');}
@@ -472,10 +479,10 @@
     document.addEventListener('DOMContentLoaded',()=>{const dl=document.getElementById('streetList'); ALL_STREETS.forEach(s=>{const o=document.createElement('option'); o.value=s; dl.appendChild(o);}); if(loadUser())showMainUI(true); else showMainUI(false); 
     document.getElementById('profileBtn').onclick=()=>{document.getElementById('profileSidebar').classList.add('active'); document.getElementById('overlay').classList.add('active');};
     document.getElementById('closeProfile').onclick=()=>{document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
-    document.getElementById('profileAddressManagerBtn').onclick=()=>{renderAddressManager(); document.getElementById('addressManagerModal').classList.remove('closed'); document.getElementById('profileSidebar').classList.remove('active');};
-    document.getElementById('profilePhotoRequestsBtn').onclick=()=>{showPhotoRequests(); document.getElementById('profileSidebar').classList.remove('active');};
-    document.getElementById('profileMyOrdersBtn').onclick=()=>{showMyOrders(); document.getElementById('profileSidebar').classList.remove('active');};
-    document.getElementById('profileLogoutBtn').onclick=()=>{logout(); document.getElementById('profileSidebar').classList.remove('active');};
+    document.getElementById('profileAddressManagerBtn').onclick=()=>{renderAddressManager(); document.getElementById('addressManagerModal').classList.remove('closed'); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
+    document.getElementById('profilePhotoRequestsBtn').onclick=()=>{showPhotoRequests(); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
+    document.getElementById('profileMyOrdersBtn').onclick=()=>{showMyOrders(); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
+    document.getElementById('profileLogoutBtn').onclick=()=>{logout(); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
     document.getElementById('rulesBtn').onclick=showRulesModal; document.getElementById('workBtn').onclick=showWorkModal; document.getElementById('supportBtn').onclick=showSupportModal;
     document.getElementById('closeRulesBtn').onclick=()=>document.getElementById('rulesModal').classList.add('closed');
     document.getElementById('closeWorkBtn').onclick=()=>document.getElementById('workModal').classList.add('closed');
