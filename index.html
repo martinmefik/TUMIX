@@ -46,22 +46,9 @@
             z-index: -1;
         }
         
-        .beta-warning {
-            background: linear-gradient(135deg, #ff8c42, #ff6b2c);
-            color: white;
-            text-align: center;
-            padding: 10px 20px;
-            border-radius: 50px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            font-size: 14px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #2aa9c9, #1e7e9e); border-radius: 10px; }
         
         .container { max-width: 1280px; width: 100%; margin: 0 auto; flex: 1; }
         
@@ -70,8 +57,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
         .card { 
-            background: rgba(15, 35, 45, 0.85); 
+            background: rgba(15, 35, 45, 0.75); 
             backdrop-filter: blur(12px); 
             border-radius: 28px; 
             box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(42, 169, 201, 0.4); 
@@ -81,7 +78,10 @@
             animation: fadeInUp 0.5s ease-out;
         }
         
-        .card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(42, 169, 201, 0.7); }
+        .card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(42, 169, 201, 0.7); 
+        }
         
         @media (min-width: 768px) { .card { padding: 28px; margin-bottom: 24px; } }
         
@@ -97,11 +97,11 @@
         }
         
         .logo-container { display: flex; align-items: center; justify-content: center; }
-        .logo-img { width: 140px; height: 140px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(42, 169, 201, 0.6)); transition: all 0.4s ease; }
-        .logo-img:hover { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(42, 169, 201, 0.9)); }
+        .logo-img { width: 140px; height: 140px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(42, 169, 201, 0.6)); transition: all 0.4s ease; animation: fadeIn 0.8s ease; }
+        .logo-img:hover { transform: scale(1.05) rotate(2deg); filter: drop-shadow(0 0 30px rgba(42, 169, 201, 0.9)); }
         @media (min-width: 768px) { .logo-img { width: 180px; height: 180px; } }
         
-        .top-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .top-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; animation: fadeIn 0.6s ease; }
         
         h2 { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #4ac7e0, #2aa9c9); -webkit-background-clip: text; background-clip: text; color: transparent; }
         h3 { font-size: 18px; font-weight: 700; color: #4ac7e0; margin-bottom: 16px; letter-spacing: 0.5px; }
@@ -124,6 +124,7 @@
             box-shadow: 0 4px 15px rgba(42, 169, 201, 0.4); 
         }
         .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(42, 169, 201, 0.6); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .btn-outline { 
             border: 1px solid #2aa9c9; 
@@ -164,7 +165,12 @@
             font-size: 16px; 
             font-weight: 600; 
         }
-        .service-card:hover { border-color: #2aa9c9; background: rgba(42, 169, 201, 0.2); transform: translateY(-3px); }
+        .service-card:hover { 
+            border-color: #2aa9c9; 
+            background: rgba(42, 169, 201, 0.2); 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(42, 169, 201, 0.2);
+        }
         .service-card i { font-size: 28px; color: #4ac7e0; transition: transform 0.3s; }
         .service-card:hover i { transform: rotate(5deg) scale(1.05); }
         
@@ -177,12 +183,11 @@
             justify-content: space-between; 
             align-items: center; 
             flex-wrap: wrap; 
-            gap: 16px; 
+            gap: 12px; 
             border-left: 3px solid #2aa9c9; 
+            transition: all 0.2s;
         }
         .address-item:hover { background: rgba(42, 169, 201, 0.15); transform: translateX(5px); }
-        
-        .address-actions { display: flex; gap: 12px; }
         
         input, select, textarea { 
             width: 100%; 
@@ -209,14 +214,14 @@
             align-items: center; 
             justify-content: center; 
             z-index: 1000; 
-            visibility: visible; 
-            opacity: 1; 
+            visibility: hidden; 
+            opacity: 0; 
             transition: 0.2s;
         }
-        .modal.closed { visibility: hidden; opacity: 0; }
+        .modal.active { visibility: visible; opacity: 1; }
         
         .modal-content { 
-            background: linear-gradient(135deg, rgba(25, 55, 70, 0.98), rgba(15, 40, 55, 0.98)); 
+            background: linear-gradient(135deg, rgba(25, 55, 70, 0.95), rgba(15, 40, 55, 0.95)); 
             border-radius: 32px; 
             max-width: 800px; 
             width: 90%; 
@@ -227,19 +232,6 @@
             box-shadow: 0 0 40px rgba(42, 169, 201, 0.3); 
         }
         
-        .close-modal-x {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #4ac7e0;
-            transition: transform 0.2s;
-            z-index: 10;
-        }
-        .close-modal-x:hover { transform: rotate(90deg); }
-        
-        /* Убираем blur у окон личного кабинета */
         .profile-sidebar { 
             position: fixed; 
             right: -400px; 
@@ -253,6 +245,7 @@
             z-index: 1100; 
             padding: 30px 20px; 
             overflow-y: auto; 
+            backdrop-filter: blur(15px);
         }
         .profile-sidebar.active { right: 0; }
         .profile-sidebar .close-profile { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #4ac7e0; transition: transform 0.2s; }
@@ -287,6 +280,7 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
+            transition: 0.2s; 
         }
         .accordion-header:hover { background: rgba(42, 169, 201, 0.15); }
         .accordion-content { 
@@ -300,48 +294,87 @@
         .accordion-item.active .accordion-content { max-height: 300px; padding: 0 20px 20px 20px; }
         .accordion-item.active .accordion-header i { transform: rotate(180deg); }
         
-        .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 640px) { .two-columns { grid-template-columns: 1fr; gap: 15px; } }
-        
-        .checkbox-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
-        .checkbox-wrapper input { width: 18px; height: 18px; accent-color: #2aa9c9; }
-        .city-wrapper { position: relative; }
-        .city-success-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #2aa9c9; }
-        .icon-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #9bb8d0; padding: 5px; }
-        .icon-btn:hover { color: #4ac7e0; transform: scale(1.1); }
-        .help-icon { display: inline-flex; width: 20px; height: 20px; background: #2a5a6a; border-radius: 50%; font-size: 12px; margin-left: 8px; cursor: pointer; align-items: center; justify-content: center; transition: 0.2s; }
-        .help-icon:hover { background: #2aa9c9; transform: scale(1.1); }
-        
-        .spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #2aa9c9;
-            animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .support-content { text-align: center; }
-        .support-content i { font-size: 48px; color: #4ac7e0; margin-bottom: 16px; }
-        .support-content h3 { margin-bottom: 20px; }
-        .support-content p { margin: 10px 0; line-height: 1.6; }
+        .rules-content { max-height: 55vh; overflow-y: auto; margin: 20px 0; padding-right: 12px; }
+        .rules-content ol { margin-left: 24px; margin-bottom: 16px; }
+        .rules-content li { margin-bottom: 12px; line-height: 1.5; }
         
         .footer { text-align: center; padding: 24px 16px; color: #7f9eb5; font-size: 12px; border-top: 1px solid rgba(42, 169, 201, 0.3); margin-top: 24px; width: 100%; max-width: 1280px; }
         .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin: 24px 0; }
         .footer-link { color: #9bb8d0; cursor: pointer; transition: 0.2s; }
         .footer-link:hover { color: #4ac7e0; transform: translateY(-2px); }
         
+        .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 640px) { .two-columns { grid-template-columns: 1fr; } }
+        .checkbox-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+        .checkbox-wrapper input { width: 18px; height: 18px; accent-color: #2aa9c9; }
+        .city-wrapper { position: relative; }
+        .city-success-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #2aa9c9; }
+        .icon-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #9bb8d0; }
+        .icon-btn:hover { color: #4ac7e0; }
+        .help-icon { display: inline-flex; width: 18px; height: 18px; background: #2a5a6a; border-radius: 50%; font-size: 11px; margin-left: 6px; cursor: pointer; align-items: center; justify-content: center; }
+        .warning-text { color: #ffaa66; font-size: 12px; margin-top: 6px; }
+        .char-counter { font-size: 11px; color: #7f9eb5; text-align: right; margin-top: 4px; }
         .status-processing { color: #4ac7e0; font-weight: 600; }
         .status-cancelled { color: #ff8866; font-weight: 600; }
         .status-delivered { color: #7f9eb5; font-weight: 600; }
         
-        .photo-item { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
-        .photo-img { max-width: 100%; border-radius: 12px; margin-top: 10px; }
-        .status-pending { color: #ffaa66; }
-        .status-approved { color: #4ac7e0; }
-        .status-rejected { color: #ff8866; }
+        /* Стили для чата поддержки */
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-message.support {
+            align-items: flex-start;
+        }
+        .chat-message.user {
+            align-items: flex-end;
+        }
+        .message-bubble {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+        .support .message-bubble {
+            background: rgba(42, 169, 201, 0.3);
+            border: 1px solid #2aa9c9;
+            color: #fff;
+            border-bottom-left-radius: 4px;
+        }
+        .user .message-bubble {
+            background: linear-gradient(135deg, #2aa9c9, #1e7e9e);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .message-time {
+            font-size: 10px;
+            color: #7f9eb5;
+            margin-top: 4px;
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            margin: 0;
+        }
+        .chat-input-area button {
+            margin: 0;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -351,74 +384,122 @@
     <h3 style="color:#4ac7e0;"><i class="fas fa-user-circle"></i> Личный кабинет</h3>
     <div style="margin:20px 0;"><p><strong><i class="fas fa-user"></i> Имя:</strong> <span id="profileName"></span></p><p><strong><i class="fas fa-envelope"></i> Email:</strong> <span id="profileEmail"></span></p><p><strong><i class="fas fa-phone"></i> Телефон:</strong> <span id="profilePhone"></span></p></div>
     <div><h4><i class="fas fa-map-pin"></i> Мои адреса</h4><div id="profileAddressList"></div><button id="profileAddressManagerBtn" class="btn btn-outline" style="width:100%; margin-top:10px;"><i class="fas fa-edit"></i> Управление адресами</button></div>
-    <div><button id="profilePhotoRequestsBtn" class="btn btn-outline" style="width:100%; margin:10px 0;"><i class="fas fa-camera"></i> Заявки на фотоконтроль</button><button id="profileMyOrdersBtn" class="btn btn-primary" style="width:100%; margin:10px 0;"><i class="fas fa-list"></i> Мои доставки</button><button id="profileLogoutBtn" class="btn btn-outline" style="width:100%;"><i class="fas fa-sign-out-alt"></i> Выйти</button></div>
+    <div><button id="profileMyOrdersBtn" class="btn btn-primary" style="width:100%; margin:15px 0;"><i class="fas fa-list"></i> Мои доставки</button><button id="profileLogoutBtn" class="btn btn-outline" style="width:100%;"><i class="fas fa-sign-out-alt"></i> Выйти</button></div>
 </div>
 
 <div class="container" id="app">
     <div id="dashboard" style="display: none;">
-        <div class="beta-warning">
-            ⚠️ TUMIX временно не принимает заказы, сайт находится в бета-тестировании ⚠️
-        </div>
-        <div class="top-buttons">
-            <button id="profileBtn" class="btn btn-outline"><i class="fas fa-user-circle"></i> Личный кабинет</button>
-            <button id="rulesBtn" class="btn btn-outline"><i class="fas fa-gavel"></i> Правила пользования</button>
-            <button id="workBtn" class="btn btn-outline"><i class="fas fa-briefcase"></i> Хочу у вас работать</button>
-            <button id="supportBtn" class="btn btn-outline"><i class="fas fa-headset"></i> Поддержка</button>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <div class="logo-container"><img src="010047C9-376B-4F75-AAB1-5175F05A898B.png" alt="TUMIX" class="logo-img" onerror="this.style.display='none'"></div>
-                <div><h2>Добрый день, <span id="userName"></span>!</h2><p style="color:#9bb8d0;"><i class="fas fa-envelope"></i> <span id="userEmail"></span> &nbsp;|&nbsp; <i class="fas fa-phone-alt"></i> <span id="userPhone"></span></p></div>
-            </div>
-        </div>
-        <div class="card"><h3>Преимущества работы с нами</h3><div class="advantages-grid"><div class="advantage-card"><i class="fas fa-shield-alt"></i><h4>Гарантия сохранности заказа</h4><p>Наши курьеры проходят строгий отбор. Ваш заказ будет доставлен в целости.</p></div><div class="advantage-card"><i class="fas fa-boxes"></i><h4>Бережная транспортировка</h4><p>Специальная упаковка для хрупких товаров.</p></div><div class="advantage-card"><i class="fas fa-truck"></i><h4>Перевозка крупногабарита</h4><p>Специализированный автопарк для мебели и техники.</p></div><div class="advantage-card"><i class="fas fa-tools"></i><h4>Доставка стройматериалов</h4><p>Помощь с покупкой и доставкой стройматериалов.</p></div><div class="advantage-card"><i class="fas fa-clock"></i><h4>Срочная доставка за 2 часа</h4><p>Экспресс-доставка по Москве в день заказа.</p></div><div class="advantage-card"><i class="fas fa-ticket-alt"></i><h4>Розыгрыши промокодов</h4><p>Частые розыгрыши промокодов на 5, 10, 30, 100% скидки на доставку!</p></div></div></div>
+        <div class="top-buttons"><button id="profileBtn" class="btn btn-outline"><i class="fas fa-user-circle"></i> Личный кабинет</button><button id="rulesBtn" class="btn btn-outline"><i class="fas fa-gavel"></i> Правила пользования</button><button id="workBtn" class="btn btn-outline"><i class="fas fa-briefcase"></i> Хочу у вас работать</button><button id="supportBtn" class="btn btn-outline"><i class="fas fa-headset"></i> Поддержка</button></div>
+        <div class="card"><div class="card-header"><div class="logo-container"><img src="010047C9-376B-4F75-AAB1-5175F05A898B.png" alt="TUMIX" class="logo-img" onerror="this.style.display='none'"></div><div><h2>Добрый день, <span id="userName"></span>!</h2><p style="color:#9bb8d0;"><i class="fas fa-envelope"></i> <span id="userEmail"></span> &nbsp;|&nbsp; <i class="fas fa-phone-alt"></i> <span id="userPhone"></span></p></div></div></div>
+        <div class="card"><h3>Преимущества работы с нами</h3><div class="advantages-grid"><div class="advantage-card"><i class="fas fa-shield-alt"></i><h4>Гарантия сохранности заказа</h4><p>Наши курьеры проходят строгий отбор. Ваш заказ будет доставлен в целости, мы несем полную ответственность.</p></div><div class="advantage-card"><i class="fas fa-boxes"></i><h4>Бережная транспортировка</h4><p>Специальная упаковка для хрупких товаров. Хрупкие предметы доставляются с особой осторожностью.</p></div><div class="advantage-card"><i class="fas fa-truck"></i><h4>Перевозка крупногабарита</h4><p>Специализированный автопарк для мебели, техники и стройматериалов. Подъем на этаж по договоренности.</p></div><div class="advantage-card"><i class="fas fa-tools"></i><h4>Доставка стройматериалов</h4><p>Помощь с покупкой и доставкой стройматериалов прямо на объект. Консультация по выбору.</p></div><div class="advantage-card"><i class="fas fa-clock"></i><h4>Срочная доставка за 2 часа</h4><p>Экспресс-доставка по Москве в день заказа. Заберите заказ из ПВЗ в удобное время.</p></div><div class="advantage-card"><i class="fas fa-ticket-alt"></i><h4>Розыгрыши промокодов</h4><p>Частые розыгрыши промокодов на 5, 10, 30, 100% скидки на доставку. Следите за новостями!</p></div></div></div>
         <div class="services-grid"><div class="service-card" data-action="pvz"><i class="fas fa-box-open"></i><span>Забрать заказ из ПВЗ</span></div><div class="service-card" data-action="internet"><i class="fas fa-shopping-cart"></i><span>Забрать интернет-заказ</span></div><div class="service-card" data-action="shop"><i class="fas fa-store"></i><span>Заехать в магазин</span></div><div class="service-card" data-action="multi"><i class="fas fa-map-marker-alt"></i><span>Несколько точек</span></div></div>
         <div class="card"><div class="card-header"><h3><i class="fas fa-map-pin"></i> Мои адреса доставки</h3><button id="openAddressManager" class="btn btn-outline"><i class="fas fa-edit"></i> Управление</button></div><div id="addressList"></div></div>
-        <div class="card"><h3><i class="fas fa-info-circle"></i> Полезная информация</h3><div class="accordion"><div class="accordion-item"><div class="accordion-header"><span>Почему стоит выбрать Tumix?</span><i class="fas fa-chevron-down"></i></div><div class="accordion-content">Tumix — новая компания на рынке доставки, мы собрали все что необходимо человеку, который часто пользуется доставкой или у кого не хватает времени. Мы несем ответственность за груз и гарантируем что с ним ничего не произойдет.</div></div><div class="accordion-item"><div class="accordion-header"><span>Как оформить доставку?</span><i class="fas fa-chevron-down"></i></div><div class="accordion-content">Выберите тип доставки на главной странице, заполните все необходимые поля, укажите адрес ПВЗ или магазина, выберите удобную дату и время, добавьте комментарий для курьера и нажмите "Оформить доставку".</div></div><div class="accordion-item"><div class="accordion-header"><span>Как отменить или перенести заказ?</span><i class="fas fa-chevron-down"></i></div><div class="accordion-content">В разделе "Мои доставки" рядом с активным заказом есть кнопки "Отменить доставку" и "Перенести доставку".</div></div></div></div>
+        <div class="card"><h3><i class="fas fa-info-circle"></i> Полезная информация</h3><div class="accordion"><div class="accordion-item"><div class="accordion-header"><span>Почему стоит выбрать Tumix?</span><i class="fas fa-chevron-down"></i></div><div class="accordion-content">Tumix — новая компания на рынке доставки, мы собрали все что необходимо человеку, который часто пользуется доставкой или у кого не хватает времени. Мы несем ответственность за груз и гарантируем что с ним ничего не произойдет. Также если вы будете пользоваться нашим сервисом в течение месяца, вам будет предоставлена уникальная возможность попасть на бета-тестирование проекта TOK-messenger — это новый вид мессенджера!</div></div><div class="accordion-item"><div class="accordion-header"><span>Как оформить доставку?</span><i class="fas fa-chevron-down"></i></div><div class="accordion-content">Выберите тип доставки на главной странице, заполните все необходимые поля, укажите адрес ПВЗ или магазина, выберите удобную дату и время, добавьте комментарий для курьера и нажмите "Оформить доставку". Статус заказа вы можете отслеживать в разделе "Мои доставки".</div></div><div class="accordion-item"><div class="accordion-header"><span>Как отменить или перенести заказ?</span><i class="fas fa-chevron-down"></i></div><div class="accordion-content">В разделе "Мои доставки" рядом с активным заказом есть кнопки "Отменить доставку" и "Перенести доставку". Отмена возможна не менее чем за 2 часа до назначенного времени. Перенос доступен с выбором новой даты и времени в пределах 2 дней от текущей даты.</div></div></div></div>
+    </div>
+</div>
+<div class="footer-links"><span class="footer-link" onclick="showRulesModal()"><i class="fas fa-gavel"></i> Правила пользования</span><span class="footer-link" onclick="showWorkModal()"><i class="fas fa-briefcase"></i> Хочу у вас работать</span><span class="footer-link" onclick="showSupportModal()"><i class="fas fa-headset"></i> Поддержка</span></div>
+<div class="footer">TUMIX - Профессиональная компания сосредоточенная на доставке, все права защищены. 2026</div>
+
+<!-- Модальное окно чата поддержки -->
+<div id="supportChatModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="flex-between" style="margin-bottom: 15px;">
+            <h3 style="color:#4ac7e0; margin:0;"><i class="fas fa-headset"></i> Поддержка TUMIX</h3>
+            <button id="closeSupportChatBtn" class="icon-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chatMessages" class="chat-messages">
+            <!-- Сообщения будут появляться здесь -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Введите ваше сообщение..." autocomplete="off">
+            <button id="sendChatBtn" class="btn btn-primary">Отправить</button>
+        </div>
+        <div class="text-muted" style="font-size: 11px; text-align: center; margin-top: 12px;">
+            Оператор ответит вам в ближайшее время
+        </div>
     </div>
 </div>
 
 <div id="welcomeModal" class="modal active"><div class="modal-content"><div style="text-align:center;"><img src="010047C9-376B-4F75-AAB1-5175F05A898B.png" alt="TUMIX" style="width:140px;height:140px;object-fit:contain;margin-bottom:16px;"><h2 style="color:#4ac7e0;">Не успеваете за заказом?</h2><p style="margin:16px 0;">Заказ далеко, или не хотите выходить на улицу?<br><strong style="color:#4ac7e0;">TUMIX</strong> заберет, отменит лишнее и довезет в сохранности!</p><div style="background:rgba(0,0,0,0.5);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;"><p><strong>Почему выбирают нас:</strong></p><ul style="margin-left:20px;"><li>✅ Гарантия доставки, а не кражи курьером</li><li>✅ Бережная транспортировка</li><li>✅ Перевозка крупногабарита на авто</li><li>✅ Доставка стройматериалов которые вы скажете</li><li>✅ Работаем с OZON, WB, Яндекс Маркет, Лемана Про и другими</li></ul></div><div style="display:flex;gap:12px;justify-content:center;"><button id="showRegBtn" class="btn btn-primary"><i class="fas fa-user-plus"></i> Регистрация</button><button id="showLoginBtn" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i> Вход</button></div></div></div></div>
-<div id="regModal" class="modal closed"><div class="modal-content"><h3>Регистрация</h3><form id="regForm"><div class="form-group"><input type="text" id="regName" placeholder="Имя (только русские буквы)"></div><div class="form-group"><input type="email" id="regEmail" placeholder="Email"></div><div class="form-group"><input type="tel" id="regPhone" value="+7"></div><div class="form-group"><input type="password" id="regPassword" placeholder="Пароль (мин. 8 символов)"></div><button type="submit" class="btn btn-primary" style="width:100%">Зарегистрироваться</button><button type="button" id="closeRegBtn" class="btn btn-outline" style="width:100%;margin-top:12px;">Назад</button></form></div></div>
-<div id="loginModal" class="modal closed"><div class="modal-content"><h3>Вход</h3><form id="loginForm"><div class="form-group"><input type="email" id="loginEmail" placeholder="Email"></div><div class="form-group"><input type="password" id="loginPassword" placeholder="Пароль"></div><button type="submit" class="btn btn-primary" style="width:100%">Войти</button><button type="button" id="closeLoginBtn" class="btn btn-outline" style="width:100%;margin-top:12px;">Назад</button></form></div></div>
-<div id="addressManagerModal" class="modal closed"><div class="modal-content" style="position:relative;"><i class="fas fa-times close-modal-x" id="closeAddressManagerBtn"></i><h3>Мои адреса</h3><div id="addressManagerList"></div><button id="addAddressBtn" class="btn btn-primary" style="width:100%;margin-top:20px;">+ Добавить адрес</button></div></div>
-<div id="addressEditModal" class="modal closed"><div class="modal-content"><h3 id="addressEditTitle">Добавить адрес</h3><form id="addressEditForm"><div class="form-group city-wrapper"><input type="text" id="editCity" placeholder="Город *" class="city-input"><span id="citySuccessIcon" class="city-success-icon" style="display:none;"><i class="fas fa-check-circle"></i></span></div><div class="form-group"><input type="text" id="editStreet" placeholder="Улица *" list="streetList"></div><datalist id="streetList"></datalist><div class="form-group"><input type="text" id="editHouse" placeholder="№ дома *"></div><div class="two-columns"><input type="text" id="editCorpus" placeholder="Корпус"><input type="text" id="editBuilding" placeholder="Строение"></div><div class="two-columns"><input type="text" id="editEntrance" placeholder="Подъезд *"><input type="text" id="editFloor" placeholder="Этаж *"></div><div class="two-columns"><input type="text" id="editApartment" placeholder="Квартира *"><input type="text" id="editIntercom" placeholder="Домофон *"></div><div style="display:flex;gap:12px;"><button type="submit" class="btn btn-primary">Сохранить</button><button type="button" id="closeEditBtn" class="btn btn-outline">Отмена</button></div></form></div></div>
-<div id="orderPvzModal" class="modal closed"><div class="modal-content"><h3><i class="fas fa-box-open"></i> Заберем ваш заказ из любого ПВЗ</h3><form id="pvzOrderForm"><div class="form-group"><label>Название маркетплейса *</label><input type="text" id="marketplace" required></div><div class="form-group"><label>Номер заказа * <span class="help-icon" data-tooltip="Номер заказа: код по которому сотрудник ПВЗ найдет заказ. OZON: 1234 5678 * 9123, WB: 123456">?</span></label><input type="text" id="orderNumber" required></div><div class="form-group"><label>Код выдачи (обязательно для Авито и Алиэкспресс)</label><input type="text" id="issueCode"></div><div class="form-group"><label>Количество товаров * (1-50)</label><input type="number" id="itemsCount" min="1" max="50" value="1" required></div>
-<div class="checkbox-group"><div class="checkbox-wrapper"><input type="checkbox" id="adultCheck"><label for="adultCheck">Есть товары 18+</label><button type="button" id="photoControlBtn" class="btn btn-outline" style="margin-left:15px;padding:5px 15px;font-size:12px;display:none;"><i class="fas fa-camera"></i> Фотоконтроль возраста</button></div><div id="adultWarning" class="warning-text" style="display:none;">Курьер проверит ваши документы!</div></div>
-<div class="checkbox-group"><div class="checkbox-wrapper"><input type="checkbox" id="leaveAtDoorCheck"><label for="leaveAtDoorCheck">Оставить у двери</label></div><div id="leaveAtDoorWarning" class="warning-text" style="display:none;">Компания TUMIX не несет ответственность за заказ после оставления у двери!</div></div>
-<div class="form-group"><label>Номер телефона * (+7XXXXXXXXXX)</label><input type="tel" id="phoneOrder" value="+7"></div><div class="form-group"><label>ФИО *</label><input type="text" id="fullName" placeholder="Иванов Иван Иванович" required><div class="checkbox-wrapper" style="margin-top:8px;"><input type="checkbox" id="noPatronymic"><label for="noPatronymic">Нет отчества</label></div></div>
-<div class="form-group"><label>Адрес доставки <button type="button" id="editAddressFromOrderBtn" class="icon-btn"><i class="fas fa-cog"></i></button></label><div id="selectedAddressDisplay" style="background:rgba(0,0,0,0.5);padding:12px;border-radius:12px;"></div></div>
-<div class="form-group"><label>Адрес ПВЗ *</label><input type="text" id="pvzAddress" placeholder="Например: ул. Тверская, д. 15" required></div><div class="two-columns"><div class="form-group"><label>Дата *</label><input type="date" id="deliveryDate" required></div><div class="form-group"><label>Время (09:00 - 22:00) *</label><input type="time" id="deliveryTime" required></div></div>
-<div class="form-group"><label>Комментарий (до 100 символов)</label><textarea id="orderComment" maxlength="100" rows="2"></textarea><div class="char-counter"><span id="charCount">0</span>/100</div></div>
-<div style="display:flex;gap:12px;"><button type="submit" class="btn btn-primary">Оформить доставку</button><button type="button" id="closeOrderModalBtn" class="btn btn-outline">Отмена</button></div></form></div></div>
-<div id="orderInternetModal" class="modal closed"><div class="modal-content"><h3><i class="fas fa-shopping-cart"></i> Заберем ваш заказ из интернет магазина</h3><form id="internetOrderForm"><div class="form-group"><label>Название организации *</label><input type="text" id="orgName" required></div><div class="form-group"><label>Номер заказа (если нету номера заказа, поставьте галочку)</label><input type="text" id="internetOrderNumber"></div>
-<div class="checkbox-group"><div class="checkbox-wrapper"><input type="checkbox" id="noOrderNumberCheck"><label for="noOrderNumberCheck">Нету номера заказа</label></div><div id="noOrderWarning" class="warning-text" style="display:none;">Пожалуйста обратитесь в поддержку!</div></div>
-<div class="form-group"><label>Количество товаров * (1-50)</label><input type="number" id="internetItemsCount" min="1" max="50" value="1" required></div>
-<div class="checkbox-group"><div class="checkbox-wrapper"><input type="checkbox" id="adultCheckInternet"><label for="adultCheckInternet">Есть товары 18+</label><button type="button" id="photoControlBtnInternet" class="btn btn-outline" style="margin-left:15px;padding:5px 15px;font-size:12px;display:none;"><i class="fas fa-camera"></i> Фотоконтроль возраста</button></div><div id="adultWarningInternet" class="warning-text" style="display:none;">Курьер проверит ваши документы!</div></div>
-<div class="form-group"><label>Адрес получения <button type="button" id="editInternetAddressBtn" class="icon-btn"><i class="fas fa-cog"></i></button></label><div id="internetAddressDisplay" style="background:rgba(0,0,0,0.5);padding:12px;border-radius:12px;"></div></div>
-<div class="form-group"><label>Адрес интернет магазина *</label><input type="text" id="internetShopAddress" placeholder="Например: ул. Тверская, д. 15" required></div>
-<div class="form-group"><label>Комментарий (до 100 символов)</label><textarea id="internetComment" maxlength="100" rows="2"></textarea><div class="char-counter"><span id="internetCharCount">0</span>/100</div></div>
-<div style="display:flex;gap:12px;"><button type="submit" class="btn btn-primary">Оформить доставку</button><button type="button" id="closeInternetOrderBtn" class="btn btn-outline">Отмена</button></div></form></div></div>
-<div id="myOrdersModal" class="modal closed"><div class="modal-content"><div class="flex-between"><h3>Мои доставки</h3><i class="fas fa-times close-modal-x" id="closeOrdersBtn" style="position:static;margin-left:auto;"></i></div><div id="ordersList"></div></div></div>
-<div id="rescheduleModal" class="modal closed"><div class="modal-content"><h3>Перенос доставки</h3><div class="two-columns"><div class="form-group"><label>Новая дата</label><input type="date" id="newDate"></div><div class="form-group"><label>Новое время</label><input type="time" id="newTime"></div></div><div style="display:flex;gap:12px;"><button id="confirmRescheduleBtn" class="btn btn-primary">Подтвердить</button><button id="closeRescheduleBtn" class="btn btn-outline">Отмена</button></div></div></div>
-<div id="rulesModal" class="modal closed"><div class="modal-content" style="position:relative;"><i class="fas fa-times close-modal-x" id="closeRulesBtn"></i><h3 style="color:#4ac7e0;">Правила пользования</h3><div class="rules-content"><ol><li>Пользователь обязан согласиться с обработкой и хранением персональных данных, без согласия функционал сайта будет недоступен.</li><li>Компания TUMIX несет ответственность за груз с момента получения груза до момента его передачи заказчику в руки. Если груз был поврежден до нашего курьера, компания TUMIX не имеет отношения к состоянию груза и не несет ответственности за уже ранее полученные повреждения!</li><li>Компания TUMIX несет ответственность за груз с момента получения курьером до момента доставки до двери с последующим оставлением груза у входной двери, далее ответственность перекладывается на заказчика! Если груз был поврежден до нашего курьера, компания TUMIX не имеет отношения к состоянию груза и не несет ответственности за уже ранее полученные повреждения!</li><li>Если в заказе есть товар со специальной отметкой 18+, то заказчик обязан указать эту информацию при оформлении доставки (отметить галочкой в окошке "Есть товары 18+"), а курьер обязан проверить ваши документы, не ссылаясь на внешность. Если вы забыли указать специальную категорию, незамедлительно обратитесь в поддержку письмом на почту или в Telegram в разделе "Поддержка" на шапке сайта, в противном случае будет вынесено предупреждение и дальнейшая временная блокировка в соответствии с нарушением раздела "Правила использования".</li><li>Компания TUMIX никогда у вас не запросит паспортные данные и персональные данные без официального письма на почту или номера телефона, все подобные действия можно приравнять к мошенническим махинациям! Если такое произошло, незамедлительно обратитесь в поддержку письмом на почту с названием письма "Мошеннические действия" или в Telegram с подписью "Срочно", данные поддержки находятся на шапке сайта в разделе "Поддержка".</li><li>Если в заказе есть товары категории 18+, то доставка под категорией "Оставить у двери" будет недоступна, так как нам нужно удостовериться в вашем совершеннолетии.</li><li>Если вы указали неверный адрес или данные для получения груза, незамедлительно обратитесь в поддержку в разделе "Поддержка" на шапке сайта письмом на почту или в Telegram!</li><li>В стоимость доставки входят все затраты, в обычные дни стоимость рассчитывается в коэффициенте 1x в соотношении с расстоянием доставки, если за окном непогода (ливень, снегопад, град и т.п.) или высокий спрос, то стоимость и время доставки увеличатся!</li><li>При возникновении конфликта с курьером незамедлительно обратитесь в поддержку в разделе "Поддержка" на шапке сайта письмом на почту или в Telegram, тема обращения будет "Конфликт с курьером", там нужно будет указать номер заказа, фамилию и имя курьера (если сохранились).</li><li>Вы можете оставить чаевые курьеру при успешной доставке, это не обязательная процедура!</li><li>При оформлении заказа обязательно указывайте точный адрес и контактный телефон для связи с курьером.</li><li>Курьер имеет право отказаться от выполнения заказа, если заказчик находится в состоянии алкогольного или наркотического опьянения.</li><li>Все претензии по качеству доставки принимаются в течение 24 часов после выполнения заказа.</li><li>Компания TUMIX оставляет за собой право изменять условия доставки с предварительным уведомлением пользователей за 3 дня.</li><li>При использовании промокодов и бонусов, они не суммируются с другими акциями.</li><li>В праздничные дни время работы службы поддержки может быть изменено с предварительным уведомлением.</li><li>Заказы, оформленные после 21:00, доставляются на следующий день.</li><li>Курьер имеет право связаться с вами за 15 минут до прибытия для уточнения деталей.</li></ol></div></div></div>
-<div id="workModal" class="modal closed"><div class="modal-content" style="text-align:center;position:relative;"><i class="fas fa-times close-modal-x" id="closeWorkBtn"></i><i class="fas fa-briefcase" style="font-size:48px;color:#4ac7e0;margin-bottom:16px;"></i><h3>Хотите стать частью нашей команды?</h3><p style="margin:16px 0;">Напишите нам письмо на почту:</p><h4 style="color:#4ac7e0;">tumix.support@gmail.com</h4><p style="color:#ffaa66;font-weight:bold;margin-top:16px;">Работа с 16 лет, до 18 необходимо согласие родителей!</p></div></div>
-<div id="supportModal" class="modal closed"><div class="modal-content support-content" style="position:relative;"><i class="fas fa-times close-modal-x" id="closeSupportBtn"></i><i class="fas fa-headset"></i><h3>Служба поддержки</h3><p><i class="fas fa-envelope"></i> <strong>tumix.support@gmail.com</strong></p><p><i class="fas fa-clock"></i> <strong>Ежедневно: 9:00 - 22:00</strong></p><p><i class="fas fa-comment"></i> Среднее время ответа: 5-10 минут</p></div></div>
-<div id="photoModal" class="modal closed"><div class="modal-content" style="text-align:center;"><h3 style="color:#4ac7e0;">Подтверждение возраста</h3><p style="margin:20px 0;">Нам нужно убедиться что вам есть 18+ лет, для этого сделайте селфи, которое проверят наши специалисты.</p><p><strong>Требования к фото:</strong> лицо по центру, хорошее освещение, четкое изображение.</p><input type="file" id="photoInput" accept="image/*" capture="environment" style="margin:20px 0;"><button id="takePhotoBtn" class="btn btn-primary" style="margin:10px;"><i class="fas fa-camera"></i> Сделать фото</button><div id="photoLoading" style="display:none; margin:20px;"><div class="spinner" style="display:block; margin:0 auto 10px;"></div><p>Пожалуйста подождите, это не займет много времени!</p></div><button id="closePhotoModalBtn" class="btn btn-outline">Отмена</button></div></div>
-<div id="photoRequestsModal" class="modal closed"><div class="modal-content"><div class="flex-between"><h3 style="color:#4ac7e0;">Заявки на фотоконтроль</h3><i class="fas fa-times close-modal-x" id="closePhotoRequestsBtn" style="position:static;margin-left:auto;"></i></div><p>Пожалуйста, дождитесь результат проверки.</p><div id="photoRequestsList"></div></div></div>
-<div id="consentModal" class="modal closed"><div class="modal-content"><h3 style="color:#4ac7e0;">Соглашение на обработку данных</h3><div class="rules-content" id="consentRulesContent"><ol><li>Я даю согласие на обработку персональных данных</li><li>Я ознакомлен с правилами пользования</li><li>Я подтверждаю свое совершеннолетие (18+)</li></ol></div><div class="accept-buttons"><button id="rejectConsentBtn" class="btn btn-outline">Отказаться</button><button id="acceptConsentBtn" class="btn btn-primary" disabled>Принять</button></div></div></div>
+<div id="regModal" class="modal"><div class="modal-content"><h3>Регистрация</h3><form id="regForm"><div class="form-group"><input type="text" id="regName" placeholder="Имя (только русские буквы)"></div><div class="form-group"><input type="email" id="regEmail" placeholder="Email"></div><div class="form-group"><input type="tel" id="regPhone" value="+7"></div><div class="form-group"><input type="password" id="regPassword" placeholder="Пароль (мин. 8 символов)"></div><button type="submit" class="btn btn-primary" style="width:100%">Зарегистрироваться</button><button type="button" id="closeRegBtn" class="btn btn-outline" style="width:100%;margin-top:12px;">Назад</button></form></div></div>
+<div id="loginModal" class="modal"><div class="modal-content"><h3>Вход</h3><form id="loginForm"><div class="form-group"><input type="email" id="loginEmail" placeholder="Email"></div><div class="form-group"><input type="password" id="loginPassword" placeholder="Пароль"></div><button type="submit" class="btn btn-primary" style="width:100%">Войти</button><button type="button" id="closeLoginBtn" class="btn btn-outline" style="width:100%;margin-top:12px;">Назад</button></form></div></div>
+<div id="addressManagerModal" class="modal"><div class="modal-content"><div class="flex-between"><h3>Мои адреса</h3><button id="closeAddressManagerBtn" class="icon-btn"><i class="fas fa-times"></i></button></div><div id="addressManagerList"></div><button id="addAddressBtn" class="btn btn-primary" style="width:100%;margin-top:20px;">+ Добавить адрес</button></div></div>
+<div id="addressEditModal" class="modal"><div class="modal-content"><h3 id="addressEditTitle">Добавить адрес</h3><form id="addressEditForm"><div class="form-group city-wrapper"><input type="text" id="editCity" placeholder="Город *" class="city-input"><span id="citySuccessIcon" class="city-success-icon" style="display:none;"><i class="fas fa-check-circle"></i></span></div><div class="form-group"><input type="text" id="editStreet" placeholder="Улица *" list="streetList"></div><datalist id="streetList"></datalist><div class="form-group"><input type="text" id="editHouse" placeholder="№ дома *"></div><div class="two-columns"><input type="text" id="editCorpus" placeholder="Корпус"><input type="text" id="editBuilding" placeholder="Строение"></div><div class="two-columns"><input type="text" id="editEntrance" placeholder="Подъезд *"><input type="text" id="editFloor" placeholder="Этаж *"></div><div class="two-columns"><input type="text" id="editApartment" placeholder="Квартира *"><input type="text" id="editIntercom" placeholder="Домофон *"></div><div style="display:flex;gap:12px;"><button type="submit" class="btn btn-primary">Сохранить</button><button type="button" id="closeEditBtn" class="btn btn-outline">Отмена</button></div></form></div></div>
+<div id="orderPvzModal" class="modal"><div class="modal-content"><h3><i class="fas fa-box-open"></i> Заберем ваш заказ из любого ПВЗ</h3><form id="pvzOrderForm"><div class="form-group"><label>Название маркетплейса *</label><input type="text" id="marketplace" required></div><div class="form-group"><label>Номер заказа * <span class="help-icon" data-tooltip="Номер заказа: код по которому сотрудник ПВЗ найдет заказ. OZON: 1234 5678 * 9123, WB: 123456">?</span></label><input type="text" id="orderNumber" required></div><div class="form-group"><label>Код выдачи (обязательно для Авито и Алиэкспресс)</label><input type="text" id="issueCode"></div><div class="form-group"><label>Количество товаров * (1-50)</label><input type="number" id="itemsCount" min="1" max="50" value="1" required></div><div class="checkbox-group"><div class="checkbox-wrapper"><input type="checkbox" id="adultCheck"><label for="adultCheck">Есть товары 18+</label></div><div id="adultWarning" class="warning-text" style="display:none;">Курьер проверит ваши документы!</div></div><div class="checkbox-group"><div class="checkbox-wrapper"><input type="checkbox" id="leaveAtDoorCheck"><label for="leaveAtDoorCheck">Оставить у двери</label></div><div id="leaveAtDoorWarning" class="warning-text" style="display:none;">Компания TUMIX не несет ответственность за заказ после оставления у двери!</div></div><div class="form-group"><label>Номер телефона * (+7XXXXXXXXXX)</label><input type="tel" id="phoneOrder" value="+7"></div><div class="form-group"><label>ФИО *</label><input type="text" id="fullName" placeholder="Иванов Иван Иванович" required><div class="checkbox-wrapper" style="margin-top:8px;"><input type="checkbox" id="noPatronymic"><label for="noPatronymic">Нет отчества</label></div></div><div class="form-group"><label>Адрес доставки <button type="button" id="editAddressFromOrderBtn" class="icon-btn"><i class="fas fa-cog"></i></button></label><div id="selectedAddressDisplay" style="background:rgba(0,0,0,0.5);padding:12px;border-radius:12px;"></div></div><div class="form-group"><label>Адрес ПВЗ *</label><input type="text" id="pvzAddress" placeholder="Например: ул. Тверская, д. 15" required></div><div class="two-columns"><div class="form-group"><label>Дата *</label><input type="date" id="deliveryDate" required></div><div class="form-group"><label>Время (09:00 - 22:00) *</label><input type="time" id="deliveryTime" required></div></div><div class="form-group"><label>Комментарий (до 100 символов)</label><textarea id="orderComment" maxlength="100" rows="2"></textarea><div class="char-counter"><span id="charCount">0</span>/100</div></div><div style="display:flex;gap:12px;"><button type="submit" class="btn btn-primary">Оформить доставку</button><button type="button" id="closeOrderModalBtn" class="btn btn-outline">Отмена</button></div></form></div></div>
+<div id="orderInternetModal" class="modal"><div class="modal-content"><h3><i class="fas fa-shopping-cart"></i> Заберем ваш заказ из интернет магазина и бережно доставим вам!</h3><form id="internetOrderForm"><div class="form-group"><label>Название организации *</label><input type="text" id="orgName" required></div><div class="form-group"><label>Номер заказа (если нету номера заказа, поставьте галочку)</label><input type="text" id="internetOrderNumber"></div><div class="checkbox-group"><div class="checkbox-wrapper"><input type="checkbox" id="noOrderNumberCheck"><label for="noOrderNumberCheck">Нету номера заказа</label></div><div id="noOrderWarning" class="warning-text" style="display:none;">Пожалуйста обратитесь в поддержку!</div></div><div class="form-group"><label>Количество товаров * (1-50)</label><input type="number" id="internetItemsCount" min="1" max="50" value="1" required></div><div class="form-group"><label>Адрес получения <button type="button" id="editInternetAddressBtn" class="icon-btn"><i class="fas fa-cog"></i></button></label><div id="internetAddressDisplay" style="background:rgba(0,0,0,0.5);padding:12px;border-radius:12px;"></div></div><div class="form-group"><label>Адрес интернет магазина *</label><input type="text" id="internetShopAddress" placeholder="Например: ул. Тверская, д. 15" required></div><div class="form-group"><label>Комментарий (до 100 символов)</label><textarea id="internetComment" maxlength="100" rows="2"></textarea><div class="char-counter"><span id="internetCharCount">0</span>/100</div></div><div style="display:flex;gap:12px;"><button type="submit" class="btn btn-primary">Оформить доставку</button><button type="button" id="closeInternetOrderBtn" class="btn btn-outline">Отмена</button></div></form></div></div>
+<div id="myOrdersModal" class="modal"><div class="modal-content"><div class="flex-between"><h3>Мои доставки</h3><button id="closeOrdersBtn" class="icon-btn"><i class="fas fa-times"></i></button></div><div id="ordersList"></div></div></div>
+<div id="rescheduleModal" class="modal"><div class="modal-content"><h3>Перенос доставки</h3><div class="two-columns"><div class="form-group"><label>Новая дата</label><input type="date" id="newDate"></div><div class="form-group"><label>Новое время</label><input type="time" id="newTime"></div></div><div style="display:flex;gap:12px;"><button id="confirmRescheduleBtn" class="btn btn-primary">Подтвердить</button><button id="closeRescheduleBtn" class="btn btn-outline">Отмена</button></div></div></div>
+<div id="rulesModal" class="modal"><div class="modal-content"><h3 style="color:#4ac7e0;">Правила пользования сервисом TUMIX</h3><div class="rules-content" id="rulesContent"></div><button id="closeRulesBtn" class="btn btn-primary" style="width:100%;">Закрыть</button></div></div>
+<div id="workModal" class="modal"><div class="modal-content" style="text-align:center;"><i class="fas fa-briefcase" style="font-size:48px;color:#4ac7e0;margin-bottom:16px;"></i><h3>Хотите стать частью нашей команды?</h3><p style="margin:16px 0;">Напишите нам письмо на почту:</p><h4 style="color:#4ac7e0;margin:8px 0;">tumix.support@gmail.com</h4><p style="margin:16px 0;">Мы вас очень ждем в рядах своей команды!</p><p style="color:#ffaa66;font-weight:bold;margin-top:16px;">Работа осуществляется с 16 лет, с 16 по 17 включительно необходимо письменное согласие законного представителя!</p><button id="closeWorkBtn" class="btn btn-primary" style="margin-top:24px;">Закрыть</button></div></div>
+<div id="consentModal" class="modal"><div class="modal-content"><h3 style="color:#4ac7e0;">Соглашение на обработку персональных данных</h3><div class="rules-content" id="consentRulesContent"></div><div class="accept-buttons"><button id="rejectConsentBtn" class="btn btn-outline">Отказаться</button><button id="acceptConsentBtn" class="btn btn-primary" disabled>Принять</button></div></div></div>
 
 <script>
-    const moscowStreets = ["Тверская","Новый Арбат","Ленинский проспект","Кутузовский проспект","Мясницкая","Покровка","Арбат","Большая Дмитровка"];
-    for(let i=1;i<=50;i++) moscowStreets.push(`улица ${i}-я`);
-    const ALL_STREETS = [...new Set(moscowStreets)].sort();
-    let currentUser = null;
-    let consentGiven = localStorage.getItem('tumix_consent') === 'true';
-    let pendingAdultCheck = null;
-    let photoRequests = JSON.parse(localStorage.getItem('tumix_photo_requests') || '[]');
-
-    function savePhotoRequests() { localStorage.setItem('tumix_photo_requests', JSON.stringify(photoRequests)); }
+    // Функционал чата поддержки
+    let supportChatMessages = [];
     
+    function addSupportMessage(text, isUser = false) {
+        const messagesContainer = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${isUser ? 'user' : 'support'}`;
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        messageDiv.innerHTML = `
+            <div class="message-bubble">${text}</div>
+            <div class="message-time">${time}</div>
+        `;
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        supportChatMessages.push({ text, isUser, time });
+    }
+    
+    function showSupportChat() {
+        const chatModal = document.getElementById('supportChatModal');
+        const messagesContainer = document.getElementById('chatMessages');
+        messagesContainer.innerHTML = '';
+        supportChatMessages = [];
+        addSupportMessage('Здравствуйте, вас приветствует поддержка компании TUMIX. Пожалуйста, опишите свой вопрос, а наши специалисты во всем разберутся!', false);
+        chatModal.classList.add('active');
+        document.getElementById('chatInput').focus();
+    }
+    
+    function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (!message) return;
+        addSupportMessage(message, true);
+        input.value = '';
+        setTimeout(() => {
+            addSupportMessage('Спасибо за ваше обращение! Наши специалисты уже получили ваш вопрос и свяжутся с вами в ближайшее время.', false);
+        }, 1000);
+    }
+    
+    const moscowStreets = ["Тверская","Новый Арбат","Ленинский проспект","Кутузовский проспект","Мясницкая","Покровка","Арбат","Большая Дмитровка","Пятницкая","Смоленская","Садовое кольцо","Мира проспект","Профсоюзная","Ленинградский проспект","Варшавское шоссе","Каширское шоссе","Дмитровское шоссе","Ярославское шоссе","Рязанский проспект","Волгоградский проспект","Люблинская"];
+    for(let i=1;i<=80;i++) moscowStreets.push(`улица ${i}-я`);
+    const ALL_STREETS = [...new Set(moscowStreets)].sort();
+    let currentUser = null, pendingRescheduleOrder = null, tempOrderData = null, tempOrderModal = null, tempInternetOrderData = null;
+    let consentGiven = localStorage.getItem('tumix_consent') === 'true';
+
+    // ОБНОВЛЕННЫЕ ПРАВИЛА ПОЛЬЗОВАНИЯ с изменениями
+    const rulesText = `<ol>
+        <li>Пользователь обязан согласиться с обработкой и хранением персональных данных, без согласия функционал сайта будет недоступен.</li>
+        <li>Компания TUMIX несет ответственность за груз с момента получения груза до момента его передачи заказчику в руки. Если груз был поврежден до нашего курьера, то компания TUMIX не имеет отношения к состоянию груза и не несет ответственности за уже ранее полученные повреждения!</li>
+        <li>Компания TUMIX несет ответственность за груз с момента получения курьером до момента доставки до двери с последующим оставлением груза у входной двери, далее ответственность перекладывается на заказчика! Если груз был поврежден до нашего курьера, то компания TUMIX не имеет отношения к состоянию груза и не несет ответственности за уже ранее полученные повреждения!</li>
+        <li>Если в заказе есть товар со специальной отметкой 18+, то заказчик обязан указать эту информацию при оформлении доставки (отметить галочкой в окошке "Есть товары 18+") и пройти фотоконтроль, а курьер обязан проверить ваши документы, не ссылаясь на внешность. Если вы забыли указать специальную категорию, незамедлительно обратитесь в поддержку, это можно сделать в разделе "Поддержка" на шапке сайта, в противном случае будет вынесено предупреждение и дальнейшая временная блокировка в соответствии с нарушением раздела "Правила использования".</li>
+        <li>Компания TUMIX никогда у вас не запросит паспортные данные и персональные данные без официального письма на почту или обращения официального обращения в чате, все подобные действия можно приравнять к мошенническим махинациям! Если такое произошло, незамедлительно обратитесь в поддержку с названием обращения "Мошеннические действия" с подписью "Срочно", данные поддержки находятся на шапке сайта в разделе "Поддержка".</li>
+        <li>Если в заказе есть товары категории 18+, то доставка под категорией "Оставить у двери" будет недоступна, так как нам нужно удостовериться в вашем совершеннолетии.</li>
+        <li>Если вы указали неверный адрес или данные для получения груза, незамедлительно обратитесь в поддержку в разделе "Поддержка" на шапке сайта!</li>
+        <li>В стоимость доставки входят все затраты, в обычные дни стоимость рассчитывается в коэффициенте 1x в соотношении с расстоянием доставки, если за окном непогода (ливень, снегопад, град и т.п.) или высокий спрос, то стоимость и время доставки увеличатся!</li>
+        <li>При возникновении конфликта с курьером незамедлительно обратитесь в поддержку в разделе "Поддержка" на шапке сайта, тема обращения будет "Конфликт с курьером", там нужно будет указать номер заказа(обязательно!), фамилию и имя курьера (если сохранились).</li>
+        <li>Вы можете оставить чаевые курьеру при успешной доставке, это не обязательная процедура!</li>
+        <li>При оформлении заказа обязательно указывайте точный адрес и контактный телефон для связи с курьером.</li>
+        <li>Курьер имеет право отказаться от выполнения заказа, если заказчик находится в состоянии алкогольного или наркотического опьянения.</li>
+        <li>Все претензии по качеству доставки принимаются в течение 24 часов после выполнения заказа.</li>
+        <li>Компания TUMIX оставляет за собой право изменять условия доставки с предварительным уведомлением пользователей за 12 часов.</li>
+        <li>При использовании промокодов и бонусов, они не суммируются с другими акциями.</li>
+        <li>В праздничные дни время работы службы поддержки может быть изменено с предварительным уведомлением.</li>
+        <li>Заказы, оформленные после 21:00, доставляются на следующий день.</li>
+        <li>Курьер имеет право связаться с вами за 15 минут до прибытия для уточнения деталей.</li>
+    </ol>`;
+
     function showAlert(msg) { alert(msg); }
     function saveUser(){if(currentUser) localStorage.setItem('tumix_user',JSON.stringify(currentUser));}
     function loadUser(){const d=localStorage.getItem('tumix_user'); if(d){try{const u=JSON.parse(d); if(u&&u.email){currentUser=u; if(!currentUser.addresses)currentUser.addresses=[]; if(!currentUser.orders)currentUser.orders=[]; return true;}}catch(e){}} return false;}
@@ -427,88 +508,54 @@
     function register(n,e,p,pass){if(!/^[А-Яа-яЁё\s\-]{2,}$/.test(n)||/(хуй|пизд|бля)/i.test(n))return 'Имя: только русские буквы'; if(!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(e))return 'Некорректный email'; if(!/^\+7\d{10}$/.test(p))return 'Телефон: +7 и 10 цифр'; if(pass.length<8)return 'Пароль минимум 8 символов'; currentUser={name:n,email:e,phone:p,password:pass,addresses:[],orders:[]}; saveUser(); return null;}
     function login(e,p){const s=localStorage.getItem('tumix_user'); if(!s)return 'Нет зарегистрированных пользователей'; const u=JSON.parse(s); if(u.email===e&&u.password===p){currentUser=u; if(!currentUser.addresses)currentUser.addresses=[]; if(!currentUser.orders)currentUser.orders=[]; saveUser(); return null;} return 'Неверный email или пароль';}
     function logout(){currentUser=null; showMainUI(false); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');}
-    function showMainUI(show){closeAllModals(); const d=document.getElementById('dashboard'), w=document.getElementById('welcomeModal'); if(show&&currentUser){if(!consentGiven){showConsentModal(); d.style.display='none'; return;} d.style.display='block'; w.classList.add('closed'); document.getElementById('userName').innerHTML=currentUser.name; document.getElementById('userEmail').innerHTML=currentUser.email; document.getElementById('userPhone').innerHTML=currentUser.phone; renderAddressList(); updateProfileSidebar();}else{d.style.display='none'; w.classList.remove('closed');}}
+    function showMainUI(show){closeAllModals(); const d=document.getElementById('dashboard'), w=document.getElementById('welcomeModal'); if(show&&currentUser){if(!consentGiven){showConsentModal(); d.style.display='none'; return;} d.style.display='block'; if(w)w.classList.remove('active'); document.getElementById('userName').innerHTML=currentUser.name; document.getElementById('userEmail').innerHTML=currentUser.email; document.getElementById('userPhone').innerHTML=currentUser.phone; renderAddressList(); updateProfileSidebar();}else{d.style.display='none'; if(w)w.classList.add('active');}}
     function updateProfileSidebar(){document.getElementById('profileName').innerHTML=currentUser.name; document.getElementById('profileEmail').innerHTML=currentUser.email; document.getElementById('profilePhone').innerHTML=currentUser.phone; renderProfileAddressList();}
     function renderProfileAddressList(){const c=document.getElementById('profileAddressList'); if(!currentUser.addresses.length){c.innerHTML='<div class="text-muted">Нет адресов.</div>'; return;} let h=''; currentUser.addresses.forEach(a=>{let s=`${a.city}, ${a.street}, д.${a.house}`; if(a.apartment)s+=`, кв.${a.apartment}`; h+=`<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;margin-bottom:8px;"><i class="fas fa-location-dot"></i> ${s}</div>`;}); c.innerHTML=h;}
     function renderAddressList(){const c=document.getElementById('addressList'); if(!currentUser.addresses.length){c.innerHTML='<div class="text-muted">Нет адресов. Добавьте через "Управление".</div>'; return;} let h=''; currentUser.addresses.forEach(a=>{let s=`${a.city}, ${a.street}, д.${a.house}`; if(a.apartment)s+=`, кв.${a.apartment}`; h+=`<div class="address-item"><span><i class="fas fa-location-dot"></i> ${s}</span></div>`;}); c.innerHTML=h;}
-    function renderAddressManager(){const c=document.getElementById('addressManagerList'); if(!currentUser.addresses.length){c.innerHTML='<div class="text-muted">Нет адресов.</div>'; return;} let h=''; currentUser.addresses.forEach((a,idx)=>{let s=`${a.city}, ${a.street}, д.${a.house}, кв.${a.apartment}`; h+=`<div class="address-item"><span>${s}</span><div class="address-actions"><button class="icon-btn editAddr" data-idx="${idx}"><i class="fas fa-cog"></i></button><button class="icon-btn delAddr" data-idx="${idx}"><i class="fas fa-times"></i></button></div></div>`;}); c.innerHTML=h; document.querySelectorAll('.editAddr').forEach(b=>b.addEventListener('click',()=>{const idx=parseInt(b.dataset.idx); document.getElementById('addressManagerModal').classList.add('closed'); openAddressEdit(idx);})); document.querySelectorAll('.delAddr').forEach(b=>b.addEventListener('click',()=>{const idx=parseInt(b.dataset.idx); if(confirm('Удалить адрес?')){currentUser.addresses.splice(idx,1); saveUser(); renderAddressList(); renderAddressManager(); updateProfileSidebar(); showAlert('Адрес удален');}}));}
-    let editAddressIndex=null; function openAddressEdit(idx=null){document.getElementById('addressEditForm').reset(); if(idx!==null&&currentUser.addresses[idx]){const a=currentUser.addresses[idx]; document.getElementById('editCity').value=a.city; document.getElementById('editStreet').value=a.street; document.getElementById('editHouse').value=a.house; document.getElementById('editCorpus').value=a.corpus||''; document.getElementById('editBuilding').value=a.building||''; document.getElementById('editEntrance').value=a.entrance; document.getElementById('editFloor').value=a.floor; document.getElementById('editApartment').value=a.apartment; document.getElementById('editIntercom').value=a.intercom; document.getElementById('addressEditTitle').innerHTML='Редактировать адрес'; editAddressIndex=idx;}else{editAddressIndex=null; document.getElementById('addressEditTitle').innerHTML='Добавить адрес';} document.getElementById('addressEditModal').classList.remove('closed');}
-    function saveAddress(){let city=document.getElementById('editCity').value.trim(); let street=document.getElementById('editStreet').value.trim(); let house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Извините, доставка только в Москве.'); return false;} city='Москва'; street=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните все поля (*)'); return false;} const newAddr={city,street,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; if(editAddressIndex!==null)currentUser.addresses[editAddressIndex]=newAddr; else currentUser.addresses.push(newAddr); saveUser(); renderAddressList(); updateProfileSidebar(); document.getElementById('addressEditModal').classList.add('closed'); showAlert('Адрес сохранен'); return true;}
+    function renderAddressManager(){const c=document.getElementById('addressManagerList'); if(!currentUser.addresses.length){c.innerHTML='<div class="text-muted">Нет адресов.</div>'; return;} let h=''; currentUser.addresses.forEach((a,idx)=>{let s=`${a.city}, ${a.street}, д.${a.house}, кв.${a.apartment}`; h+=`<div class="address-item"><span>${s}</span><div><button class="icon-btn editAddr" data-idx="${idx}"><i class="fas fa-cog"></i></button><button class="icon-btn delAddr" data-idx="${idx}"><i class="fas fa-times"></i></button></div></div>`;}); c.innerHTML=h; document.querySelectorAll('.editAddr').forEach(b=>b.addEventListener('click',()=>{const idx=parseInt(b.dataset.idx); document.getElementById('addressManagerModal').classList.remove('active'); openAddressEdit(idx);})); document.querySelectorAll('.delAddr').forEach(b=>b.addEventListener('click',()=>{const idx=parseInt(b.dataset.idx); if(confirm('Удалить адрес?')){currentUser.addresses.splice(idx,1); saveUser(); renderAddressList(); renderAddressManager(); updateProfileSidebar(); showAlert('Адрес удален');}}));}
+    let editAddressIndex=null; function openAddressEdit(idx=null){document.getElementById('addressEditForm').reset(); if(idx!==null&&currentUser.addresses[idx]){const a=currentUser.addresses[idx]; document.getElementById('editCity').value=a.city; document.getElementById('editStreet').value=a.street; document.getElementById('editHouse').value=a.house; document.getElementById('editCorpus').value=a.corpus||''; document.getElementById('editBuilding').value=a.building||''; document.getElementById('editEntrance').value=a.entrance; document.getElementById('editFloor').value=a.floor; document.getElementById('editApartment').value=a.apartment; document.getElementById('editIntercom').value=a.intercom; document.getElementById('addressEditTitle').innerHTML='Редактировать адрес'; editAddressIndex=idx;}else{editAddressIndex=null; document.getElementById('addressEditTitle').innerHTML='Добавить адрес';} document.getElementById('addressEditModal').classList.add('active');}
+    function saveAddress(){let city=document.getElementById('editCity').value.trim(); let street=document.getElementById('editStreet').value.trim(); let house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Извините, доставка только в Москве.'); return false;} city='Москва'; street=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните все поля (*)'); return false;} const newAddr={city,street,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; if(editAddressIndex!==null)currentUser.addresses[editAddressIndex]=newAddr; else currentUser.addresses.push(newAddr); saveUser(); renderAddressList(); updateProfileSidebar(); document.getElementById('addressEditModal').classList.remove('active'); showAlert('Адрес сохранен'); return true;}
     function formatFullName(s){return s.split(' ').map(p=>p.charAt(0).toUpperCase()+p.slice(1).toLowerCase()).join(' ');}
-    function updateDateTimeRestrictions(){const now=new Date(); const today=now.toISOString().split('T')[0]; const di=document.getElementById('deliveryDate'); if(di){di.min=today; di.value=today;} const ti=document.getElementById('deliveryTime'); if(ti){ti.min='09:00'; ti.max='22:00';}}
-    function openPvzOrder(){if(!currentUser.addresses.length){showAlert('Сначала добавьте адрес доставки'); return;} document.getElementById('pvzOrderForm').reset(); updateDateTimeRestrictions(); document.getElementById('phoneOrder').value='+7'; document.getElementById('adultWarning').style.display='none'; document.getElementById('leaveAtDoorWarning').style.display='none'; document.getElementById('photoControlBtn').style.display='none'; document.getElementById('adultCheck').checked=false; updateSelectedAddress(); document.getElementById('orderPvzModal').classList.remove('closed');}
+    function updateDateTimeRestrictions(){const now=new Date(); const today=now.toISOString().split('T')[0]; const maxDate=new Date(now.getTime()+2*24*60*60*1000).toISOString().split('T')[0]; const di=document.getElementById('deliveryDate'); if(di){di.min=today; di.max=maxDate; di.value=today;} const ti=document.getElementById('deliveryTime'); if(ti){ti.min='09:00'; ti.max='22:00'; if(di&&di.value===today){const mt=new Date(now.getTime()+60*60*1000); ti.min=`${mt.getHours().toString().padStart(2,'0')}:${mt.getMinutes().toString().padStart(2,'0')}`;}}}
+    function openPvzOrder(){if(!currentUser.addresses.length){showAlert('Сначала добавьте адрес доставки'); return;} document.getElementById('pvzOrderForm').reset(); updateDateTimeRestrictions(); document.getElementById('phoneOrder').value='+7'; document.getElementById('adultWarning').style.display='none'; document.getElementById('leaveAtDoorWarning').style.display='none'; updateSelectedAddress(); document.getElementById('orderPvzModal').classList.add('active');}
     function updateSelectedAddress(){const addr=currentUser.addresses[0]; const div=document.getElementById('selectedAddressDisplay'); if(addr)div.innerHTML=`${addr.city}, ${addr.street}, д.${addr.house}, кв.${addr.apartment}`; else div.innerHTML='<span style="color:red;">Нет адреса</span>';}
-    function editAddressFromOrder(){const addr=currentUser.addresses[0]; if(!addr){showAlert('Нет адреса'); return;} tempOrderData={...addr}; tempOrderModal=document.querySelector('.modal:not(.closed)'); document.getElementById('orderPvzModal').classList.add('closed'); openAddressEdit(null); window.saveAddressTemp=function(){const city=document.getElementById('editCity').value.trim(); const street=document.getElementById('editStreet').value.trim(); const house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Только Москва'); return false;} const newStreet=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните поля'); return false;} const newAddr={city:'Москва',street:newStreet,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; const isSame=JSON.stringify(tempOrderData)===JSON.stringify(newAddr); if(!isSame){currentUser.addresses[0]=newAddr; saveUser(); renderAddressList(); updateProfileSidebar(); showAlert('Адрес обновлен');} document.getElementById('addressEditModal').classList.add('closed'); if(tempOrderModal)tempOrderModal.classList.remove('closed'); updateSelectedAddress(); return true;}; window.cancelAddressEditTemp=function(){document.getElementById('addressEditModal').classList.add('closed'); if(tempOrderModal)tempOrderModal.classList.remove('closed');}; document.getElementById('addressEditForm').onsubmit=(e)=>{e.preventDefault(); window.saveAddressTemp();}; const ce=document.getElementById('closeEditBtn'); ce.onclick=()=>{window.cancelAddressEditTemp();};}
-    function editInternetAddress(){const addr=currentUser.addresses[0]; if(!addr){showAlert('Нет адреса'); return;} tempInternetOrderData={...addr}; tempOrderModal=document.querySelector('.modal:not(.closed)'); document.getElementById('orderInternetModal').classList.add('closed'); openAddressEdit(null); window.saveInternetAddressTemp=function(){const city=document.getElementById('editCity').value.trim(); const street=document.getElementById('editStreet').value.trim(); const house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Только Москва'); return false;} const newStreet=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните поля'); return false;} const newAddr={city:'Москва',street:newStreet,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; const isSame=JSON.stringify(tempInternetOrderData)===JSON.stringify(newAddr); if(!isSame){currentUser.addresses[0]=newAddr; saveUser(); renderAddressList(); updateProfileSidebar(); showAlert('Адрес обновлен');} document.getElementById('addressEditModal').classList.add('closed'); if(tempOrderModal)tempOrderModal.classList.remove('closed'); updateInternetAddressDisplay(); return true;}; window.cancelInternetAddressTemp=function(){document.getElementById('addressEditModal').classList.add('closed'); if(tempOrderModal)tempOrderModal.classList.remove('closed');}; document.getElementById('addressEditForm').onsubmit=(e)=>{e.preventDefault(); window.saveInternetAddressTemp();}; const ce2=document.getElementById('closeEditBtn'); ce2.onclick=()=>{window.cancelInternetAddressTemp();};}
+    function editAddressFromOrder(){const addr=currentUser.addresses[0]; if(!addr){showAlert('Нет адреса'); return;} tempOrderData={...addr}; tempOrderModal=document.querySelector('.modal.active'); document.getElementById('orderPvzModal').classList.remove('active'); openAddressEdit(null); window.saveAddressTemp=function(){const city=document.getElementById('editCity').value.trim(); const street=document.getElementById('editStreet').value.trim(); const house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Только Москва'); return false;} const newStreet=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните поля'); return false;} const newAddr={city:'Москва',street:newStreet,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; const isSame=JSON.stringify(tempOrderData)===JSON.stringify(newAddr); if(!isSame){currentUser.addresses[0]=newAddr; saveUser(); renderAddressList(); updateProfileSidebar(); showAlert('Адрес обновлен');} document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active'); updateSelectedAddress(); return true;}; window.cancelAddressEditTemp=function(){document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active');}; document.getElementById('addressEditForm').onsubmit=(e)=>{e.preventDefault(); window.saveAddressTemp();}; const ce=document.getElementById('closeEditBtn'); ce.onclick=()=>{window.cancelAddressEditTemp();};}
+    function editInternetAddress(){const addr=currentUser.addresses[0]; if(!addr){showAlert('Нет адреса'); return;} tempInternetOrderData={...addr}; tempOrderModal=document.querySelector('.modal.active'); document.getElementById('orderInternetModal').classList.remove('active'); openAddressEdit(null); window.saveInternetAddressTemp=function(){const city=document.getElementById('editCity').value.trim(); const street=document.getElementById('editStreet').value.trim(); const house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Только Москва'); return false;} const newStreet=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните поля'); return false;} const newAddr={city:'Москва',street:newStreet,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; const isSame=JSON.stringify(tempInternetOrderData)===JSON.stringify(newAddr); if(!isSame){currentUser.addresses[0]=newAddr; saveUser(); renderAddressList(); updateProfileSidebar(); showAlert('Адрес обновлен');} document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active'); updateInternetAddressDisplay(); return true;}; window.cancelInternetAddressTemp=function(){document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active');}; document.getElementById('addressEditForm').onsubmit=(e)=>{e.preventDefault(); window.saveInternetAddressTemp();}; const ce2=document.getElementById('closeEditBtn'); ce2.onclick=()=>{window.cancelInternetAddressTemp();};}
     function updateInternetAddressDisplay(){const addr=currentUser.addresses[0]; const div=document.getElementById('internetAddressDisplay'); if(addr)div.innerHTML=`${addr.city}, ${addr.street}, д.${addr.house}, кв.${addr.apartment}`; else div.innerHTML='<span style="color:red;">Нет адреса</span>';}
-    
-    function openPhotoModal(callback, orderType, orderId){
-        pendingAdultCheck=callback; 
-        const modal=document.getElementById('photoModal'); 
-        modal.classList.remove('closed'); 
-        const fileInput=document.getElementById('photoInput'); 
-        const takeBtn=document.getElementById('takePhotoBtn'); 
-        const loading=document.getElementById('photoLoading'); 
-        const handlePhoto=(file, imageData)=>{if(file){loading.style.display='block'; const reader=new FileReader(); reader.onloadend=function(){const photoData=reader.result; const request={id:Date.now(),orderType:orderType,orderId:orderId,photo:photoData,status:'pending',date:new Date().toISOString()}; photoRequests.push(request); savePhotoRequests(); setTimeout(()=>{loading.style.display='none'; modal.classList.add('closed'); if(pendingAdultCheck)pendingAdultCheck(true); showAlert('Спасибо за уделенное время, как все проверим пришлем уведомление на сайте. Так же можете следить за статусом во вкладке: Личный кабинет -> Заявки на фотоконтроль.');},2000);}; reader.readAsDataURL(file);}};
-        takeBtn.onclick=()=>{if('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices){navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(stream=>{const video=document.createElement('video'); video.srcObject=stream; video.play(); const canvas=document.createElement('canvas'); const ctx=canvas.getContext('2d'); setTimeout(()=>{canvas.width=video.videoWidth; canvas.height=video.videoHeight; ctx.drawImage(video,0,0,canvas.width,canvas.height); canvas.toBlob(blob=>{const file=new File([blob],'selfie.jpg',{type:'image/jpeg'}); handlePhoto(file); stream.getTracks().forEach(track=>track.stop());});},500);}).catch(()=>{fileInput.click();});}else{fileInput.click();}};
-        fileInput.onchange=(e)=>{if(e.target.files.length)handlePhoto(e.target.files[0]);};
-        document.getElementById('closePhotoModalBtn').onclick=()=>{modal.classList.add('closed'); if(pendingAdultCheck)pendingAdultCheck(false);};
-    }
-    
-    function showPhotoRequests(){
-        const container=document.getElementById('photoRequestsList'); 
-        const userRequests=photoRequests; 
-        if(!userRequests.length){container.innerHTML='<div class="text-muted">Нет заявок на фотоконтроль</div>';}
-        else{let html=''; userRequests.forEach(req=>{let statusText=req.status==='pending'?'Ожидает проверки':(req.status==='approved'?'Одобрено':'Отклонено'); let statusClass=req.status==='pending'?'status-pending':(req.status==='approved'?'status-approved':'status-rejected'); html+=`<div class="photo-item"><div><strong>Заказ: ${req.orderType}</strong></div><div>Статус: <span class="${statusClass}">${statusText}</span></div><div>Дата: ${new Date(req.date).toLocaleString()}</div><img src="${req.photo}" class="photo-img" alt="Фото"></div>`;}); 
-        container.innerHTML=html;} 
-        document.getElementById('photoRequestsModal').classList.remove('closed');
-    }
-    
-    function submitPvzOrder(e){e.preventDefault(); const adult=document.getElementById('adultCheck').checked; if(adult){const orderId='pvz_'+Date.now(); openPhotoModal((verified)=>{if(verified){savePvzOrder(e, orderId);}}, 'ПВЗ', orderId);}else{savePvzOrder(e, null);}}
-    function savePvzOrder(e, photoRequestId){const marketplace=document.getElementById('marketplace').value.trim(); const orderNumber=document.getElementById('orderNumber').value.trim(); const itemsCount=parseInt(document.getElementById('itemsCount').value); const phone=document.getElementById('phoneOrder').value.trim(); let fullName=document.getElementById('fullName').value.trim(); const noPatr=document.getElementById('noPatronymic').checked; const comment=document.getElementById('orderComment').value.trim(); const date=document.getElementById('deliveryDate').value; const time=document.getElementById('deliveryTime').value; const pvzAddress=document.getElementById('pvzAddress').value.trim(); fullName=formatFullName(fullName); if(noPatr&&fullName.split(' ').length!==2){showAlert('Укажите фамилию и имя'); return;} if(!noPatr&&fullName.split(' ').length<3){showAlert('Укажите полные ФИО'); return;} if(!/^\+7\d{10}$/.test(phone)){showAlert('Телефон +7 и 10 цифр'); return;} if(!marketplace||!orderNumber||itemsCount<1){showAlert('Заполните поля'); return;} if(!pvzAddress){showAlert('Укажите адрес ПВЗ'); return;} const order={id:Date.now(),type:'ПВЗ',marketplace,orderNumber,itemsCount,phone,fullName,comment,address:{...currentUser.addresses[0]},pvzAddress,date,time,status:'обработка',createdAt:new Date().toISOString(),photoRequestId:photoRequestId}; currentUser.orders.unshift(order); saveUser(); showAlert('Заказ оформлен!'); document.getElementById('orderPvzModal').classList.add('closed');}
-    function openInternetOrder(){if(!currentUser.addresses.length){showAlert('Сначала добавьте адрес'); return;} document.getElementById('internetOrderForm').reset(); updateInternetAddressDisplay(); document.getElementById('noOrderWarning').style.display='none'; document.getElementById('adultWarningInternet').style.display='none'; document.getElementById('photoControlBtnInternet').style.display='none'; document.getElementById('adultCheckInternet').checked=false; document.getElementById('internetItemsCount').value=1; document.getElementById('orderInternetModal').classList.remove('closed');}
-    function submitInternetOrder(e){e.preventDefault(); const adult=document.getElementById('adultCheckInternet').checked; if(adult){const orderId='internet_'+Date.now(); openPhotoModal((verified)=>{if(verified){saveInternetOrder(e, orderId);}}, 'ИНТЕРНЕТ-МАГАЗИН', orderId);}else{saveInternetOrder(e, null);}}
-    function saveInternetOrder(e, photoRequestId){const orgName=document.getElementById('orgName').value.trim(); const orderNumber=document.getElementById('internetOrderNumber').value.trim(); const noNumber=document.getElementById('noOrderNumberCheck').checked; const itemsCount=parseInt(document.getElementById('internetItemsCount').value); const shopAddress=document.getElementById('internetShopAddress').value.trim(); const comment=document.getElementById('internetComment').value.trim(); if(!orgName){showAlert('Укажите название организации'); return;} if(!noNumber&&!orderNumber){showAlert('Укажите номер заказа или поставьте галочку'); return;} if(itemsCount<1||itemsCount>50){showAlert('Количество от 1 до 50'); return;} if(!shopAddress){showAlert('Укажите адрес магазина'); return;} const order={id:Date.now(),type:'ИНТЕРНЕТ-МАГАЗИН',orgName,orderNumber:noNumber?'Нет номера':orderNumber,itemsCount,shopAddress,comment,address:{...currentUser.addresses[0]},status:'обработка',createdAt:new Date().toISOString(),photoRequestId:photoRequestId}; currentUser.orders.unshift(order); saveUser(); showAlert('Заказ оформлен!'); document.getElementById('orderInternetModal').classList.add('closed');}
-    function showMyOrders(){const c=document.getElementById('ordersList'); if(!currentUser.orders.length){c.innerHTML='<div class="text-muted">Нет заказов</div>';}else{let h=''; currentUser.orders.forEach(o=>{let sc=o.status==='обработка'?'status-processing':(o.status==='отменен'?'status-cancelled':'status-delivered'); h+=`<div class="order-item"><div class="flex-between"><strong>${o.type}: ${o.marketplace||o.orgName||''}</strong><span class="${sc}">${o.status.toUpperCase()}</span></div><div>Заказ №${o.orderNumber||'Нет номера'} | Кол-во: ${o.itemsCount}</div>${o.date?`<div>Дата: ${o.date} ${o.time}</div>`:''}<div>Адрес: ${o.address.street}, д.${o.address.house}</div>${o.pvzAddress?`<div>ПВЗ: ${o.pvzAddress}</div>`:''}${o.shopAddress?`<div>Магазин: ${o.shopAddress}</div>`:''}<div class="text-muted">${new Date(o.createdAt).toLocaleString()}</div>`; if(o.status==='обработка'){h+=`<div class="order-actions"><button class="btn btn-danger cancel-order" data-id="${o.id}">Отменить</button></div>`;} h+=`</div>`;}); c.innerHTML=h; document.querySelectorAll('.cancel-order').forEach(b=>b.addEventListener('click',()=>{const id=parseInt(b.dataset.id); const o=currentUser.orders.find(o=>o.id===id); if(confirm('Отменить заказ?')){o.status='отменен'; saveUser(); showMyOrders();}}));} document.getElementById('myOrdersModal').classList.remove('closed');}
-    function closeAllModals(){['regModal','loginModal','addressManagerModal','addressEditModal','orderPvzModal','orderInternetModal','myOrdersModal','rescheduleModal','rulesModal','workModal','supportModal','photoModal','photoRequestsModal','consentModal'].forEach(id=>{const e=document.getElementById(id); if(e)e.classList.add('closed');});}
-    function showRulesModal(){document.getElementById('rulesModal').classList.remove('closed');}
-    function showWorkModal(){document.getElementById('workModal').classList.remove('closed');}
-    function showSupportModal(){document.getElementById('supportModal').classList.remove('closed');}
-    function showConsentModal(){const modal=document.getElementById('consentModal'); modal.classList.remove('closed'); const ab=document.getElementById('acceptConsentBtn'); ab.disabled=false; document.getElementById('acceptConsentBtn').onclick=()=>{localStorage.setItem('tumix_consent','true'); consentGiven=true; modal.classList.add('closed'); if(currentUser)showMainUI(true);}; document.getElementById('rejectConsentBtn').onclick=()=>{modal.classList.add('closed'); if(currentUser)logout();};}
+    function submitPvzOrder(e){e.preventDefault(); const marketplace=document.getElementById('marketplace').value.trim(); const orderNumber=document.getElementById('orderNumber').value.trim(); const itemsCount=parseInt(document.getElementById('itemsCount').value); const adult=document.getElementById('adultCheck').checked; const phone=document.getElementById('phoneOrder').value.trim(); let fullName=document.getElementById('fullName').value.trim(); const noPatr=document.getElementById('noPatronymic').checked; const leaveAtDoor=document.getElementById('leaveAtDoorCheck').checked; const comment=document.getElementById('orderComment').value.trim(); const date=document.getElementById('deliveryDate').value; const time=document.getElementById('deliveryTime').value; const pvzAddress=document.getElementById('pvzAddress').value.trim(); fullName=formatFullName(fullName); if(noPatr&&fullName.split(' ').length!==2){showAlert('Укажите фамилию и имя'); return;} if(!noPatr&&fullName.split(' ').length<3){showAlert('Укажите полные ФИО'); return;} if(!/^\+7\d{10}$/.test(phone)){showAlert('Телефон +7 и 10 цифр'); return;} if(!marketplace||!orderNumber||itemsCount<1){showAlert('Заполните поля'); return;} if(!pvzAddress){showAlert('Укажите адрес ПВЗ'); return;} const order={id:Date.now(),type:'ПВЗ',marketplace,orderNumber,itemsCount,adult,phone,fullName,comment,leaveAtDoor,address:{...currentUser.addresses[0]},pvzAddress,date,time,status:'обработка',createdAt:new Date().toISOString()}; currentUser.orders.unshift(order); saveUser(); showAlert('Заказ оформлен!'); document.getElementById('orderPvzModal').classList.remove('active');}
+    function openInternetOrder(){if(!currentUser.addresses.length){showAlert('Сначала добавьте адрес'); return;} document.getElementById('internetOrderForm').reset(); updateInternetAddressDisplay(); document.getElementById('noOrderWarning').style.display='none'; document.getElementById('internetItemsCount').value=1; document.getElementById('orderInternetModal').classList.add('active');}
+    function submitInternetOrder(e){e.preventDefault(); const orgName=document.getElementById('orgName').value.trim(); const orderNumber=document.getElementById('internetOrderNumber').value.trim(); const noNumber=document.getElementById('noOrderNumberCheck').checked; const itemsCount=parseInt(document.getElementById('internetItemsCount').value); const shopAddress=document.getElementById('internetShopAddress').value.trim(); const comment=document.getElementById('internetComment').value.trim(); if(!orgName){showAlert('Укажите название организации'); return;} if(!noNumber&&!orderNumber){showAlert('Укажите номер заказа или поставьте галочку'); return;} if(itemsCount<1||itemsCount>50){showAlert('Количество от 1 до 50'); return;} if(!shopAddress){showAlert('Укажите адрес магазина'); return;} const order={id:Date.now(),type:'ИНТЕРНЕТ-МАГАЗИН',orgName,orderNumber:noNumber?'Нет номера':orderNumber,itemsCount,shopAddress,comment,address:{...currentUser.addresses[0]},status:'обработка',createdAt:new Date().toISOString()}; currentUser.orders.unshift(order); saveUser(); showAlert('Заказ оформлен!'); document.getElementById('orderInternetModal').classList.remove('active');}
+    function showMyOrders(){const c=document.getElementById('ordersList'); if(!currentUser.orders.length){c.innerHTML='<div class="text-muted">Нет заказов</div>';}else{let h=''; currentUser.orders.forEach(o=>{let sc=o.status==='обработка'?'status-processing':(o.status==='отменен'?'status-cancelled':'status-delivered'); h+=`<div class="order-item"><div class="flex-between"><strong>${o.type}: ${o.marketplace||o.orgName||''}</strong><span class="${sc}">${o.status.toUpperCase()}</span></div><div>Заказ №${o.orderNumber||'Нет номера'} | Кол-во: ${o.itemsCount}</div>${o.date?`<div>Дата: ${o.date} ${o.time}</div>`:''}<div>Адрес: ${o.address.street}, д.${o.address.house}</div>${o.pvzAddress?`<div>ПВЗ: ${o.pvzAddress}</div>`:''}${o.shopAddress?`<div>Магазин: ${o.shopAddress}</div>`:''}<div class="text-muted">${new Date(o.createdAt).toLocaleString()}</div>`; if(o.status==='обработка'&&o.date){h+=`<div class="order-actions"><button class="btn btn-danger cancel-order" data-id="${o.id}">Отменить</button><button class="btn btn-warning reschedule-order" data-id="${o.id}">Перенести</button></div>`;}else if(o.status==='обработка'){h+=`<div class="order-actions"><button class="btn btn-danger cancel-order" data-id="${o.id}">Отменить</button></div>`;} h+=`</div>`;}); c.innerHTML=h; document.querySelectorAll('.cancel-order').forEach(b=>b.addEventListener('click',()=>{const id=parseInt(b.dataset.id); const o=currentUser.orders.find(o=>o.id===id); if(confirm('Отменить заказ?')){o.status='отменен'; saveUser(); showMyOrders();}})); document.querySelectorAll('.reschedule-order').forEach(b=>b.addEventListener('click',()=>{const id=parseInt(b.dataset.id); const o=currentUser.orders.find(o=>o.id===id); const nd=prompt('Новая дата (ГГГГ-ММ-ДД):',o.date); const nt=prompt('Новое время (ЧЧ:ММ):',o.time); if(nd&&nt){o.date=nd; o.time=nt; saveUser(); showMyOrders(); showAlert('Доставка перенесена');}}));} document.getElementById('myOrdersModal').classList.add('active');}
+    function closeAllModals(){['regModal','loginModal','addressManagerModal','addressEditModal','orderPvzModal','orderInternetModal','myOrdersModal','welcomeModal','rescheduleModal','rulesModal','workModal','consentModal','supportChatModal'].forEach(id=>{const e=document.getElementById(id); if(e)e.classList.remove('active');});}
+    function showRulesModal(){document.getElementById('rulesContent').innerHTML=rulesText; document.getElementById('rulesModal').classList.add('active');}
+    function showWorkModal(){document.getElementById('workModal').classList.add('active');}
+    function showSupportModal(){showSupportChat();}
+    function showConsentModal(){const modal=document.getElementById('consentModal'); document.getElementById('consentRulesContent').innerHTML=rulesText; modal.classList.add('active'); const rc=document.getElementById('consentRulesContent'); const ab=document.getElementById('acceptConsentBtn'); const checkScroll=()=>{if(rc.scrollTop+rc.clientHeight>=rc.scrollHeight-10){ab.disabled=false; rc.removeEventListener('scroll',checkScroll);}}; rc.addEventListener('scroll',checkScroll); document.getElementById('acceptConsentBtn').onclick=()=>{localStorage.setItem('tumix_consent','true'); consentGiven=true; modal.classList.remove('active'); if(currentUser)showMainUI(true);}; document.getElementById('rejectConsentBtn').onclick=()=>{modal.classList.remove('active'); if(currentUser)logout();};}
     document.addEventListener('click',(e)=>{if(e.target.classList.contains('modal')||e.target.id==='overlay'){closeAllModals(); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');}});
     document.addEventListener('DOMContentLoaded',()=>{const dl=document.getElementById('streetList'); ALL_STREETS.forEach(s=>{const o=document.createElement('option'); o.value=s; dl.appendChild(o);}); if(loadUser())showMainUI(true); else showMainUI(false); 
     document.getElementById('profileBtn').onclick=()=>{document.getElementById('profileSidebar').classList.add('active'); document.getElementById('overlay').classList.add('active');};
     document.getElementById('closeProfile').onclick=()=>{document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
-    document.getElementById('profileAddressManagerBtn').onclick=()=>{renderAddressManager(); document.getElementById('addressManagerModal').classList.remove('closed'); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
-    document.getElementById('profilePhotoRequestsBtn').onclick=()=>{showPhotoRequests(); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
+    document.getElementById('profileAddressManagerBtn').onclick=()=>{renderAddressManager(); document.getElementById('addressManagerModal').classList.add('active'); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
     document.getElementById('profileMyOrdersBtn').onclick=()=>{showMyOrders(); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
     document.getElementById('profileLogoutBtn').onclick=()=>{logout(); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');};
-    document.getElementById('rulesBtn').onclick=showRulesModal; document.getElementById('workBtn').onclick=showWorkModal; document.getElementById('supportBtn').onclick=showSupportModal;
-    document.getElementById('closeRulesBtn').onclick=()=>document.getElementById('rulesModal').classList.add('closed');
-    document.getElementById('closeWorkBtn').onclick=()=>document.getElementById('workModal').classList.add('closed');
-    document.getElementById('closeSupportBtn').onclick=()=>document.getElementById('supportModal').classList.add('closed');
-    document.getElementById('closePhotoRequestsBtn').onclick=()=>document.getElementById('photoRequestsModal').classList.add('closed');
-    document.getElementById('openAddressManager').onclick=()=>{renderAddressManager(); document.getElementById('addressManagerModal').classList.remove('closed');};
-    document.getElementById('closeAddressManagerBtn').onclick=()=>document.getElementById('addressManagerModal').classList.add('closed');
-    document.getElementById('addAddressBtn').onclick=()=>{document.getElementById('addressManagerModal').classList.add('closed'); openAddressEdit(null);};
-    document.getElementById('closeEditBtn').onclick=()=>document.getElementById('addressEditModal').classList.add('closed');
-    document.getElementById('closeOrderModalBtn').onclick=()=>document.getElementById('orderPvzModal').classList.add('closed');
-    document.getElementById('closeInternetOrderBtn').onclick=()=>document.getElementById('orderInternetModal').classList.add('closed');
-    document.getElementById('closeOrdersBtn').onclick=()=>document.getElementById('myOrdersModal').classList.add('closed');
-    document.getElementById('closeRescheduleBtn').onclick=()=>document.getElementById('rescheduleModal').classList.add('closed');
-    document.getElementById('confirmRescheduleBtn').onclick=()=>{const nd=document.getElementById('newDate').value; const nt=document.getElementById('newTime').value; if(nd&&nt){pendingRescheduleOrder.date=nd; pendingRescheduleOrder.time=nt; saveUser(); document.getElementById('rescheduleModal').classList.add('closed'); showMyOrders(); showAlert('Перенесено');}};
+    document.getElementById('rulesBtn').onclick=showRulesModal; document.getElementById('workBtn').onclick=showWorkModal; document.getElementById('supportBtn').onclick=showSupportModal; document.getElementById('openAddressManager').onclick=()=>{renderAddressManager(); document.getElementById('addressManagerModal').classList.add('active');};
+    document.getElementById('closeAddressManagerBtn').onclick=()=>document.getElementById('addressManagerModal').classList.remove('active');
+    document.getElementById('addAddressBtn').onclick=()=>{document.getElementById('addressManagerModal').classList.remove('active'); openAddressEdit(null);};
+    document.getElementById('closeEditBtn').onclick=()=>document.getElementById('addressEditModal').classList.remove('active');
+    document.getElementById('closeOrderModalBtn').onclick=()=>document.getElementById('orderPvzModal').classList.remove('active');
+    document.getElementById('closeInternetOrderBtn').onclick=()=>document.getElementById('orderInternetModal').classList.remove('active');
+    document.getElementById('closeOrdersBtn').onclick=()=>document.getElementById('myOrdersModal').classList.remove('active');
+    document.getElementById('closeRescheduleBtn').onclick=()=>document.getElementById('rescheduleModal').classList.remove('active');
+    document.getElementById('confirmRescheduleBtn').onclick=()=>{const nd=document.getElementById('newDate').value; const nt=document.getElementById('newTime').value; if(nd&&nt){pendingRescheduleOrder.date=nd; pendingRescheduleOrder.time=nt; saveUser(); document.getElementById('rescheduleModal').classList.remove('active'); showMyOrders(); showAlert('Перенесено');}};
     document.getElementById('editAddressFromOrderBtn').onclick=editAddressFromOrder;
     document.getElementById('editInternetAddressBtn').onclick=editInternetAddress;
-    document.getElementById('adultCheck').onchange=function(){document.getElementById('adultWarning').style.display=this.checked?'block':'none'; document.getElementById('photoControlBtn').style.display=this.checked?'inline-block':'none'; if(this.checked){document.getElementById('leaveAtDoorCheck').disabled=true;}else document.getElementById('leaveAtDoorCheck').disabled=false;};
-    document.getElementById('adultCheckInternet').onchange=function(){document.getElementById('adultWarningInternet').style.display=this.checked?'block':'none'; document.getElementById('photoControlBtnInternet').style.display=this.checked?'inline-block':'none';};
-    document.getElementById('photoControlBtn').onclick=()=>{if(document.getElementById('adultCheck').checked){openPhotoModal(()=>{}, 'ПВЗ', null);}else{showAlert('Сначала отметьте "Есть товары 18+"');}};
-    document.getElementById('photoControlBtnInternet').onclick=()=>{if(document.getElementById('adultCheckInternet').checked){openPhotoModal(()=>{}, 'ИНТЕРНЕТ-МАГАЗИН', null);}else{showAlert('Сначала отметьте "Есть товары 18+"');}};
     document.querySelectorAll('.service-card').forEach(btn=>{if(btn.dataset.action==='pvz')btn.onclick=openPvzOrder; else if(btn.dataset.action==='internet')btn.onclick=openInternetOrder; else btn.onclick=()=>showAlert('Функция в разработке');});
     document.getElementById('regForm').onsubmit=(e)=>{e.preventDefault(); const err=register(regName.value,regEmail.value,regPhone.value,regPassword.value); if(err)showAlert(err); else{closeAllModals(); showMainUI(true); showAlert('Регистрация успешна!');}};
     document.getElementById('loginForm').onsubmit=(e)=>{e.preventDefault(); const err=login(loginEmail.value,loginPassword.value); if(err)showAlert(err); else{closeAllModals(); showMainUI(true); showAlert('Добро пожаловать!');}};
     document.getElementById('addressEditForm').onsubmit=(e)=>{e.preventDefault(); saveAddress();};
     document.getElementById('pvzOrderForm').onsubmit=submitPvzOrder;
     document.getElementById('internetOrderForm').onsubmit=submitInternetOrder;
+    document.getElementById('adultCheck').onchange=function(){document.getElementById('adultWarning').style.display=this.checked?'block':'none'; if(this.checked){document.getElementById('leaveAtDoorCheck').checked=false; document.getElementById('leaveAtDoorCheck').disabled=true;}else document.getElementById('leaveAtDoorCheck').disabled=false;};
     document.getElementById('leaveAtDoorCheck').onchange=function(){document.getElementById('leaveAtDoorWarning').style.display=this.checked?'block':'none';};
     document.getElementById('noOrderNumberCheck').onchange=function(){const nn=document.getElementById('internetOrderNumber'); const warn=document.getElementById('noOrderWarning'); if(this.checked){nn.disabled=true; nn.value=''; warn.style.display='block';}else{nn.disabled=false; warn.style.display='none';}};
     document.getElementById('fullName').addEventListener('blur',function(){this.value=formatFullName(this.value);});
@@ -518,11 +565,15 @@
     document.getElementById('phoneOrder').addEventListener('input',function(){if(!this.value.startsWith('+7'))this.value='+7';});
     const ci=document.getElementById('editCity'); const ciIcon=document.getElementById('citySuccessIcon'); if(ci){ci.addEventListener('input',function(){if(isMoscowCity(this.value))ciIcon.style.display='block'; else ciIcon.style.display='none';}); ci.addEventListener('blur',function(){if(isMoscowCity(this.value)){this.value='Москва'; ciIcon.style.display='block';}});}
     document.querySelectorAll('.accordion-header').forEach(header=>{header.addEventListener('click',()=>{header.parentElement.classList.toggle('active');});});
-    document.querySelectorAll('.help-icon').forEach(icon=>{icon.addEventListener('click',(e)=>{e.stopPropagation(); showAlert(icon.getAttribute('data-tooltip'));});});
-    document.getElementById('showRegBtn').onclick=()=>{closeAllModals(); document.getElementById('regModal').classList.remove('closed');};
-    document.getElementById('showLoginBtn').onclick=()=>{closeAllModals(); document.getElementById('loginModal').classList.remove('closed');};
-    document.getElementById('closeRegBtn').onclick=()=>{closeAllModals(); document.getElementById('welcomeModal').classList.remove('closed');};
-    document.getElementById('closeLoginBtn').onclick=()=>{closeAllModals(); document.getElementById('welcomeModal').classList.remove('closed');};
+    document.getElementById('showRegBtn').onclick=()=>{closeAllModals(); document.getElementById('regModal').classList.add('active');};
+    document.getElementById('showLoginBtn').onclick=()=>{closeAllModals(); document.getElementById('loginModal').classList.add('active');};
+    document.getElementById('closeRegBtn').onclick=()=>{closeAllModals(); document.getElementById('welcomeModal').classList.add('active');};
+    document.getElementById('closeLoginBtn').onclick=()=>{closeAllModals(); document.getElementById('welcomeModal').classList.add('active');};
+    document.getElementById('closeRulesBtn').onclick=()=>document.getElementById('rulesModal').classList.remove('active');
+    document.getElementById('closeWorkBtn').onclick=()=>document.getElementById('workModal').classList.remove('active');
+    document.getElementById('closeSupportChatBtn').onclick=()=>document.getElementById('supportChatModal').classList.remove('active');
+    document.getElementById('sendChatBtn').onclick=sendChatMessage;
+    document.getElementById('chatInput').addEventListener('keypress',(e)=>{if(e.key==='Enter') sendChatMessage();});
     });
 </script>
 </body>
