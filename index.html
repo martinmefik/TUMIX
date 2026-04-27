@@ -8,6 +8,10 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
@@ -60,11 +64,6 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
         }
         
         .card { 
@@ -375,6 +374,34 @@
             margin: 0;
             white-space: nowrap;
         }
+        
+        /* Стили для фотоконтроля */
+        .photo-control {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+        }
+        .photo-status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        .photo-status.pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .photo-status.approved { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .photo-status.rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+        .upload-area {
+            border: 2px dashed #2aa9c9;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .upload-area:hover {
+            background: rgba(42, 169, 201, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -402,7 +429,7 @@
 
 <!-- Модальное окно чата поддержки -->
 <div id="supportChatModal" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-content" style="max-width: 600px;">
         <div class="flex-between" style="margin-bottom: 15px;">
             <h3 style="color:#4ac7e0; margin:0;"><i class="fas fa-headset"></i> Поддержка TUMIX</h3>
             <button id="closeSupportChatBtn" class="icon-btn"><i class="fas fa-times"></i></button>
@@ -414,6 +441,21 @@
             <input type="text" id="chatInput" placeholder="Введите ваше сообщение..." autocomplete="off">
             <button id="sendChatBtn" class="btn btn-primary">Отправить</button>
         </div>
+        
+        <!-- Блок загрузки фото для фотоконтроля -->
+        <div class="photo-control">
+            <h4 style="color:#4ac7e0; margin-bottom: 10px;"><i class="fas fa-camera"></i> Фотоконтроль 18+</h4>
+            <div id="photoStatus" class="photo-status pending">Статус: ожидает загрузки фото</div>
+            <div id="uploadArea" class="upload-area">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 8px;"></i>
+                <p>Нажмите или перетащите фото для подтверждения возраста</p>
+                <input type="file" id="photoInput" accept="image/*" style="display: none;">
+            </div>
+            <div id="photoPreview" style="margin-top: 10px; max-width: 100%; display: none;">
+                <img id="previewImg" style="max-width: 100%; border-radius: 12px;">
+            </div>
+        </div>
+        
         <div class="text-muted" style="font-size: 11px; text-align: center; margin-top: 12px;">
             Оператор ответит вам в ближайшее время
         </div>
@@ -434,11 +476,172 @@
 <div id="consentModal" class="modal"><div class="modal-content"><h3 style="color:#4ac7e0;">Соглашение на обработку персональных данных</h3><div class="rules-content" id="consentRulesContent"></div><div class="accept-buttons"><button id="rejectConsentBtn" class="btn btn-outline">Отказаться</button><button id="acceptConsentBtn" class="btn btn-primary" disabled>Принять</button></div></div></div>
 
 <script>
+    // Firebase конфигурация
+    const firebaseConfig = {
+        apiKey: "AIzaSyCoxvUCeYxUMXC3HtCblMXorZpuzH7Shcg",
+        authDomain: "delivery-support-34881.firebaseapp.com",
+        projectId: "delivery-support-34881",
+        storageBucket: "delivery-support-34881.firebasestorage.app",
+        messagingSenderId: "238590278521",
+        appId: "1:238590278521:web:1fc2ce85a8187e59d10da8"
+    };
+
+    // Инициализация Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    let currentUser = null;
+    let currentUserId = null;
+    let chatUnsubscribe = null;
+
+    // Функции для работы с Firebase
+    async function saveOrderToFirebase(order) {
+        if (!currentUserId) return;
+        try {
+            await db.collection('orders').add({
+                ...order,
+                userId: currentUserId,
+                userName: currentUser.name,
+                userEmail: currentUser.email,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'pending'
+            });
+        } catch (error) {
+            console.error('Ошибка сохранения заказа:', error);
+        }
+    }
+
+    async function saveMessageToFirebase(message, isUser = true) {
+        if (!currentUserId) return;
+        try {
+            await db.collection('chats').add({
+                userId: currentUserId,
+                userName: currentUser.name,
+                message: message,
+                isUser: isUser,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                read: false
+            });
+        } catch (error) {
+            console.error('Ошибка сохранения сообщения:', error);
+        }
+    }
+
+    async function updatePhotoStatus(status, photoUrl = null) {
+        if (!currentUserId) return;
+        try {
+            await db.collection('users').doc(currentUserId).set({
+                photoStatus: status,
+                photoUrl: photoUrl,
+                lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            
+            const statusDiv = document.getElementById('photoStatus');
+            if (statusDiv) {
+                statusDiv.className = `photo-status ${status}`;
+                if (status === 'pending') statusDiv.innerHTML = 'Статус: ожидает проверки';
+                else if (status === 'approved') statusDiv.innerHTML = '✅ Статус: подтвержден';
+                else if (status === 'rejected') statusDiv.innerHTML = '❌ Статус: отклонен, повторите попытку';
+            }
+        } catch (error) {
+            console.error('Ошибка обновления статуса фото:', error);
+        }
+    }
+
+    async function uploadPhoto(file) {
+        if (!currentUserId) return;
+        try {
+            const storageRef = storage.ref();
+            const photoRef = storageRef.child(`photos/${currentUserId}_${Date.now()}.jpg`);
+            await photoRef.put(file);
+            const photoUrl = await photoRef.getDownloadURL();
+            await updatePhotoStatus('pending', photoUrl);
+            return photoUrl;
+        } catch (error) {
+            console.error('Ошибка загрузки фото:', error);
+            return null;
+        }
+    }
+
+    function setupPhotoUpload() {
+        const uploadArea = document.getElementById('uploadArea');
+        const photoInput = document.getElementById('photoInput');
+        const photoPreview = document.getElementById('photoPreview');
+        const previewImg = document.getElementById('previewImg');
+
+        if (!uploadArea) return;
+
+        uploadArea.onclick = () => photoInput.click();
+        
+        photoInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    previewImg.src = event.target.result;
+                    photoPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+                
+                const photoUrl = await uploadPhoto(file);
+                if (photoUrl) {
+                    const statusDiv = document.getElementById('photoStatus');
+                    if (statusDiv) {
+                        statusDiv.className = 'photo-status pending';
+                        statusDiv.innerHTML = 'Статус: на проверке у оператора';
+                    }
+                }
+            }
+        };
+    }
+
+    function setupChatListener() {
+        if (chatUnsubscribe) chatUnsubscribe();
+        if (!currentUserId) return;
+        
+        chatUnsubscribe = db.collection('chats')
+            .where('userId', '==', currentUserId)
+            .orderBy('timestamp', 'asc')
+            .onSnapshot((snapshot) => {
+                const messagesContainer = document.getElementById('chatMessages');
+                if (messagesContainer && snapshot.docChanges().length > 0) {
+                    snapshot.docChanges().forEach(change => {
+                        if (change.type === 'added') {
+                            const data = change.doc.data();
+                            addSupportMessage(data.message, data.isUser);
+                        }
+                    });
+                }
+            });
+    }
+
+    function setupPhotoStatusListener() {
+        if (!currentUserId) return;
+        
+        db.collection('users').doc(currentUserId)
+            .onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data && data.photoStatus) {
+                        const statusDiv = document.getElementById('photoStatus');
+                        if (statusDiv) {
+                            statusDiv.className = `photo-status ${data.photoStatus}`;
+                            if (data.photoStatus === 'pending') statusDiv.innerHTML = 'Статус: на проверке у оператора';
+                            else if (data.photoStatus === 'approved') statusDiv.innerHTML = '✅ Статус: подтвержден';
+                            else if (data.photoStatus === 'rejected') statusDiv.innerHTML = '❌ Статус: отклонен, повторите попытку';
+                        }
+                    }
+                }
+            });
+    }
+
     // Функционал чата поддержки
     let supportChatMessages = [];
     
     function addSupportMessage(text, isUser = false) {
         const messagesContainer = document.getElementById('chatMessages');
+        if (!messagesContainer) return;
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${isUser ? 'user' : 'support'}`;
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -451,34 +654,43 @@
         supportChatMessages.push({ text, isUser, time });
     }
     
-    function showSupportChat() {
+    async function showSupportChat() {
         const chatModal = document.getElementById('supportChatModal');
         const messagesContainer = document.getElementById('chatMessages');
-        messagesContainer.innerHTML = '';
+        if (messagesContainer) {
+            messagesContainer.innerHTML = '';
+        }
         supportChatMessages = [];
         addSupportMessage('Здравствуйте, вас приветствует поддержка компании TUMIX. Пожалуйста, опишите свой вопрос, а наши специалисты во всем разберутся!', false);
         chatModal.classList.add('active');
-        document.getElementById('chatInput').focus();
+        document.getElementById('chatInput')?.focus();
+        
+        setupChatListener();
+        setupPhotoStatusListener();
+        setupPhotoUpload();
     }
     
-    function sendChatMessage() {
+    async function sendChatMessage() {
         const input = document.getElementById('chatInput');
         const message = input.value.trim();
         if (!message) return;
         addSupportMessage(message, true);
+        await saveMessageToFirebase(message, true);
         input.value = '';
-        setTimeout(() => {
-            addSupportMessage('Спасибо за ваше обращение! Наши специалисты уже получили ваш вопрос и свяжутся с вами в ближайшее время.', false);
+        setTimeout(async () => {
+            const response = 'Спасибо за ваше обращение! Наши специалисты уже получили ваш вопрос и свяжутся с вами в ближайшее время.';
+            addSupportMessage(response, false);
+            await saveMessageToFirebase(response, false);
         }, 1000);
     }
     
     const moscowStreets = ["Тверская","Новый Арбат","Ленинский проспект","Кутузовский проспект","Мясницкая","Покровка","Арбат","Большая Дмитровка","Пятницкая","Смоленская","Садовое кольцо","Мира проспект","Профсоюзная","Ленинградский проспект","Варшавское шоссе","Каширское шоссе","Дмитровское шоссе","Ярославское шоссе","Рязанский проспект","Волгоградский проспект","Люблинская"];
     for(let i=1;i<=80;i++) moscowStreets.push(`улица ${i}-я`);
     const ALL_STREETS = [...new Set(moscowStreets)].sort();
-    let currentUser = null, pendingRescheduleOrder = null, tempOrderData = null, tempOrderModal = null, tempInternetOrderData = null;
+    let pendingRescheduleOrder = null, tempOrderData = null, tempOrderModal = null, tempInternetOrderData = null;
     let consentGiven = localStorage.getItem('tumix_consent') === 'true';
 
-    // ОБНОВЛЕННЫЕ ПРАВИЛА ПОЛЬЗОВАНИЯ с изменениями
+    // ОБНОВЛЕННЫЕ ПРАВИЛА ПОЛЬЗОВАНИЯ
     const rulesText = `<ol>
         <li>Пользователь обязан согласиться с обработкой и хранением персональных данных, без согласия функционал сайта будет недоступен.</li>
         <li>Компания TUMIX несет ответственность за груз с момента получения груза до момента его передачи заказчику в руки. Если груз был поврежден до нашего курьера, то компания TUMIX не имеет отношения к состоянию груза и не несет ответственности за уже ранее полученные повреждения!</li>
@@ -505,9 +717,14 @@
     function loadUser(){const d=localStorage.getItem('tumix_user'); if(d){try{const u=JSON.parse(d); if(u&&u.email){currentUser=u; if(!currentUser.addresses)currentUser.addresses=[]; if(!currentUser.orders)currentUser.orders=[]; return true;}}catch(e){}} return false;}
     function capitalizeWords(s){return s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');}
     function isMoscowCity(c){return c.trim().toLowerCase()==='москва'||c.trim().toLowerCase()==='moscow';}
-    function register(n,e,p,pass){if(!/^[А-Яа-яЁё\s\-]{2,}$/.test(n)||/(хуй|пизд|бля)/i.test(n))return 'Имя: только русские буквы'; if(!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(e))return 'Некорректный email'; if(!/^\+7\d{10}$/.test(p))return 'Телефон: +7 и 10 цифр'; if(pass.length<8)return 'Пароль минимум 8 символов'; currentUser={name:n,email:e,phone:p,password:pass,addresses:[],orders:[]}; saveUser(); return null;}
-    function login(e,p){const s=localStorage.getItem('tumix_user'); if(!s)return 'Нет зарегистрированных пользователей'; const u=JSON.parse(s); if(u.email===e&&u.password===p){currentUser=u; if(!currentUser.addresses)currentUser.addresses=[]; if(!currentUser.orders)currentUser.orders=[]; saveUser(); return null;} return 'Неверный email или пароль';}
-    function logout(){currentUser=null; showMainUI(false); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');}
+    function register(n,e,p,pass){if(!/^[А-Яа-яЁё\s\-]{2,}$/.test(n)||/(хуй|пизд|бля)/i.test(n))return 'Имя: только русские буквы'; if(!/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(e))return 'Некорректный email'; if(!/^\+7\d{10}$/.test(p))return 'Телефон: +7 и 10 цифр'; if(pass.length<8)return 'Пароль минимум 8 символов'; 
+        currentUser = {name:n, email:e, phone:p, password:pass, addresses:[], orders:[]}; 
+        currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        saveUser(); 
+        return null;
+    }
+    function login(e,p){const s=localStorage.getItem('tumix_user'); if(!s)return 'Нет зарегистрированных пользователей'; const u=JSON.parse(s); if(u.email===e&&u.password===p){currentUser=u; if(!currentUser.addresses)currentUser.addresses=[]; if(!currentUser.orders)currentUser.orders=[]; currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); saveUser(); return null;} return 'Неверный email или пароль';}
+    function logout(){currentUser=null; currentUserId=null; if(chatUnsubscribe) chatUnsubscribe(); showMainUI(false); document.getElementById('profileSidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active');}
     function showMainUI(show){closeAllModals(); const d=document.getElementById('dashboard'), w=document.getElementById('welcomeModal'); if(show&&currentUser){if(!consentGiven){showConsentModal(); d.style.display='none'; return;} d.style.display='block'; if(w)w.classList.remove('active'); document.getElementById('userName').innerHTML=currentUser.name; document.getElementById('userEmail').innerHTML=currentUser.email; document.getElementById('userPhone').innerHTML=currentUser.phone; renderAddressList(); updateProfileSidebar();}else{d.style.display='none'; if(w)w.classList.add('active');}}
     function updateProfileSidebar(){document.getElementById('profileName').innerHTML=currentUser.name; document.getElementById('profileEmail').innerHTML=currentUser.email; document.getElementById('profilePhone').innerHTML=currentUser.phone; renderProfileAddressList();}
     function renderProfileAddressList(){const c=document.getElementById('profileAddressList'); if(!currentUser.addresses.length){c.innerHTML='<div class="text-muted">Нет адресов.</div>'; return;} let h=''; currentUser.addresses.forEach(a=>{let s=`${a.city}, ${a.street}, д.${a.house}`; if(a.apartment)s+=`, кв.${a.apartment}`; h+=`<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;margin-bottom:8px;"><i class="fas fa-location-dot"></i> ${s}</div>`;}); c.innerHTML=h;}
@@ -522,9 +739,53 @@
     function editAddressFromOrder(){const addr=currentUser.addresses[0]; if(!addr){showAlert('Нет адреса'); return;} tempOrderData={...addr}; tempOrderModal=document.querySelector('.modal.active'); document.getElementById('orderPvzModal').classList.remove('active'); openAddressEdit(null); window.saveAddressTemp=function(){const city=document.getElementById('editCity').value.trim(); const street=document.getElementById('editStreet').value.trim(); const house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Только Москва'); return false;} const newStreet=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните поля'); return false;} const newAddr={city:'Москва',street:newStreet,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; const isSame=JSON.stringify(tempOrderData)===JSON.stringify(newAddr); if(!isSame){currentUser.addresses[0]=newAddr; saveUser(); renderAddressList(); updateProfileSidebar(); showAlert('Адрес обновлен');} document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active'); updateSelectedAddress(); return true;}; window.cancelAddressEditTemp=function(){document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active');}; document.getElementById('addressEditForm').onsubmit=(e)=>{e.preventDefault(); window.saveAddressTemp();}; const ce=document.getElementById('closeEditBtn'); ce.onclick=()=>{window.cancelAddressEditTemp();};}
     function editInternetAddress(){const addr=currentUser.addresses[0]; if(!addr){showAlert('Нет адреса'); return;} tempInternetOrderData={...addr}; tempOrderModal=document.querySelector('.modal.active'); document.getElementById('orderInternetModal').classList.remove('active'); openAddressEdit(null); window.saveInternetAddressTemp=function(){const city=document.getElementById('editCity').value.trim(); const street=document.getElementById('editStreet').value.trim(); const house=document.getElementById('editHouse').value.trim(); const entrance=document.getElementById('editEntrance').value.trim(); const floor=document.getElementById('editFloor').value.trim(); const apartment=document.getElementById('editApartment').value.trim(); const intercom=document.getElementById('editIntercom').value.trim(); if(!isMoscowCity(city)){showAlert('Только Москва'); return false;} const newStreet=capitalizeWords(street); if(!house||!entrance||!floor||!apartment||!intercom){showAlert('Заполните поля'); return false;} const newAddr={city:'Москва',street:newStreet,house,corpus:document.getElementById('editCorpus').value.trim(),building:document.getElementById('editBuilding').value.trim(),entrance,floor,apartment,intercom}; const isSame=JSON.stringify(tempInternetOrderData)===JSON.stringify(newAddr); if(!isSame){currentUser.addresses[0]=newAddr; saveUser(); renderAddressList(); updateProfileSidebar(); showAlert('Адрес обновлен');} document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active'); updateInternetAddressDisplay(); return true;}; window.cancelInternetAddressTemp=function(){document.getElementById('addressEditModal').classList.remove('active'); if(tempOrderModal)tempOrderModal.classList.add('active');}; document.getElementById('addressEditForm').onsubmit=(e)=>{e.preventDefault(); window.saveInternetAddressTemp();}; const ce2=document.getElementById('closeEditBtn'); ce2.onclick=()=>{window.cancelInternetAddressTemp();};}
     function updateInternetAddressDisplay(){const addr=currentUser.addresses[0]; const div=document.getElementById('internetAddressDisplay'); if(addr)div.innerHTML=`${addr.city}, ${addr.street}, д.${addr.house}, кв.${addr.apartment}`; else div.innerHTML='<span style="color:red;">Нет адреса</span>';}
-    function submitPvzOrder(e){e.preventDefault(); const marketplace=document.getElementById('marketplace').value.trim(); const orderNumber=document.getElementById('orderNumber').value.trim(); const itemsCount=parseInt(document.getElementById('itemsCount').value); const adult=document.getElementById('adultCheck').checked; const phone=document.getElementById('phoneOrder').value.trim(); let fullName=document.getElementById('fullName').value.trim(); const noPatr=document.getElementById('noPatronymic').checked; const leaveAtDoor=document.getElementById('leaveAtDoorCheck').checked; const comment=document.getElementById('orderComment').value.trim(); const date=document.getElementById('deliveryDate').value; const time=document.getElementById('deliveryTime').value; const pvzAddress=document.getElementById('pvzAddress').value.trim(); fullName=formatFullName(fullName); if(noPatr&&fullName.split(' ').length!==2){showAlert('Укажите фамилию и имя'); return;} if(!noPatr&&fullName.split(' ').length<3){showAlert('Укажите полные ФИО'); return;} if(!/^\+7\d{10}$/.test(phone)){showAlert('Телефон +7 и 10 цифр'); return;} if(!marketplace||!orderNumber||itemsCount<1){showAlert('Заполните поля'); return;} if(!pvzAddress){showAlert('Укажите адрес ПВЗ'); return;} const order={id:Date.now(),type:'ПВЗ',marketplace,orderNumber,itemsCount,adult,phone,fullName,comment,leaveAtDoor,address:{...currentUser.addresses[0]},pvzAddress,date,time,status:'обработка',createdAt:new Date().toISOString()}; currentUser.orders.unshift(order); saveUser(); showAlert('Заказ оформлен!'); document.getElementById('orderPvzModal').classList.remove('active');}
+    async function submitPvzOrder(e){
+        e.preventDefault(); 
+        const marketplace=document.getElementById('marketplace').value.trim(); 
+        const orderNumber=document.getElementById('orderNumber').value.trim(); 
+        const itemsCount=parseInt(document.getElementById('itemsCount').value); 
+        const adult=document.getElementById('adultCheck').checked; 
+        const phone=document.getElementById('phoneOrder').value.trim(); 
+        let fullName=document.getElementById('fullName').value.trim(); 
+        const noPatr=document.getElementById('noPatronymic').checked; 
+        const leaveAtDoor=document.getElementById('leaveAtDoorCheck').checked; 
+        const comment=document.getElementById('orderComment').value.trim(); 
+        const date=document.getElementById('deliveryDate').value; 
+        const time=document.getElementById('deliveryTime').value; 
+        const pvzAddress=document.getElementById('pvzAddress').value.trim(); 
+        fullName=formatFullName(fullName); 
+        if(noPatr&&fullName.split(' ').length!==2){showAlert('Укажите фамилию и имя'); return;} 
+        if(!noPatr&&fullName.split(' ').length<3){showAlert('Укажите полные ФИО'); return;} 
+        if(!/^\+7\d{10}$/.test(phone)){showAlert('Телефон +7 и 10 цифр'); return;} 
+        if(!marketplace||!orderNumber||itemsCount<1){showAlert('Заполните поля'); return;} 
+        if(!pvzAddress){showAlert('Укажите адрес ПВЗ'); return;} 
+        const order={id:Date.now(),type:'ПВЗ',marketplace,orderNumber,itemsCount,adult,phone,fullName,comment,leaveAtDoor,address:{...currentUser.addresses[0]},pvzAddress,date,time,status:'обработка',createdAt:new Date().toISOString()}; 
+        currentUser.orders.unshift(order); 
+        saveUser(); 
+        await saveOrderToFirebase(order);
+        showAlert('Заказ оформлен!'); 
+        document.getElementById('orderPvzModal').classList.remove('active');
+    }
     function openInternetOrder(){if(!currentUser.addresses.length){showAlert('Сначала добавьте адрес'); return;} document.getElementById('internetOrderForm').reset(); updateInternetAddressDisplay(); document.getElementById('noOrderWarning').style.display='none'; document.getElementById('internetItemsCount').value=1; document.getElementById('orderInternetModal').classList.add('active');}
-    function submitInternetOrder(e){e.preventDefault(); const orgName=document.getElementById('orgName').value.trim(); const orderNumber=document.getElementById('internetOrderNumber').value.trim(); const noNumber=document.getElementById('noOrderNumberCheck').checked; const itemsCount=parseInt(document.getElementById('internetItemsCount').value); const shopAddress=document.getElementById('internetShopAddress').value.trim(); const comment=document.getElementById('internetComment').value.trim(); if(!orgName){showAlert('Укажите название организации'); return;} if(!noNumber&&!orderNumber){showAlert('Укажите номер заказа или поставьте галочку'); return;} if(itemsCount<1||itemsCount>50){showAlert('Количество от 1 до 50'); return;} if(!shopAddress){showAlert('Укажите адрес магазина'); return;} const order={id:Date.now(),type:'ИНТЕРНЕТ-МАГАЗИН',orgName,orderNumber:noNumber?'Нет номера':orderNumber,itemsCount,shopAddress,comment,address:{...currentUser.addresses[0]},status:'обработка',createdAt:new Date().toISOString()}; currentUser.orders.unshift(order); saveUser(); showAlert('Заказ оформлен!'); document.getElementById('orderInternetModal').classList.remove('active');}
+    async function submitInternetOrder(e){
+        e.preventDefault(); 
+        const orgName=document.getElementById('orgName').value.trim(); 
+        const orderNumber=document.getElementById('internetOrderNumber').value.trim(); 
+        const noNumber=document.getElementById('noOrderNumberCheck').checked; 
+        const itemsCount=parseInt(document.getElementById('internetItemsCount').value); 
+        const shopAddress=document.getElementById('internetShopAddress').value.trim(); 
+        const comment=document.getElementById('internetComment').value.trim(); 
+        if(!orgName){showAlert('Укажите название организации'); return;} 
+        if(!noNumber&&!orderNumber){showAlert('Укажите номер заказа или поставьте галочку'); return;} 
+        if(itemsCount<1||itemsCount>50){showAlert('Количество от 1 до 50'); return;} 
+        if(!shopAddress){showAlert('Укажите адрес магазина'); return;} 
+        const order={id:Date.now(),type:'ИНТЕРНЕТ-МАГАЗИН',orgName,orderNumber:noNumber?'Нет номера':orderNumber,itemsCount,shopAddress,comment,address:{...currentUser.addresses[0]},status:'обработка',createdAt:new Date().toISOString()}; 
+        currentUser.orders.unshift(order); 
+        saveUser(); 
+        await saveOrderToFirebase(order);
+        showAlert('Заказ оформлен!'); 
+        document.getElementById('orderInternetModal').classList.remove('active');
+    }
     function showMyOrders(){const c=document.getElementById('ordersList'); if(!currentUser.orders.length){c.innerHTML='<div class="text-muted">Нет заказов</div>';}else{let h=''; currentUser.orders.forEach(o=>{let sc=o.status==='обработка'?'status-processing':(o.status==='отменен'?'status-cancelled':'status-delivered'); h+=`<div class="order-item"><div class="flex-between"><strong>${o.type}: ${o.marketplace||o.orgName||''}</strong><span class="${sc}">${o.status.toUpperCase()}</span></div><div>Заказ №${o.orderNumber||'Нет номера'} | Кол-во: ${o.itemsCount}</div>${o.date?`<div>Дата: ${o.date} ${o.time}</div>`:''}<div>Адрес: ${o.address.street}, д.${o.address.house}</div>${o.pvzAddress?`<div>ПВЗ: ${o.pvzAddress}</div>`:''}${o.shopAddress?`<div>Магазин: ${o.shopAddress}</div>`:''}<div class="text-muted">${new Date(o.createdAt).toLocaleString()}</div>`; if(o.status==='обработка'&&o.date){h+=`<div class="order-actions"><button class="btn btn-danger cancel-order" data-id="${o.id}">Отменить</button><button class="btn btn-warning reschedule-order" data-id="${o.id}">Перенести</button></div>`;}else if(o.status==='обработка'){h+=`<div class="order-actions"><button class="btn btn-danger cancel-order" data-id="${o.id}">Отменить</button></div>`;} h+=`</div>`;}); c.innerHTML=h; document.querySelectorAll('.cancel-order').forEach(b=>b.addEventListener('click',()=>{const id=parseInt(b.dataset.id); const o=currentUser.orders.find(o=>o.id===id); if(confirm('Отменить заказ?')){o.status='отменен'; saveUser(); showMyOrders();}})); document.querySelectorAll('.reschedule-order').forEach(b=>b.addEventListener('click',()=>{const id=parseInt(b.dataset.id); const o=currentUser.orders.find(o=>o.id===id); const nd=prompt('Новая дата (ГГГГ-ММ-ДД):',o.date); const nt=prompt('Новое время (ЧЧ:ММ):',o.time); if(nd&&nt){o.date=nd; o.time=nt; saveUser(); showMyOrders(); showAlert('Доставка перенесена');}}));} document.getElementById('myOrdersModal').classList.add('active');}
     function closeAllModals(){['regModal','loginModal','addressManagerModal','addressEditModal','orderPvzModal','orderInternetModal','myOrdersModal','welcomeModal','rescheduleModal','rulesModal','workModal','consentModal','supportChatModal'].forEach(id=>{const e=document.getElementById(id); if(e)e.classList.remove('active');});}
     function showRulesModal(){document.getElementById('rulesContent').innerHTML=rulesText; document.getElementById('rulesModal').classList.add('active');}
@@ -571,7 +832,7 @@
     document.getElementById('closeLoginBtn').onclick=()=>{closeAllModals(); document.getElementById('welcomeModal').classList.add('active');};
     document.getElementById('closeRulesBtn').onclick=()=>document.getElementById('rulesModal').classList.remove('active');
     document.getElementById('closeWorkBtn').onclick=()=>document.getElementById('workModal').classList.remove('active');
-    document.getElementById('closeSupportChatBtn').onclick=()=>document.getElementById('supportChatModal').classList.remove('active');
+    document.getElementById('closeSupportChatBtn').onclick=()=>{if(chatUnsubscribe) chatUnsubscribe(); document.getElementById('supportChatModal').classList.remove('active');};
     document.getElementById('sendChatBtn').onclick=sendChatMessage;
     document.getElementById('chatInput').addEventListener('keypress',(e)=>{if(e.key==='Enter') sendChatMessage();});
     });
